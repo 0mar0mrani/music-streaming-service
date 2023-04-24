@@ -6,8 +6,8 @@ import schemas from './schemas/schemas.js';
 export default {
 	title: 'Studio',
 
-	projectId: '',
-	dataset: '',
+	projectId: 'scckrbbt',
+	dataset: 'production',
 
 	plugins: [deskTool(), visionTool()],
 
