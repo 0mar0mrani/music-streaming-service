@@ -1,0 +1,22 @@
+:root {
+	/* Colors */
+	--color-primary-default: #FFFFE3;
+	--color-primary-darker: #CCCCB6;
+	--color-primary-darkest: #808072;
+
+	--color-secondary-default: #10100E;
+	--color-secondary-lighter: #282826;
+	--color-secondary-lightest: #40403E;
+
+	/* Fonts */
+	--font-header: 700 3.6rem "Poppins", sans-serif; 
+	--font-sub-header: 400 2.4rem "Poppins", sans-serif;
+	--font-body: 400 2rem "Poppins", sans-serif;
+	--font-small-text: 300 1.4rem "Poppins", sans-serif; 
+
+	/* Gaps */
+	--gap-small: 1rem;
+	--gap-medium: 1.5rem;
+	--gap-large: 2rem;
+	--gap-extra-large: 4rem;
+}
