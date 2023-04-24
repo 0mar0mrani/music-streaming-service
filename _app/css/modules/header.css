@@ -1,0 +1,6 @@
+.header {
+	grid-column-start: 2;
+	background-color: var(--color-secondary-default);
+	padding: 0 var(--gap-large);
+	align-self: self-start;
+}
