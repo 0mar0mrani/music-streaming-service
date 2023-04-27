@@ -36,6 +36,29 @@ export default {
 			validation: Rule => Rule.required(),
 		},
 		{
+			title: 'Play Time',
+			name: 'playTime',
+			type: 'object',
+			fields: [
+				{
+					title: 'Minutes',
+					name: 'minutes',
+					type: 'number',
+				},
+				{
+					title: 'Seconds',
+					name: 'seconds',
+					type: 'number',
+				}
+			],
+			
+			options: {
+				columns: 2,
+			},
+
+			validation: Rule => Rule.required(),
+		},
+		{
 			title: 'Plays',
 			name: 'plays',
 			type: 'number',
