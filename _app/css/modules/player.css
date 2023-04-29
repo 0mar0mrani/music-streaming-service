@@ -128,3 +128,14 @@
 .player__duration {
 	font: var(--font-small-text);
 }
+
+/* Section 3 */
+.player__section-3 {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.player__volume {
+	width: 10rem;
+}
