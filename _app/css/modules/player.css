@@ -78,6 +78,22 @@
 	font: var(--font-small-text);
 }
 
+/* Section 2 */
+.player__section-2 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: 100%;
+	width: 50%;
+}
+
+/* Section 2 - bottom */
+.player__top {
+	display: flex;
+	gap: var(--gap-large);
+}
+
 /* Play(pause) button */
 .player__play {
 	display: flex;
@@ -91,4 +107,24 @@
 
 .player__play:hover {
 	background-color: var(--color-secondary-lightest);
+}
+
+.player__play img {
+	width: 2.4rem;
+	height: 2.4rem;
+	filter: var(--filter-secondary-default);
+}
+
+/* Section 2 - bottom*/
+.player__bottom {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	width: 100%;
+}
+
+.player__current,
+.player__duration {
+	font: var(--font-small-text);
 }
