@@ -1,0 +1,100 @@
+.release {
+	padding: var(--gap-large) 0;
+	transition: 0.1s border ease-in-out;
+}
+
+.release__release-container {
+	display: flex;
+	gap: var(--gap-large);
+	margin: 0 var(--gap-large) var(--gap-large) var(--gap-large);
+}
+
+.release__meta-data-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.release__artwork {
+	width: 20rem;
+	height: 20rem;
+}
+
+.release__title {
+	margin-top: var(--gap-medium);
+	font: var(--font-header);
+	text-transform: uppercase;
+}
+
+.release__artist {
+	font: var(--font-sub-header);
+}
+
+.release__type {
+	font: var(--font-small-text);
+}
+
+.release__more-meta-data-container {
+	display: flex;
+	gap: var(--gap-extra-large);
+	font: var(--font-small-text);
+	margin-top: auto;
+}
+
+.release__more-meta-data-container div {
+	position: relative;
+}
+
+.release__more-meta-data-container div:not(:last-child):after {
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	margin-left: calc(var(--gap-extra-large) / 2);
+	transform: translate(-50%, -50%);
+	content: '';
+	width: 0.6rem;
+	height: 0.6rem;
+	background-color: var(--color-primary-default);
+	border-radius: 50%;
+}
+
+/* Song Header */
+.release__song-header {
+	display: grid;
+	grid-template-columns: var(--columns-song); 
+	font: var(--font-small-text);
+	text-transform: uppercase;
+	padding-bottom: var(--gap-extra-small);
+	border-bottom: solid 0.1rem var(--color-secondary-lighter);
+	padding: 0 var(--gap-large) var(--gap-small) var(--gap-large);
+	margin-bottom: var(--gap-large);
+}
+
+/* Songs */
+.release__songs {
+	display: flex;
+	flex-direction: column;
+}
+
+.release__song {
+	display: grid;
+	align-items: center;
+	grid-template-columns: var(--columns-song); 
+	padding: var(--gap-small) var(--gap-large);
+	border: none;
+	font: var(--font-small-text);
+	text-align: start;
+	transition: 0.1s background-color ease-in-out, 0.1s color ease-in-out;
+}
+
+.release__song:hover {
+	background-color: var(--color-secondary-lighter);
+}
+
+.release__number {
+	font: var(--font-sub-header);
+}
+
+.release__track-title {
+	font: var(--font-body);
+	margin-bottom: var(--gap-extra-small);
+}

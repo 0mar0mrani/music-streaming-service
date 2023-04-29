@@ -1,0 +1,22 @@
+.main-window {
+	grid-row: 2 / 3;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: var(--gap-extra-large);
+	padding: var(--gap-medium);
+}
+
+.main-window::-webkit-scrollbar {
+	width: 1rem;
+	background-color: var(--color-secondary-default);
+}
+
+.main-window::-webkit-scrollbar-thumb:hover  {
+	background-color: var(--color-primary-default);
+	cursor: pointer;
+}
+
+.main-window::-webkit-scrollbar-thumb {
+	background-color: var(--color-secondary-lighter);
+}
