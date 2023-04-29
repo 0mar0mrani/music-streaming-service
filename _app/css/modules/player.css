@@ -9,3 +9,42 @@
 	background-color: var(--color-secondary-default);
 	border-top: solid 0.1rem var(--color-secondary-lighter);
 }
+
+/* Buttons (not play) */
+.player__previous,
+.player__next,
+.player__shuffle,
+.player__repeat,
+.player__mute {
+	filter: var(--filter-primary-default);
+}
+
+.player__previous:hover,
+.player__next:hover,
+.player__shuffle:hover,
+.player__repeat:hover,
+.player__mute:hover {
+	filter: var(--filter-primary-darker);
+}
+
+.player__previous:active,
+.player__next:active,
+.player__shuffle:active,
+.player__repeat:active,
+.player__mute:active {
+	filter: var(--filter-primary-darker);
+}
+/* Play(pause) button */
+.player__play {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+	background-color: var(--color-primary-default);
+}
+
+.player__play:hover {
+	background-color: var(--color-secondary-lightest);
+}
