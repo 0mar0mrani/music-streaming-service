@@ -12,6 +12,17 @@ export default async function mainWindow() {
 	const mainWindow = document.querySelector('.main-window');
 	let songsEl = null;
 
+	function handleSongElClick(event) {
+		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
+		const clickedReleaseNumber = event.currentTarget.closest('.release').dataset.releaseNumber;
+
+		player.setCurrentTrack(clickedTrackNumber);
+		player.setCurrentRelease(clickedReleaseNumber);
+		player.setQue();
+		player.loadTrackFromQue();
+		player.toggleIsPlaying(true);
+		player.renderAudio();
+	}
 
 	async function fetchAllReleases() {
       const query = `*[_type == 'release'] | order(releaseDate desc) {
@@ -184,7 +195,7 @@ export default async function mainWindow() {
 		songsEl = document.querySelectorAll('.release__song');
 
 		for (const songEl of songsEl) {
-			songEl.addEventListener('click', handleSongElClick);
+			songEl.addEventListener('dblclick', handleSongElClick);
 		}
 	}
 }
