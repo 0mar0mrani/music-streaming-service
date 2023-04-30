@@ -129,11 +129,20 @@ export default function player(releases) {
 		}
 
 		renderPlayButton();
+		renderShuffleButton();
 		renderRepeatButton();
 
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
 			playButtonIcon.src = icon;
+		}
+
+		function renderShuffleButton() {
+			if (isShuffle) {
+				shuffleButton.classList.add('player__shuffle--active');
+			} else {
+				shuffleButton.classList.remove('player__shuffle--active');
+			}
 		}
 
 		function renderRepeatButton() {

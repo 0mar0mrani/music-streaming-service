@@ -119,7 +119,8 @@
 	filter: var(--filter-secondary-default);
 }
 
-.player__repeat--active {
+.player__repeat--active,
+.player__shuffle--active {
 	filter: var(--filter-highlight-default) !important;
 }
 
