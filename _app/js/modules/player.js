@@ -4,6 +4,7 @@ export default function player(releases) {
 	let currentTrack = null; 
 	let currentRelease = null;
 	let isPlaying = false;
+	let isRepeat = false;
 	const audio = new Audio();
 
 	const playerElement = document.querySelector('.player');
@@ -18,9 +19,12 @@ export default function player(releases) {
 	const previousButton = document.querySelector('.player__previous');
 	const nextButton = document.querySelector('.player__next');
 
+	const repeatButton = document.querySelector('.player__repeat');
+
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
+	repeatButton.addEventListener('click', handleRepeatButtonClick);
 
 	function handlePlayButtonClick() {
 		toggleIsPlaying();
@@ -29,7 +33,7 @@ export default function player(releases) {
 	}
 
 	function handlePreviousButtonClick() {
-		previousTrack();
+		!isRepeat && previousTrack();
 		loadTrackFromQue();
 		isPlaying = true;
 		renderAudio();
@@ -37,11 +41,17 @@ export default function player(releases) {
 	}
 
 	function handleNextButtonClick() {
-		nextTrack();
+		!isRepeat && nextTrack();
 		loadTrackFromQue();
 		isPlaying = true;
 		renderAudio();
 		renderHTML();
+	}
+
+	function handleRepeatButtonClick() {
+		isRepeat = !isRepeat;
+		renderHTML();
+		console.log(isRepeat);
 	}
 
 	function setCurrentTrack(clickedTrackNumber) {
