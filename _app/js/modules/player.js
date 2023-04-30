@@ -51,7 +51,6 @@ export default function player(releases) {
 	function handleRepeatButtonClick() {
 		isRepeat = !isRepeat;
 		renderHTML();
-		console.log(isRepeat);
 	}
 
 	function setCurrentTrack(clickedTrackNumber) {
@@ -109,10 +108,19 @@ export default function player(releases) {
 		}
 
 		renderPlayButton();
+		renderRepeatButton();
 
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
 			playButtonIcon.src = icon;
+		}
+
+		function renderRepeatButton() {
+			if (isRepeat) {
+				repeatButton.classList.add('player__repeat--active');
+			} else {
+				repeatButton.classList.remove('player__repeat--active');
+			}
 		}
 	}
 

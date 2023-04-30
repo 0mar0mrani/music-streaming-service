@@ -8,10 +8,14 @@
 	--color-secondary-lighter: #282826;
 	--color-secondary-lightest: #40403E;
 
+	--color-highlight-default: #ffd401;
+
 	/* Filter colors */
 	--filter-primary-default: invert(99%) sepia(3%) saturate(3561%) hue-rotate(316deg) brightness(107%) contrast(106%);
 	--filter-primary-darker: invert(93%) sepia(16%) saturate(234%) hue-rotate(19deg) brightness(88%) contrast(86%);
 	--filter-primary-darkest: invert(54%) sepia(16%) saturate(243%) hue-rotate(21deg) brightness(89%) contrast(84%);
+
+	--filter-highlight-default: invert(73%) sepia(100%) saturate(752%) hue-rotate(357deg) brightness(102%) contrast(102%);
 
 	/* Fonts */
 	--font-header: 700 3.6rem / 1 "Poppins", sans-serif; 

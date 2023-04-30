@@ -119,6 +119,10 @@
 	filter: var(--filter-secondary-default);
 }
 
+.player__repeat--active {
+	filter: var(--filter-highlight-default) !important;
+}
+
 /* Section 2 - bottom*/
 .player__bottom {
 	display: flex;
