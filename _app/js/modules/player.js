@@ -9,6 +9,7 @@ export default function player(releases) {
 	let isShuffle = false;
 	let isRepeat = false;
 	const audio = new Audio();
+	let currentVolume = 1;
 
 	const playerElement = document.querySelector('.player');
 
@@ -26,11 +27,14 @@ export default function player(releases) {
 
 	const repeatButton = document.querySelector('.player__repeat');
 
+	const volumeSlider = document.querySelector('.player__volume');
+
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
 	shuffleButton.addEventListener('click', handleShuffleButtonClick);
 	repeatButton.addEventListener('click', handleRepeatButtonClick);
+	volumeSlider.addEventListener('input', handleInputInput);
 
 	function handlePlayButtonClick() {
 		toggleIsPlaying();
@@ -66,6 +70,13 @@ export default function player(releases) {
 
 		const currentTrackNewIndex = que.findIndex(index => index._id === currentTrackID)
 		queIndex = currentTrackNewIndex;
+		renderHTML();
+	}
+
+	function handleInputInput() {
+		const input = volumeSlider.value;
+		currentVolume = input;
+		audio.volume = currentVolume;
 		renderHTML();
 	}
 
