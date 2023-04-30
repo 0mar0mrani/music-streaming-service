@@ -1,9 +1,12 @@
+import shuffle from "../util/shuffle.js";
+
 export default function player(releases) {
 	let que = [];
 	let queIndex = null;
 	let currentTrack = null; 
 	let currentRelease = null;
 	let isPlaying = false;
+	let isShuffle = false;
 	let isRepeat = false;
 	const audio = new Audio();
 
@@ -19,11 +22,14 @@ export default function player(releases) {
 	const previousButton = document.querySelector('.player__previous');
 	const nextButton = document.querySelector('.player__next');
 
+	const shuffleButton = document.querySelector('.player__shuffle');
+
 	const repeatButton = document.querySelector('.player__repeat');
 
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
+	shuffleButton.addEventListener('click', handleShuffleButtonClick);
 	repeatButton.addEventListener('click', handleRepeatButtonClick);
 
 	function handlePlayButtonClick() {
@@ -45,6 +51,21 @@ export default function player(releases) {
 		loadTrackFromQue();
 		isPlaying = true;
 		renderAudio();
+		renderHTML();
+	}
+
+	function handleShuffleButtonClick() {
+		isShuffle = !isShuffle;
+		const currentTrackID = currentTrack._id;
+		
+		if (isShuffle) {
+			que = shuffle(que, 2);
+		} else {
+			setQue();
+		}
+
+		const currentTrackNewIndex = que.findIndex(index => index._id === currentTrackID)
+		queIndex = currentTrackNewIndex;
 		renderHTML();
 	}
 
