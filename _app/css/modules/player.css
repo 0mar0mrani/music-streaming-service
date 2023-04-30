@@ -1,6 +1,6 @@
 .player {
 	grid-column: 1 / 3;
-	display: flex;
+	display: none;
 	justify-content: space-between;
 	align-items: center;
 	height: var(--player-height);
@@ -8,6 +8,10 @@
 	color: var(--color-primary-default);
 	background-color: var(--color-secondary-default);
 	border-top: solid 0.1rem var(--color-secondary-lighter);
+}
+
+.player--open {
+	display: flex;
 }
 
 /* Buttons (not play) */

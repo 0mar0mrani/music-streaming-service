@@ -6,6 +6,8 @@ export default function player(releases) {
 	let isPlaying = false;
 	const audio = new Audio();
 
+	const playerEl = document.querySelector('.player');
+
 	function setCurrentTrack(clickedTrackNumber) {
 		queIndex = Number(clickedTrackNumber);
 	}
@@ -36,6 +38,14 @@ export default function player(releases) {
 		isPlaying ? audio.play() : audio.pause();
    }
 
+	function renderHTML() {
+		if (isPlaying) {
+			playerEl.classList.add('player--open');
+		} else {
+			playerEl.classList.remove('player--open');
+		}
+	}
+
 	return {
 		setCurrentTrack,
 		setCurrentRelease,
@@ -43,5 +53,6 @@ export default function player(releases) {
 		loadTrackFromQue,
 		toggleIsPlaying,
 		renderAudio,
+		renderHTML,
 	}
 }

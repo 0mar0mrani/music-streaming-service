@@ -22,6 +22,7 @@ export default async function mainWindow() {
 		player.loadTrackFromQue();
 		player.toggleIsPlaying(true);
 		player.renderAudio();
+		renderHTML();
 	}
 
 	async function fetchAllReleases() {
@@ -59,6 +60,8 @@ export default async function mainWindow() {
 	}
 
 	function renderHTML() {
+		player.renderHTML();
+
 		mainWindow.innerHTML = '';
 
 		releases.forEach((release, index) => {
