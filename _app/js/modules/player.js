@@ -30,13 +30,14 @@ export default function player(releases) {
 
 	const volumeSlider = document.querySelector('.player__volume');
 	const muteButton = document.querySelector('.player__mute');
+	const muteButtonIcon = document.querySelector('.player__mute img');
 
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
 	shuffleButton.addEventListener('click', handleShuffleButtonClick);
 	repeatButton.addEventListener('click', handleRepeatButtonClick);
-	volumeSlider.addEventListener('input', handleInputInput);
+	volumeSlider.addEventListener('input', handleVolumeSliderInput);
 	muteButton.addEventListener('click', handleMuteButtonClick);
 
 
@@ -77,7 +78,7 @@ export default function player(releases) {
 		renderHTML();
 	}
 
-	function handleInputInput() {
+	function handleVolumeSliderInput() {
 		const input = volumeSlider.value;
 		currentVolume = input;
 		renderAudio();
@@ -139,7 +140,6 @@ export default function player(releases) {
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
-		audio.volume = currentVolume;
    }
 
 	function renderHTML() {
@@ -153,6 +153,7 @@ export default function player(releases) {
 		renderPlayButton();
 		renderShuffleButton();
 		renderRepeatButton();
+		renderMuteButton();
 
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
@@ -172,6 +173,20 @@ export default function player(releases) {
 				repeatButton.classList.add('player__repeat--active');
 			} else {
 				repeatButton.classList.remove('player__repeat--active');
+			}
+		}
+
+		function renderMuteButton() {
+			const volume = audio.volume;
+
+			if (volume === 0) {
+				muteButtonIcon.src = '_app/assets/svg/volume-0.svg';
+			} else if (volume > 0 && volume < 0.5) {
+				muteButtonIcon.src = '_app/assets/svg/volume-1.svg';
+			} else if (volume >= 0.5 && volume < 0.9) {
+				muteButtonIcon.src = '_app/assets/svg/volume-2.svg';
+			} else {
+				muteButtonIcon.src = '_app/assets/svg/volume-3.svg';
 			}
 		}
 	}
