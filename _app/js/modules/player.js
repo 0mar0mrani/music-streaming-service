@@ -81,6 +81,7 @@ export default function player(releases) {
 	function handleVolumeSliderInput() {
 		const input = volumeSlider.value;
 		currentVolume = input;
+		isMute = false;
 		renderAudio();
 		renderHTML();
 	}
@@ -154,6 +155,7 @@ export default function player(releases) {
 		renderShuffleButton();
 		renderRepeatButton();
 		renderMuteButton();
+		renderVolumeSlider();
 
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
@@ -188,6 +190,15 @@ export default function player(releases) {
 			} else {
 				muteButtonIcon.src = '_app/assets/svg/volume-3.svg';
 			}
+		}
+
+		function renderVolumeSlider() {
+			if (isMute) {
+				volumeSlider.value = 0;
+			} else {
+				volumeSlider.value = currentVolume;
+			}
+			// audio.volume = volumeSlider.value;
 		}
 	}
 
