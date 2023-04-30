@@ -15,10 +15,31 @@ export default function player(releases) {
 	const playButton = document.querySelector('.player__play');
 	const playButtonIcon = document.querySelector('.player__play img');
 
+	const previousButton = document.querySelector('.player__previous');
+	const nextButton = document.querySelector('.player__next');
+
 	playButton.addEventListener('click', handlePlayButtonClick);
+	previousButton.addEventListener('click', handlePreviousButtonClick);
+	nextButton.addEventListener('click', handleNextButtonClick);
 
 	function handlePlayButtonClick() {
 		toggleIsPlaying();
+		renderAudio();
+		renderHTML();
+	}
+
+	function handlePreviousButtonClick() {
+		previousTrack();
+		loadTrackFromQue();
+		isPlaying = true;
+		renderAudio();
+		renderHTML();
+	}
+
+	function handleNextButtonClick() {
+		nextTrack();
+		loadTrackFromQue();
+		isPlaying = true;
 		renderAudio();
 		renderHTML();
 	}
@@ -49,6 +70,22 @@ export default function player(releases) {
 		}
 	}
 
+	function nextTrack() {
+		if (queIndex < que.length - 1) {
+			queIndex += 1;
+		} else {
+			queIndex = 0;
+		}
+	}
+
+	function previousTrack() {
+		if (queIndex > 0) {
+			queIndex -= 1;
+		} else {
+			queIndex = 0;
+		}
+	}
+
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
    }
@@ -64,7 +101,7 @@ export default function player(releases) {
 		renderPlayButton();
 
 		function renderPlayButton() {
-			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg'
+			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
 			playButtonIcon.src = icon;
 		}
 	}
