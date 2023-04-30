@@ -50,11 +50,13 @@ export default async function mainWindow() {
 	function renderHTML() {
 		mainWindow.innerHTML = '';
 
-		releases.forEach((release) => {
+		releases.forEach((release, index) => {
 			const container = document.createElement('div');
 			const releaseContainer = createReleaseDOM();
 			const songHeaderContainer = createSongHeader();
 			const songsContainer = createSongsDOM();
+
+			container.dataset.releaseNumber = index;
 			
 			container.className = 'release';
 			songsContainer.className = 'release__songs';
@@ -149,6 +151,8 @@ export default async function mainWindow() {
 					const artist = document.createElement('div');
 					const plays = document.createElement('div');
 					const time = document.createElement('div');
+
+					songContainer.dataset.trackNumber = index;
 
 					number.innerText = index + 1;
 					title.innerText = track.title;
