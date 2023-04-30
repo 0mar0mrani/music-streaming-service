@@ -81,7 +81,7 @@ export default function player(releases) {
 	function handleVolumeSliderInput() {
 		const input = volumeSlider.value;
 		currentVolume = input;
-		isMute = false;
+		currentVolume > 0 ? isMute = false : isMute = true;
 		renderAudio();
 		renderHTML();
 	}
