@@ -13,6 +13,7 @@ export default function player(releases) {
 	const artworkElement = document.querySelector('.player__artwork img');
 
 	const playButton = document.querySelector('.player__play');
+	const playButtonIcon = document.querySelector('.player__play img');
 
 	playButton.addEventListener('click', handlePlayButtonClick);
 
@@ -58,6 +59,13 @@ export default function player(releases) {
 			titleElement.innerText = currentTrack.title;
 			artistElement.innerText = currentTrack.artists.join(', ');
 			artworkElement.src = currentTrack.artworkURL;
+		}
+
+		renderPlayButton();
+
+		function renderPlayButton() {
+			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg'
+			playButtonIcon.src = icon;
 		}
 	}
 
