@@ -80,7 +80,7 @@ export default function player(releases) {
 	function handleInputInput() {
 		const input = volumeSlider.value;
 		currentVolume = input;
-		audio.volume = currentVolume;
+		renderAudio();
 		renderHTML();
 	}
 
@@ -139,6 +139,7 @@ export default function player(releases) {
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
+		audio.volume = currentVolume;
    }
 
 	function renderHTML() {
