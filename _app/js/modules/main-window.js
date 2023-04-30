@@ -2,9 +2,12 @@ import { sanity } from '../sanity.js'
 import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds.js';
+import playerModule from './player.js';
 
 export default async function mainWindow() {
 	let releases = await fetchAllReleases();
+
+	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
 
