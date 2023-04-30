@@ -83,8 +83,7 @@ export default function player(releases) {
 	}
 
 	function setQue() {
-		que = [...releases[0].tracks];
-		console.log(que);
+		que = [...releases[currentRelease].tracks];
 	}
 
 	function loadTrackFromQue() {
