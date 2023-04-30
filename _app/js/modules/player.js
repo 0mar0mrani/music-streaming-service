@@ -6,7 +6,10 @@ export default function player(releases) {
 	let isPlaying = false;
 	const audio = new Audio();
 
-	const playerEl = document.querySelector('.player');
+	const playerElement = document.querySelector('.player');
+	const titleElement = document.querySelector('.player__title');
+	const artistElement = document.querySelector('.player__artist');
+	const artworkElement = document.querySelector('.player__artwork img');
 
 	function setCurrentTrack(clickedTrackNumber) {
 		queIndex = Number(clickedTrackNumber);
@@ -40,10 +43,11 @@ export default function player(releases) {
 
 	function renderHTML() {
 		if (isPlaying) {
-			playerEl.classList.add('player--open');
-		} else {
-			playerEl.classList.remove('player--open');
-		}
+			playerElement.classList.add('player--open');
+			titleElement.innerText = currentTrack.title;
+			artistElement.innerText = currentTrack.artists.join(', ');
+			artworkElement.src = currentTrack.artworkURL;
+		} 
 	}
 
 	return {
