@@ -10,6 +10,8 @@ export default async function mainWindow() {
 	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
+	let songsEl = null;
+
 
 	async function fetchAllReleases() {
       const query = `*[_type == 'release'] | order(releaseDate desc) {
@@ -174,5 +176,11 @@ export default async function mainWindow() {
 
 			mainWindow.append(container);
 		});
+
+		songsEl = document.querySelectorAll('.release__song');
+
+		for (const songEl of songsEl) {
+			songEl.addEventListener('click', handleSongElClick);
+		}
 	}
 }
