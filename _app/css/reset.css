@@ -18,4 +18,9 @@ button {
 	background-color: inherit;
 	color: inherit;
 	cursor: pointer;
+	border: none;
+}
+
+input[type="range"] {
+	cursor: pointer;
 }

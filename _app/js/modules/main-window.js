@@ -2,11 +2,28 @@ import { sanity } from '../sanity.js'
 import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds.js';
+import playerModule from './player.js';
 
 export default async function mainWindow() {
 	let releases = await fetchAllReleases();
 
+	const player = playerModule(releases);
+
 	const mainWindow = document.querySelector('.main-window');
+	let songsEl = null;
+
+	function handleSongElClick(event) {
+		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
+		const clickedReleaseNumber = event.currentTarget.closest('.release').dataset.releaseNumber;
+
+		player.setCurrentTrack(clickedTrackNumber);
+		player.setCurrentRelease(clickedReleaseNumber);
+		player.setQue();
+		player.loadTrackFromQue();
+		player.toggleIsPlaying(true);
+		player.renderAudio();
+		renderHTML();
+	}
 
 	async function fetchAllReleases() {
       const query = `*[_type == 'release'] | order(releaseDate desc) {
@@ -43,13 +60,17 @@ export default async function mainWindow() {
 	}
 
 	function renderHTML() {
+		player.renderHTML();
+
 		mainWindow.innerHTML = '';
 
-		releases.forEach((release) => {
+		releases.forEach((release, index) => {
 			const container = document.createElement('div');
 			const releaseContainer = createReleaseDOM();
 			const songHeaderContainer = createSongHeader();
 			const songsContainer = createSongsDOM();
+
+			container.dataset.releaseNumber = index;
 			
 			container.className = 'release';
 			songsContainer.className = 'release__songs';
@@ -145,6 +166,8 @@ export default async function mainWindow() {
 					const plays = document.createElement('div');
 					const time = document.createElement('div');
 
+					songContainer.dataset.trackNumber = index;
+
 					number.innerText = index + 1;
 					title.innerText = track.title;
 					artist.innerText = track.artists.join(', ');
@@ -171,5 +194,11 @@ export default async function mainWindow() {
 
 			mainWindow.append(container);
 		});
+
+		songsEl = document.querySelectorAll('.release__song');
+
+		for (const songEl of songsEl) {
+			songEl.addEventListener('dblclick', handleSongElClick);
+		}
 	}
 }
