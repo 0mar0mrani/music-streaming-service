@@ -136,6 +136,9 @@
 .player__current,
 .player__duration {
 	font: var(--font-small-text);
+	width: 4rem;
+	flex-shrink: 0;
+	flex-grow: 0;
 }
 
 /* Section 3 */
