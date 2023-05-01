@@ -44,6 +44,7 @@ export default function player(releases) {
 	repeatButton.addEventListener('click', handleRepeatButtonClick);
 	volumeSlider.addEventListener('input', handleVolumeSliderInput);
 	muteButton.addEventListener('click', handleMuteButtonClick);
+	timelineSlider.addEventListener('input', handleTimelineSliderInput);
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
@@ -100,6 +101,13 @@ export default function player(releases) {
 	function handleMuteButtonClick() {
 		isMute = !isMute;
 		renderAudio();
+		renderHTML();
+	}
+
+	function handleTimelineSliderInput() {
+		const input = timelineSlider.value;
+		audio.currentTime = input;
+		isPlaying = true;
 		renderHTML();
 	}
 
