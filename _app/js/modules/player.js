@@ -1,4 +1,5 @@
 import shuffle from "../util/shuffle.js";
+import formatTime from "../util/format-time.js";
 
 export default function player(releases) {
 	let que = [];
@@ -32,6 +33,10 @@ export default function player(releases) {
 	const muteButton = document.querySelector('.player__mute');
 	const muteButtonIcon = document.querySelector('.player__mute img');
 
+	const timelineSlider = document.querySelector('.player__timeline');
+	const timelineCurrent = document.querySelector('.player__current');
+	const timelineDuration = document.querySelector('.player__duration');
+
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
@@ -39,7 +44,8 @@ export default function player(releases) {
 	repeatButton.addEventListener('click', handleRepeatButtonClick);
 	volumeSlider.addEventListener('input', handleVolumeSliderInput);
 	muteButton.addEventListener('click', handleMuteButtonClick);
-
+	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
+	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
 	function handlePlayButtonClick() {
 		toggleIsPlaying();
@@ -97,6 +103,14 @@ export default function player(releases) {
 		renderHTML();
 	}
 
+	function handleAudioLoadedmetadata() {
+		renderHTML('timeline');
+	}
+
+	function handleAudioTimeupdate() {
+		renderHTML('timeline');
+	}
+
 	function setCurrentTrack(clickedTrackNumber) {
 		queIndex = Number(clickedTrackNumber);
 	}
@@ -143,20 +157,25 @@ export default function player(releases) {
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
    }
 
-	function renderHTML() {
-		if (isPlaying) {
-			playerElement.classList.add('player--open');
-			titleElement.innerText = currentTrack.title;
-			artistElement.innerText = currentTrack.artists.join(', ');
-			artworkElement.src = currentTrack.artworkURL;
+	function renderHTML(string) {
+
+		if (string === 'timeline') {
+			renderTimeline()
+		} else {
+			if (isPlaying) {
+				playerElement.classList.add('player--open');
+				titleElement.innerText = currentTrack.title;
+				artistElement.innerText = currentTrack.artists.join(', ');
+				artworkElement.src = currentTrack.artworkURL;
+			}
+	
+			renderPlayButton();
+			renderShuffleButton();
+			renderRepeatButton();
+			renderMuteButton();
+			renderVolumeSlider();
 		}
-
-		renderPlayButton();
-		renderShuffleButton();
-		renderRepeatButton();
-		renderMuteButton();
-		renderVolumeSlider();
-
+		
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
 			playButtonIcon.src = icon;
@@ -198,7 +217,17 @@ export default function player(releases) {
 			} else {
 				volumeSlider.value = currentVolume;
 			}
-			// audio.volume = volumeSlider.value;
+		}
+
+		function renderTimeline() {
+			const duration = audio.duration;
+			const currentTime = audio.currentTime;
+			const formattedCurrentTime = formatTime(currentTime);
+			const formattedDuration = formatTime(duration);
+			timelineSlider.max = duration;
+			timelineSlider.value = currentTime;
+			timelineCurrent.innerText = formattedCurrentTime;
+			timelineDuration.innerText = formattedDuration;
 		}
 	}
 
