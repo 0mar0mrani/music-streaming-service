@@ -116,7 +116,16 @@ export default function player(releases) {
 	}
 
 	function handleAudioTimeupdate() {
-		renderHTML('timeline');
+		const reachedEnd = audio.currentTime === audio.duration;
+
+		if (reachedEnd) {
+			!isRepeat && nextTrack();
+			loadTrackFromQue();
+			renderAudio();
+			renderHTML();
+		} else {
+			renderHTML('timeline');
+		}
 	}
 
 	function setCurrentTrack(clickedTrackNumber) {
