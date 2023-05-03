@@ -143,7 +143,7 @@ export default async function mainWindow() {
 					artist.innerText = release.artists.join(', ');
 					releaseType.innerText = release.type;
 					releaseDate.innerText = formatDate(release.releaseDate);
-					amountOfSongs.innerText = `${release.tracks.length} songs`;
+					amountOfSongs.innerText = `${release.tracks.length} ${release.tracks.length === 1 ? 'song' : 'songs'}`;
 					playTime.innerText = formatSeconds(totalSecondsOfRelease);
 	
 					releaseContainer.className = 'release__release-container';
