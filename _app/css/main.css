@@ -9,3 +9,5 @@
 @import './modules/main-window.css';
 @import './modules/release.css';
 @import './modules/player.css';
+
+@import './modules/error.css';

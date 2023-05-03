@@ -50,12 +50,36 @@ export function SanityClient(config) {
 		}
 
 		const response = await fetch(request_url, request_options);
-		const response_body = await response.json();
 
-		if (response.ok) {
-			return response_body.result;
-		} else {
-			throw new Error(response_body.message || response_body.error.description);
+		try {
+			const responseBody = await handleResponse(response);
+			return responseBody.result;
+		} catch (error) {
+			return error.message;
+		} 
+
+		async function handleResponse(response) {
+			const status = response.status;
+
+			if(response.ok) {
+				const responseBody = await response.json();
+				const noHitOnQuery = responseBody.result.length === 0;
+
+				if (noHitOnQuery) {
+					throw new Error('No result, try again');
+				} else {
+					return responseBody;
+				}
+
+			} else if (status === 404) {
+				throw new Error('URL does not exist');
+			} else if (status === 401) {
+				throw new Error('User is not authorized');
+			} else if (status >= 500) {
+				throw new Error('Server is not responding, try again') 
+			} else {
+				throw new Error ('Something went wrong, try again')
+			}
 		}
 	}
 
