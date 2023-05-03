@@ -1,0 +1,11 @@
+.error {
+	height: 100%;
+	width: 100%;
+	display: grid;
+	place-items: center;
+}
+
+.error__message {
+	padding: 2rem 4rem;
+	border: solid 0.1rem var(--color-primary-default);
+}
