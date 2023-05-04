@@ -235,6 +235,13 @@ export default async function mainWindow() {
 	
 				mainWindow.append(container);
 			});
+
+			if (scrolledToBottom) {
+				const message = document.createElement('div');
+				message.innerText = `You've reached bottom`;
+				message.className = 'main-window__message';
+				mainWindow.append(message);
+			}
 		}
 
 		songsEl = document.querySelectorAll('.release__song');

@@ -3,6 +3,7 @@
 	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	gap: var(--gap-extra-large);
 	padding: var(--gap-medium);
 }
@@ -19,4 +20,11 @@
 
 .main-window::-webkit-scrollbar-thumb {
 	background-color: var(--color-secondary-lighter);
+}
+
+/* Message: bottom scroll */
+.main-window__message {
+	padding: var(--gap-large) var(--gap-extra-large);
+	border-top: solid 0.1rem var(--color-secondary-lighter);
+	border-bottom: solid 0.1rem var(--color-secondary-lighter);
 }
