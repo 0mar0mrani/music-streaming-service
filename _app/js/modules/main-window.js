@@ -6,6 +6,8 @@ import playerModule from './player.js';
 
 export default async function mainWindow() {
 	let errorMessage = '';
+	let currentPage = 0;
+	let pageSize = 5;
 	let scrolledToBottom = false;
 	let releases = await fetchAllReleases();
 
@@ -34,11 +36,19 @@ export default async function mainWindow() {
 		const mainWindowHeight = mainWindow.scrollHeight;
 
 		if (!scrolledToBottom && scrollCoordinatesFromBottom >= mainWindowHeight) {
+			currentPage += 1;
+			const moreReleases = await fetchAllReleases();
+			scrolledToBottom = moreReleases.length === pageSize ? false : true;
+			releases = [...releases, ...moreReleases];
+			renderHTML();
 		}
 	}
 
 	async function fetchAllReleases() {
-      const query = `*[_type == 'release'] | order(releaseDate desc) {
+		const sliceStart = currentPage * pageSize;
+		const sliceEnd = currentPage * pageSize + pageSize;
+
+      const query = `*[_type == 'release' ] [${sliceStart}...${sliceEnd}] | order(releaseDate desc)  {
 			_id,
          _type,
 			type,
@@ -56,7 +66,7 @@ export default async function mainWindow() {
 				'artworkAlt': ^.artworkAlt,
 			},
       }`;
-      
+
 		const fetchedReleases = await sanity.fetch(query);
 		const isError = typeof fetchedReleases !== 'string';
 		
