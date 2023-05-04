@@ -6,12 +6,15 @@ import playerModule from './player.js';
 
 export default async function mainWindow() {
 	let errorMessage = '';
+	let scrolledToBottom = false;
 	let releases = await fetchAllReleases();
 
 	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
 	let songsEl = null;
+
+	mainWindow.addEventListener('scroll', handleMainWindowScroll);
 
 	function handleSongElClick(event) {
 		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
@@ -24,6 +27,14 @@ export default async function mainWindow() {
 		player.toggleIsPlaying(true);
 		player.renderAudio();
 		renderHTML();
+	}
+
+	async function handleMainWindowScroll() {
+		const scrollCoordinatesFromBottom = window.innerHeight + mainWindow.scrollTop;
+		const mainWindowHeight = mainWindow.scrollHeight;
+
+		if (!scrolledToBottom && scrollCoordinatesFromBottom >= mainWindowHeight) {
+		}
 	}
 
 	async function fetchAllReleases() {
