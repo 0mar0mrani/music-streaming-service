@@ -1,4 +1,5 @@
 .release {
+	width: 100%;
 	padding: var(--gap-large) 0;
 	transition: 0.1s border ease-in-out;
 }
