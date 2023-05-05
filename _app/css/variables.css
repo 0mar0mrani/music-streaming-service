@@ -21,12 +21,6 @@
 
 	--filter-highlight-default: invert(73%) sepia(100%) saturate(752%) hue-rotate(357deg) brightness(102%) contrast(102%);
 
-	/* Fonts */
-	--font-header: 700 3.6rem / 1 "Poppins", sans-serif; 
-	--font-sub-header: 400 2.4rem / 1 "Poppins", sans-serif;
-	--font-body: 400 2rem / 1 "Poppins", sans-serif;
-	--font-small-text: 300 1.4rem / 1 "Poppins", sans-serif; 
-
 	/* Gaps */
 	--gap-extra-small: 0.5rem;
 	--gap-small: 1rem;
