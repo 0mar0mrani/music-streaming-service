@@ -231,3 +231,32 @@
 		margin-bottom: 0.1rem;
 	} 
 }
+
+@media only screen and (max-width: 700px) {
+	.release__number,
+	.release__header-number,
+	.release__header-plays,
+	.release__playtime,
+	.release__plays {
+		display: none;
+	}
+
+	.release__release-container {
+		flex-direction: column;
+	}
+
+	.release__artwork {
+		width: 100%;
+		height: auto;
+	}
+
+	.release__more-meta-data-container {
+		margin-top: var(--gap-large);
+	}
+}
+
+@media only screen and (max-width: 450px) {
+	.release__more-meta-data-container {
+		display: none;
+	}
+}
