@@ -14,6 +14,7 @@ export default function player(releases) {
 	let currentVolume = 1;
 
 	const playerElement = document.querySelector('.player');
+	const mainWindow = document.querySelector('.main-window');
 
 	const titleElement = document.querySelector('.player__title');
 	const artistElement = document.querySelector('.player__artist');
@@ -181,6 +182,7 @@ export default function player(releases) {
 		} else {
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
+				mainWindow.classList.add('main-window--player-open');
 				titleElement.innerText = currentTrack.title;
 				artistElement.innerText = currentTrack.artists.join(', ');
 				artworkElement.src = currentTrack.artworkURL;
@@ -239,12 +241,16 @@ export default function player(releases) {
 		function renderTimeline() {
 			const duration = audio.duration;
 			const currentTime = audio.currentTime;
+			const percentage = (currentTime / duration) * 100;
 			const formattedCurrentTime = formatTime(currentTime);
 			const formattedDuration = formatTime(duration);
 			timelineSlider.max = duration;
 			timelineSlider.value = currentTime;
 			timelineCurrent.innerText = formattedCurrentTime;
 			timelineDuration.innerText = formattedDuration;
+
+
+			timelineSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-secondary-default) 50%) ${100 - percentage}% 50% / 200%`;			
 		}
 	}
 
