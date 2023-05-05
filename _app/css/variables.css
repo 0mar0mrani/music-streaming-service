@@ -15,6 +15,10 @@
 	--filter-primary-darker: invert(93%) sepia(16%) saturate(234%) hue-rotate(19deg) brightness(88%) contrast(86%);
 	--filter-primary-darkest: invert(54%) sepia(16%) saturate(243%) hue-rotate(21deg) brightness(89%) contrast(84%);
 
+	--filter-secondary-default: invert(6%) sepia(9%) saturate(446%) hue-rotate(21deg) brightness(91%) contrast(99%);
+	--filter-secondary-lighter: invert(9%) sepia(7%) saturate(409%) hue-rotate(22deg) brightness(96%) contrast(84%);
+	--filter-secondary-lightest: invert(25%) sepia(6%) saturate(178%) hue-rotate(22deg) brightness(89%) contrast(91%);
+
 	--filter-highlight-default: invert(73%) sepia(100%) saturate(752%) hue-rotate(357deg) brightness(102%) contrast(102%);
 
 	/* Fonts */
@@ -35,4 +39,5 @@
 
 	/* Height */
 	--player-height: 9rem;
+	--navigation-height: 6rem;
 }
