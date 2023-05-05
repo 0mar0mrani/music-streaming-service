@@ -6,3 +6,10 @@
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto 1fr auto;
 }
+
+@media only screen and (max-width: 900px) {
+	.layout {
+		display: flex;
+		flex-direction: column;
+	}
+}

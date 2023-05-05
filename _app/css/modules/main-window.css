@@ -28,3 +28,15 @@
 	border-top: solid 0.1rem var(--color-secondary-lighter);
 	border-bottom: solid 0.1rem var(--color-secondary-lighter);
 }
+
+@media only screen and (max-width: 900px) {
+	.main-window {
+		grid-row: unset;
+		grid-column: 1 / -1;
+		order: 0;
+	}
+
+	.main-window--player-open {
+		margin-bottom: var(--player-height);
+	}
+}
