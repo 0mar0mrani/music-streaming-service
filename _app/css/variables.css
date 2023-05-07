@@ -34,6 +34,14 @@
 	/* Height */
 	--player-height: 9rem;
 	--navigation-height: 6rem;
+
+	/* Duration */
+	--duration: 0.7s;
+
+	/* Element Sizes */
+	--artwork: 7rem;
+	--play-button-small: 4.5rem;
+	--play-button-big: 7rem;
 }
 
 @media only screen and (max-width: 700px) {
