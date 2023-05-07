@@ -79,10 +79,12 @@
 @keyframes section-1-maximized {
 	30% {
 		flex-direction: column;
+		max-width: 40rem;
 	}
 
 	100% {
 		flex-direction: column;
+		max-width: 40rem;
 	}
 }
 
@@ -99,12 +101,14 @@
 		width: 100%;
 		align-self: center;
 		gap: 3rem;
+		max-width: 40rem;
 	}
 
 	100% {
 		width: 100%;
 		align-self: center;
 		gap: 3rem;
+		max-width: 40rem;
 	}
 }
 
@@ -391,18 +395,22 @@
 @keyframes section-1-minimized {
 	0% {
 		flex-direction: column;
+		max-width: 40rem;
 	}
 
 	70% {
 		flex-direction: column;
+		max-width: 40rem;
 	}
 
 	70.0001% {
 		flex-direction: row;
+		max-width: unset;
 	}
 
 	100% {
 		flex-direction: row;
+		max-width: unset;
 	}
 }
 
@@ -431,24 +439,28 @@
 		width: 100%;
 		align-self: center;
 		gap: 3rem;
+		max-width: 40rem;
 	}
 
 	70% {
 		width: 100%;
 		align-self: center;
 		gap: 3rem;
+		max-width: 40rem;
 	}
 
 	70.0001% {
 		width: unset;
 		align-self: unset;
 		gap: 0;
+		max-width: unset;
 	}
 
 	100% {
 		width: unset;
 		align-self: unset;
 		gap: 0;
+		max-width: unset;
 	}
 }
 
