@@ -248,9 +248,7 @@ export default function player(releases) {
 			timelineSlider.value = currentTime;
 			timelineCurrent.innerText = formattedCurrentTime;
 			timelineDuration.innerText = formattedDuration;
-
-
-			timelineSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-secondary-default) 50%) ${100 - percentage}% 50% / 200%`;			
+			timelineSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - percentage}% 50% / 200%`;			
 		}
 	}
 
