@@ -10,6 +10,7 @@ export default function player(releases) {
 	let isShuffle = false;
 	let isRepeat = false;
 	let isMute = false;
+	let isMaximized = false;
 	const audio = new Audio();
 	let currentVolume = 1;
 
@@ -38,6 +39,9 @@ export default function player(releases) {
 	const timelineCurrent = document.querySelector('.player__current');
 	const timelineDuration = document.querySelector('.player__duration');
 
+	const closeButton = document.querySelector('.player__close');
+
+	playerElement.addEventListener('click', handlePlayerElementClick);
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
@@ -46,10 +50,17 @@ export default function player(releases) {
 	volumeSlider.addEventListener('input', handleVolumeSliderInput);
 	muteButton.addEventListener('click', handleMuteButtonClick);
 	timelineSlider.addEventListener('input', handleTimelineSliderInput);
+	closeButton.addEventListener('click', handleCloseButtonClick);
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
-	function handlePlayButtonClick() {
+	function handlePlayerElementClick() {
+		isMaximized = true;
+		renderHTML();
+	}
+
+	function handlePlayButtonClick(event) {
+		event.stopPropagation();
 		toggleIsPlaying();
 		renderAudio();
 		renderHTML();
@@ -109,6 +120,12 @@ export default function player(releases) {
 		const input = timelineSlider.value;
 		audio.currentTime = input;
 		isPlaying = true;
+		renderHTML();
+	}
+
+	function handleCloseButtonClick(event) {
+		event.stopPropagation(); 
+		isMaximized = false;
 		renderHTML();
 	}
 
@@ -186,6 +203,14 @@ export default function player(releases) {
 				titleElement.innerText = currentTrack.title;
 				artistElement.innerText = currentTrack.artists.join(', ');
 				artworkElement.src = currentTrack.artworkURL;
+			}
+
+			if (isMaximized) {
+				playerElement.classList.add('player--maximized');
+				playerElement.classList.remove('player--minimized');
+			} else {
+				playerElement.classList.remove('player--maximized');
+				playerElement.classList.add('player--minimized');
 			}
 	
 			renderPlayButton();
