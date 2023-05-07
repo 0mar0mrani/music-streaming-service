@@ -66,8 +66,8 @@
 
 .player__artwork {
 	flex-shrink: 0;
-	width: 7rem;
-	height: 7rem;
+	width: var(--artwork);
+	height: var(--artwork);
 }
 
 .player__names {
@@ -103,8 +103,8 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 4.5rem;
-	height: 4.5rem;
+	width: var(--play-button-small);
+	height: var(--play-button-small);
 	border-radius: 50%;
 	background-color: var(--color-primary-default);
 }
