@@ -5,6 +5,8 @@
 	display: grid;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: auto 1fr auto;
+	overflow: hidden;
+	transform-style: preserve-3d;
 }
 
 @media only screen and (max-width: 900px) {
