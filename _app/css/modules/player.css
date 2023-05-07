@@ -95,7 +95,8 @@
 /* Section 2 - bottom */
 .player__top {
 	display: flex;
-	gap: var(--gap-large);
+	align-items: center;
+	gap: 2rem;
 }
 
 /* Play(pause) button */
@@ -124,7 +125,7 @@
 	filter: var(--filter-highlight-default) !important;
 }
 
-/* Section 2 - bottom*/
+/* Section 2 - bottom */
 .player__bottom {
 	display: flex;
 	justify-content: center;
@@ -163,32 +164,75 @@
 	width: auto;
 }
 
+.player__close {
+	align-self: flex-start;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.player__close img {
+	filter: var(--filter-primary-default);
+}
+
+.player__close:hover img {
+	filter: var(--filter-primary-darkest);
+}
+
 @media only screen and (max-width: 900px) {
 	.player {
-		position: absolute;
-		bottom: var(--navigation-height);
-		width: 100%;
+		display: flex;
 		justify-content: space-between;
+		position: absolute;
+		top: calc(100% - var(--navigation-height));
+		transform: translateY(-100%);
+		width: 100%;
 		padding-bottom: 1.4rem;
+	}
+
+
+	.player__section-2 {
+		height: auto;
+	}
+
+	.player__section-3 {
+		display: none;
+	}
+
+	.player__top {
+		gap: unset;
+	}
+
+	/* Not using 'display: none' as it not able to use in keyframes */
+	.player__shuffle, 
+	.player__next, 
+	.player__previous,
+	.player__next,
+	.player__repeat,
+	.player__current,
+	.player__duration {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.player__shuffle, 
+	.player__next, 
+	.player__previous,
+	.player__next,
+	.player__repeat {
+		width: 2.8rem;
+		height: 2.8rem;
 	}
 
 	.player--open {
 		display: flex;
-	}
-
-	.player__section-2 {
-		justify-content: center;
-	}
-
-	.player__previous,
-	.player__next,
-	.player__shuffle,
-	.player__repeat,
-	.player__mute,
-	.player__section-3,
-	.player__current,
-	.player__duration {
-		display: none;
 	}
 
 	.player__play {
@@ -220,43 +264,130 @@
 		width: 100%;
 	}
 
-	.player__timeline::-webkit-slider-thumb {
-		display: none;
-	}
-
 	.player__timeline {
 		user-select: none;
 		pointer-events: none;
-		background-color: var(--color-secondary-default);
-		margin-bottom: 0.1rem;
 	} 
-}
 
-@media only screen and (max-width: 700px) {
-	.release__number,
-	.release__header-number,
-	.release__header-plays,
-	.release__playtime,
-	.release__plays {
-		display: none;
+	.player__timeline::-webkit-slider-thumb {
+		opacity: 0;
+		transition: opacity 0.0001s 0.2s;
 	}
 
-	.release__release-container {
-		flex-direction: column;
+	/* Mobile: player maximized */
+	.player--maximized {
+		animation: player-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.release__artwork {
-		width: 100%;
-		height: auto;
+	.player--maximized .player__shuffle, 
+	.player--maximized .player__next, 
+	.player--maximized .player__previous,
+	.player--maximized .player__next,
+	.player--maximized .player__repeat,
+	.player--maximized .player__current,
+	.player--maximized .player__duration {
+		animation: controllers-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.release__more-meta-data-container {
-		margin-top: var(--gap-large);
+	.player--maximized .player__close {
+		animation: controllers-maximized var(--duration) ease-in-out forwards;
 	}
-}
 
-@media only screen and (max-width: 450px) {
-	.release__more-meta-data-container {
-		display: none;
+	.player--maximized .player__title,
+	.player--maximized .player__artist {
+		animation: names-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__section-1 {
+		animation: section-1-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__section-2 {
+		animation: section-2-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__top {
+		animation: section-2-top-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__play {
+		animation: play-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__artwork {
+		animation: artwork-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__timeline {
+		animation: timeline-maximized var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__play:hover {
+		background-color: var(--color-primary-darkest) !important;
+	}
+
+	.player--maximized .player__play img {
+		animation: play-icon var(--duration) ease-in-out forwards;
+	}
+
+	.player--maximized .player__timeline::-webkit-slider-thumb {
+		opacity: 1;
+	}
+
+	.player--maximized .player__timeline {
+		user-select: unset;
+		pointer-events: unset;
+	} 
+
+	/* Mobile: player Minimized */
+	.player--minimized {
+		animation: player-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__shuffle, 
+	.player--minimized .player__next, 
+	.player--minimized .player__previous,
+	.player--minimized .player__next,
+	.player--minimized .player__repeat,
+	.player--minimized .player__current,
+	.player--minimized .player__duration {
+		animation: disappear var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__close {
+		animation: disappear var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__title,
+	.player--minimized .player__artist {
+		animation: disappear-appear-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__section-1 {
+		animation: section-1-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__section-2 {
+		animation: section-2-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__top {
+		animation: section-2-top-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__play {
+		animation: play-to-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__play img {
+		animation: play-icon-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__artwork {
+		animation: artwork-to-minimized var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__timeline {
+		animation: timeline-minimized var(--duration) ease-in-out forwards;
 	}
 }
