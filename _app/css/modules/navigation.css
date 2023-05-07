@@ -4,6 +4,7 @@
 	flex-direction: column;
 	width: 15rem;
 	background-color: var(--color-secondary-default);
+	z-index: 10;
 }
 
 /* Button */
