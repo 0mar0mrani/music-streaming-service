@@ -10,6 +10,7 @@ export default function player(releases) {
 	let isShuffle = false;
 	let isRepeat = false;
 	let isMute = false;
+	let isAnimation = false; // making sure the player only animate at right times
 	let isMaximized = false;
 	const audio = new Audio();
 	let currentVolume = 1;
@@ -41,6 +42,7 @@ export default function player(releases) {
 
 	const closeButton = document.querySelector('.player__close');
 
+	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
@@ -54,7 +56,13 @@ export default function player(releases) {
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
+	function handleWindowResize() {
+		isAnimation = false;
+		renderHTML();
+	}
+
 	function handlePlayerElementClick() {
+		isAnimation = true;
 		isMaximized = true;
 		renderHTML();
 	}
@@ -125,6 +133,7 @@ export default function player(releases) {
 
 	function handleCloseButtonClick(event) {
 		event.stopPropagation(); 
+		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
 	}
@@ -205,12 +214,17 @@ export default function player(releases) {
 				artworkElement.src = currentTrack.artworkURL;
 			}
 
-			if (isMaximized) {
-				playerElement.classList.add('player--maximized');
-				playerElement.classList.remove('player--minimized');
+			if (isAnimation) {
+				if (isMaximized) {
+					playerElement.classList.add('player--maximized');
+					playerElement.classList.remove('player--minimized');
+				} else {
+					playerElement.classList.remove('player--maximized');
+					playerElement.classList.add('player--minimized');
+				}
 			} else {
+				playerElement.classList.remove('player--minimized');
 				playerElement.classList.remove('player--maximized');
-				playerElement.classList.add('player--minimized');
 			}
 	
 			renderPlayButton();

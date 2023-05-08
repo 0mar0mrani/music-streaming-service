@@ -184,13 +184,16 @@
 
 @media only screen and (max-width: 900px) {
 	.player {
-		display: flex;
 		justify-content: space-between;
 		position: absolute;
 		top: calc(100% - var(--navigation-height));
 		transform: translateY(-100%);
 		width: 100%;
 		padding-bottom: 1.4rem;
+	}
+
+	.player--open {
+		display: flex;
 	}
 
 
