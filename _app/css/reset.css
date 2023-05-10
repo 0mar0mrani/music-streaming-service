@@ -30,3 +30,7 @@ button {
 input[type="range"] {
 	cursor: pointer;
 }
+
+ul {
+	list-style: none;
+}

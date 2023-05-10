@@ -118,7 +118,7 @@ export default async function mainWindow() {
 			mainWindow.append(container)
 		} else {
 			releases.forEach((release, index) => {
-				const container = document.createElement('div');
+				const container = document.createElement('li');
 				const releaseContainer = createReleaseDOM();
 				const songHeaderContainer = createSongHeader();
 				const songsContainer = createSongsDOM();
@@ -208,13 +208,14 @@ export default async function mainWindow() {
 				}
 	
 				function createSongsDOM() {
-					const songsContainer = document.createElement('div');
+					const songsContainer = document.createElement('ul');
 		
 					release.tracks.forEach((track, index) => {
 						const formattedPlaytime = `${track.playTime.minutes.toString().padStart(2, '0')}:${track.playTime.seconds.toString().padStart(2, '0')}`;
 						const formattedPlays = formatPlays(String(track.plays));
-	
-						const songContainer = document.createElement('button');
+
+						const songContainer = document.createElement('li');
+						const songButton = document.createElement('button');
 						const number = document.createElement('div');
 						const titleArtistContainer = document.createElement('div');
 						const title = document.createElement('div');
@@ -222,7 +223,7 @@ export default async function mainWindow() {
 						const plays = document.createElement('div');
 						const time = document.createElement('div');
 	
-						songContainer.dataset.trackNumber = index;
+						songButton.dataset.trackNumber = index;
 	
 						number.innerText = index + 1;
 						title.innerText = track.title;
@@ -230,7 +231,7 @@ export default async function mainWindow() {
 						plays.innerText = formattedPlays;
 						time.innerText = formattedPlaytime;
 	
-						songContainer.className = 'release__song';
+						songButton.className = 'release__song';
 						number.className = 'release__number';
 						title.className = 'release__track-title';
 						plays.className = 'release__plays';
@@ -238,11 +239,13 @@ export default async function mainWindow() {
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artist);
 	
-						songContainer.append(number);
-						songContainer.append(titleArtistContainer);
-						songContainer.append(plays);
-						songContainer.append(time);
+						songButton.append(number);
+						songButton.append(titleArtistContainer);
+						songButton.append(plays);
+						songButton.append(time);
 	
+						songContainer.append(songButton);
+
 						songsContainer.append(songContainer);
 					});
 	
