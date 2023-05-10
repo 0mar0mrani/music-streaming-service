@@ -292,7 +292,6 @@ export default function player(releases) {
 	}
 
 	function playerFocusTrap(event) {
-		event.preventDefault();
 		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
 		const firstElement = focusableElements[0];
 		const lastElement = focusableElements[focusableElements.length - 1];
@@ -300,8 +299,10 @@ export default function player(releases) {
 		const shiftKeyPressed = event.shiftKey;
 
 		if (shiftKeyPressed && activeElement === firstElement) {
+			event.preventDefault();
 			lastElement.focus();
 		} else if (!shiftKeyPressed && activeElement === lastElement) {
+			event.preventDefault();
 			firstElement.focus();
 		}
 	}
