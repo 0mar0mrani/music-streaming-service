@@ -4,6 +4,7 @@
 	flex-direction: column;
 	width: 15rem;
 	background-color: var(--color-secondary-default);
+	z-index: 10;
 }
 
 /* Button */
@@ -27,4 +28,23 @@
 
 .navigation__button:hover {
 	color: var(--color-primary-darkest);
+}
+
+@media only screen and (max-width: 900px) {
+	.navigation {
+		grid-row: unset;
+		grid-column: 1 / -1;
+		order: 1;
+		flex-direction: row;
+		justify-content: end;
+		height: 100%;
+		width: 100%;
+		flex-shrink: 0;
+		height: var(--navigation-height);
+		background-color: var(--color-secondary-default);
+	}
+
+	.navigation__button {
+		aspect-ratio: unset;
+	}
 }

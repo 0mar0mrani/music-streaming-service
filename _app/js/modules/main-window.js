@@ -133,6 +133,9 @@ export default async function mainWindow() {
 					title.innerText = 'title';
 					plays.innerText = 'plays';
 					time.innerText = 'time';
+
+					number.className = 'release__header-number';
+					plays.className = 'release__header-plays';
 	
 					songHeaderContainer.append(number);
 					songHeaderContainer.append(title);
@@ -218,6 +221,7 @@ export default async function mainWindow() {
 						songContainer.className = 'release__song';
 						number.className = 'release__number';
 						title.className = 'release__track-title';
+						plays.className = 'release__plays';
 	
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artist);
@@ -247,7 +251,7 @@ export default async function mainWindow() {
 		songsEl = document.querySelectorAll('.release__song');
 
 		for (const songEl of songsEl) {
-			songEl.addEventListener('dblclick', handleSongElClick);
+			songEl.addEventListener('click', handleSongElClick);
 		}
 	}
 }

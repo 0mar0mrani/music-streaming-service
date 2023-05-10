@@ -4,3 +4,21 @@ body {
 	font: var(--font-body);
 	color: var(--color-primary-default);
 }
+
+:root {
+	/* Fonts */
+	--font-header: 700 3.6rem / 1 "Poppins", sans-serif; 
+	--font-sub-header: 400 2.4rem / 1 "Poppins", sans-serif;
+	--font-body: 400 2rem / 1 "Poppins", sans-serif;
+	--font-small-text: 300 1.4rem / 1 "Poppins", sans-serif; 
+}
+
+
+@media only screen and (max-width: 450px) {
+	:root {
+		--font-header: 700 2.8rem / 1 "Poppins", sans-serif; 
+		--font-sub-header: 400 2rem / 1 "Poppins", sans-serif;
+		--font-body: 400 1.4rem / 1 "Poppins", sans-serif;
+		--font-small-text: 300 1.2rem / 1 "Poppins", sans-serif; 
+	}
+}
