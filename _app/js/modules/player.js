@@ -89,6 +89,9 @@ export default function player(releases) {
 			isMaximized = true;
 		}
 
+		if (event.key === 'Escape') {
+			isMaximized = false;
+		}
 
 		renderHTML();
 	}
