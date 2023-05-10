@@ -11,109 +11,109 @@
 	
 	<body>
 		<div class="layout">
+			<div class="accessibility">
+				<a href="#main-window" class="accessibility__skip">Go to main content</a>
+
+				<div class="accessibility__player">
+					<!-- player.js will render here based if player is open -->
+				</div>
+			</div>
+
 			<header class="header">
-				<h1>Releases</h1>
+				<h1>New releases</h1>
 			</header>
 
-			<aside class="navigation">
+			<nav class="navigation">
 				<button class="navigation__button navigation__button--active">
-					<!-- <div class="navigation__icon">
-						<img src="/_app/assets/svg/release.svg" alt="releases">
-					</div> -->
-
 					<span>Release</span>
 				</button>
 
 				<button class="navigation__button">
-					<!-- <div class="navigation__icon">
-						<img src="/_app/assets/svg/search.svg" alt="search">
-					</div> -->
-
 					<span>Search</span>
 				</button>
 
 				<button class="navigation__button">
-					<!-- <div class="navigation__icon">
-						<img src="/_app/assets/svg/playlist.svg" alt="playlist">
-					</div> -->
-
 					<span>Playlist</span>
 				</button>
-			</aside>
+			</nav>
 
-			<main class="main-window"></main>
+			<main class="main-window-container">
+				<ul class="main-window" id="main-window"></ul>
+			</main>
 
 			<div class="loading">
-				<div class="loading__animation"><div>
+				<div class="loading__animation"></div>
 			</div>
 
-			<section class="player">
-				<button class="player__close">
-					<img src="/_app/assets/svg/close.svg" alt="close player">
-				</button>
-
-				<div class="player__section-1">
-					<div class="player__artwork">
-						<img src="" alt="">
+			<section class="player-container">
+				<div class="player" id="player" aria-label="controllers">
+					<button class="player__close">
+						<img src="/_app/assets/svg/close.svg" alt="close player">
+					</button>
+	
+					<div class="player__section-1">
+						<div class="player__artwork">
+							<img src="" alt="">
+						</div>
+	
+						<div class="player__names">
+							<p class="player__title">Title</p>
+	
+							<p class="player__artist">Artist</p>
+						</div>
 					</div>
-
-					<div class="player__names">
-						<p class="player__title">Title</p>
-
-						<p class="player__artist">Artist</p>
+	
+					<div class="player__section-2">
+						<div class="player__top">
+							<button class="player__shuffle">
+								<img src="/_app/assets/svg/shuffle.svg" alt="shuffle">
+							</button>
+	
+							<button class="player__previous">
+								<img src="/_app/assets/svg/previous.svg" alt="previous">
+							</button>
+	
+							<button class="player__play">
+								<img src="/_app/assets/svg/play.svg" alt="play">
+							</button>
+							
+							<button class="player__next">
+								<img src="/_app/assets/svg/next.svg" alt="next">
+							</button>
+	
+							<button class="player__repeat">
+								<img src="/_app/assets/svg/repeat.svg" alt="repeat">
+							</button>
+						</div>
+	
+						<div class="player__bottom">
+							<div class="player__current">00:00</div>
+		
+							<input 
+								type="range" 
+								class="player__timeline" 
+								value="0" 
+								step="0.01"
+							>
+		
+							<div class="player__duration">00:00</div>
+						</div>
 					</div>
-				</div>
-
-				<div class="player__section-2">
-					<div class="player__top">
-						<button class="player__shuffle">
-							<img src="/_app/assets/svg/shuffle.svg" alt="shuffle">
+	
+					<div class="player__section-3">
+						<button class="player__mute">
+							<img src="/_app/assets/svg/volume-3.svg" alt="mute">
 						</button>
-
-						<button class="player__previous">
-							<img src="/_app/assets/svg/previous.svg" alt="previous">
-						</button>
-
-						<button class="player__play">
-							<img src="/_app/assets/svg/play.svg" alt="play">
-						</button>
-						
-						<button class="player__next">
-							<img src="/_app/assets/svg/next.svg" alt="next">
-						</button>
-
-						<button class="player__repeat">
-							<img src="/_app/assets/svg/repeat.svg" alt="repeat">
-						</button>
-					</div>
-
-					<div class="player__bottom">
-						<div class="player__current">00:00</div>
 	
 						<input 
 							type="range" 
-							class="player__timeline" 
-							value="0" 
-							step="0.01"
+							class="player__volume" 
+							min="0" 
+							max="1" 
+							step="0.01" 
+							value="1"
 						>
-	
-						<div class="player__duration">00:00</div>
 					</div>
-				</div>
-
-				<div class="player__section-3">
-					<button class="player__mute">
-						<img src="/_app/assets/svg/volume-3.svg" alt="mute">
-					</button>
-
-					<input 
-						type="range" 
-						class="player__volume" 
-						min="0" 
-						max="1" 
-						step="0.01" 
-						value="1"
-					>
 				</div>
 			</section>
 		</div>

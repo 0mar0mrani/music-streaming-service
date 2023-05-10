@@ -1,0 +1,24 @@
+.accessibility {
+	position: absolute;
+	top: -100%;
+	left: 0;
+	white-space: nowrap;
+	z-index: 30;
+}
+
+.accessibility:focus-within {
+	top: 0;
+}
+
+.accessibility__skip {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 1rem 2rem;
+	background-color: var(--color-secondary-default);
+	opacity: 0;
+}
+
+.accessibility__skip:focus {
+	opacity: 1;
+}

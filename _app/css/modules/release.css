@@ -80,6 +80,7 @@
 	display: grid;
 	align-items: center;
 	grid-template-columns: var(--columns-song); 
+	width: 100%;
 	padding: var(--gap-small) var(--gap-large);
 	border: none;
 	font: var(--font-small-text);

@@ -15,6 +15,9 @@ export default function player(releases) {
 	const audio = new Audio();
 	let currentVolume = 1;
 
+	let isMobile = true;
+	const mobileBreakpoint = 900;
+
 	let touchStart = null; // for drag player to close
 	let over50Percent = false;
 	let animationDelay = null;
@@ -48,9 +51,11 @@ export default function player(releases) {
 	const timelineDuration = document.querySelector('.player__duration');
 
 	const closeButton = document.querySelector('.player__close');
+	const accessabilitySkipToPlayer = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
+	playerElement.addEventListener('keydown', handlePlayerElementKeydown)
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
@@ -68,6 +73,7 @@ export default function player(releases) {
 	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 
 	function handleWindowResize() {
+		isMobile = window.innerWidth <= mobileBreakpoint ? true : false;
 		isAnimation = false;
 		renderHTML();
 	}
@@ -75,6 +81,25 @@ export default function player(releases) {
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
+		renderHTML();
+	}
+
+	function handlePlayerElementKeydown(event) {
+		const key = event.key;
+
+		if (key === 'Enter') {
+			isAnimation = true;
+			isMaximized = true;
+		}
+
+		if (key === 'Tab' && isMaximized) {
+			playerFocusTrap(event);
+		}
+
+		if (key === 'Escape') {
+			isMaximized = false;
+		}
+
 		renderHTML();
 	}
 
@@ -267,6 +292,22 @@ export default function player(releases) {
 		}
 	}
 
+	function playerFocusTrap(event) {
+		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
+		const firstElement = focusableElements[0];
+		const lastElement = focusableElements[focusableElements.length - 1];
+		const activeElement = document.activeElement;
+		const shiftKeyPressed = event.shiftKey;
+
+		if (shiftKeyPressed && activeElement === firstElement) {
+			event.preventDefault();
+			lastElement.focus();
+		} else if (!shiftKeyPressed && activeElement === lastElement) {
+			event.preventDefault();
+			firstElement.focus();
+		}
+	}
+
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
@@ -277,6 +318,8 @@ export default function player(releases) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
+			renderAccessability();
+			
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
 				mainWindow.classList.add('main-window--player-open');
@@ -304,6 +347,35 @@ export default function player(releases) {
 			renderMuteButton();
 			renderVolumeSlider();
 		}
+
+		function renderAccessability() {
+				if (isMobile) {
+					playerElement.setAttribute('role', 'button');
+					playerElement.setAttribute('tabindex', '0');
+	
+					if (isMaximized) {
+						timelineSlider.removeAttribute('tabindex');
+						playerElement.setAttribute('aria-expanded', 'true');
+					} else {
+						timelineSlider.setAttribute('tabindex', '-1');
+						playerElement.setAttribute('aria-expanded', 'false');
+					}
+				} else {
+					playerElement.removeAttribute('role');
+					playerElement.removeAttribute('tabindex');
+					timelineSlider.removeAttribute('tabindex');
+					playerElement.removeAttribute('aria-expanded');
+				}
+
+				if (isPlaying) {
+					accessabilitySkipToPlayer.innerHTML = '';
+					const link = document.createElement('a');
+					link.innerText = 'Go to controllers';
+					link.className = 'accessibility__skip';
+					link.href = '#player';
+					accessabilitySkipToPlayer.append(link);
+				}
+			}
 		
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
@@ -356,7 +428,6 @@ export default function player(releases) {
 			const formattedDuration = formatTime(duration);
 			timelineSlider.max = duration;
 			timelineSlider.value = currentTime;
-			console.log(duration);
 			
 			if (!isNaN(duration)) {
 				timelineCurrent.innerText = formattedCurrentTime;

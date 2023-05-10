@@ -1,7 +1,6 @@
 .header {
 	grid-column-start: 2;
 	background-color: var(--color-secondary-default);
-	padding: 0 var(--gap-large);
+	padding: var(--gap-medium) calc(var(--gap-medium) * 2);
 	align-self: self-start;
-	display: none;
 }
