@@ -54,6 +54,7 @@ export default function player(releases) {
 
 	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
+	playerElement.addEventListener('keydown', handlePlayerElementKeydown)
 	playButton.addEventListener('click', handlePlayButtonClick);
 	previousButton.addEventListener('click', handlePreviousButtonClick);
 	nextButton.addEventListener('click', handleNextButtonClick);
@@ -79,6 +80,16 @@ export default function player(releases) {
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
+		renderHTML();
+	}
+
+	function handlePlayerElementKeydown(event) {
+		if (event.key === 'Enter') {
+			isAnimation = true;
+			isMaximized = true;
+		}
+
+
 		renderHTML();
 	}
 
