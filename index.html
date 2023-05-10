@@ -11,7 +11,13 @@
 	
 	<body>
 		<div class="layout">
-			<a href="#main-window" class="accessibility">Go to main content</a>
+			<div class="accessibility">
+				<a href="#main-window" class="accessibility__skip">Go to main content</a>
+
+				<div class="accessibility__player">
+					<!-- player.js will render here based if player is open -->
+				</div>
+			</div>
 
 			<header class="header">
 				<h1>Releases</h1>
@@ -38,7 +44,7 @@
 			</div>
 
 			<section class="player-container">
-				<div class="player">
+				<div class="player" id="player" aria-label="controllers">
 					<button class="player__close">
 						<img src="/_app/assets/svg/close.svg" alt="close player">
 					</button>

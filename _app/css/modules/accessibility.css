@@ -1,13 +1,21 @@
 .accessibility {
-	opacity: 0;
 	position: absolute;
 	top: var(--gap-extra-large);
 	left: 50%;
 	transform: translateX(-50%);
-	padding: 1rem 2rem;
-	background-color: var(--color-secondary-default);
+	white-space: nowrap;
 }
 
-.accessibility:focus {
+.accessibility__skip {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 1rem 2rem;
+	background-color: var(--color-secondary-default);
+	opacity: 0;
+}
+
+.accessibility__skip:focus {
 	opacity: 1;
 }

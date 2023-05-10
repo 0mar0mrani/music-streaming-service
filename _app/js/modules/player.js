@@ -51,6 +51,7 @@ export default function player(releases) {
 	const timelineDuration = document.querySelector('.player__duration');
 
 	const closeButton = document.querySelector('.player__close');
+	const accessabilitySkipToPlayer = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
@@ -364,6 +365,15 @@ export default function player(releases) {
 					playerElement.removeAttribute('tabindex');
 					timelineSlider.removeAttribute('tabindex');
 					playerElement.removeAttribute('aria-expanded');
+				}
+
+				if (isPlaying) {
+					accessabilitySkipToPlayer.innerHTML = '';
+					const link = document.createElement('a');
+					link.innerText = 'Go to controllers';
+					link.className = 'accessibility__skip';
+					link.href = '#player';
+					accessabilitySkipToPlayer.append(link);
 				}
 			}
 		
