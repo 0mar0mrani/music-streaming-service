@@ -164,7 +164,7 @@ export default async function mainWindow() {
 					const artworkContainer = document.createElement('div');
 					const artwork = document.createElement('img');
 					const metaDataContainer = document.createElement('div');
-					const title = document.createElement('div');
+					const title = document.createElement('h2');
 					const artist = document.createElement('div');
 					const releaseType = document.createElement('div');
 					const moreMetaDataContainer = document.createElement('div');
@@ -218,7 +218,7 @@ export default async function mainWindow() {
 						const songButton = document.createElement('button');
 						const number = document.createElement('div');
 						const titleArtistContainer = document.createElement('div');
-						const title = document.createElement('div');
+						const title = document.createElement('h3');
 						const artist = document.createElement('div');
 						const plays = document.createElement('div');
 						const time = document.createElement('div');
