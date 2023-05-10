@@ -3,7 +3,7 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	display: flex;
+	display: none;
 	justify-content: center;
 	align-items: center;
 	border-radius: 50%;
@@ -13,6 +13,9 @@
 	background-color: var(--color-secondary-default);
 }
 
+.loading--active {
+	display: flex;
+}
 
 /* This animation is take from: www.loading.io/css/ */
 .loading__animation {
