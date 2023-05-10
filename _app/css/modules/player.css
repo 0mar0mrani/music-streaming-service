@@ -187,6 +187,7 @@
 
 @media only screen and (max-width: 900px) {
 	.player {
+		cursor: pointer;
 		justify-content: space-between;
 		position: absolute;
 		top: calc(100% - var(--navigation-height));
@@ -282,6 +283,7 @@
 
 	/* Mobile: player maximized */
 	.player--maximized {
+		cursor: unset;
 		animation: player-maximized var(--duration) ease-in-out forwards;
 	}
 
