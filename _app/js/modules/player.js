@@ -15,6 +15,9 @@ export default function player(releases) {
 	const audio = new Audio();
 	let currentVolume = 1;
 
+	let isMobile = true;
+	const mobileBreakpoint = 900;
+
 	let touchStart = null; // for drag player to close
 	let over50Percent = false;
 	let animationDelay = null;
@@ -68,6 +71,7 @@ export default function player(releases) {
 	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 
 	function handleWindowResize() {
+		isMobile = window.innerWidth <= mobileBreakpoint ? true : false;
 		isAnimation = false;
 		renderHTML();
 	}
