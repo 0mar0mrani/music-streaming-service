@@ -84,12 +84,18 @@ export default function player(releases) {
 	}
 
 	function handlePlayerElementKeydown(event) {
-		if (event.key === 'Enter') {
+		const key = event.key;
+		
+		if (key === 'Enter') {
 			isAnimation = true;
 			isMaximized = true;
 		}
 
-		if (event.key === 'Escape') {
+		if (key === 'Tab' && isMaximized) {
+			playerFocusTrap(event);
+		}
+
+		if (key === 'Escape') {
 			isMaximized = false;
 		}
 
@@ -282,6 +288,21 @@ export default function player(releases) {
 			queIndex -= 1;
 		} else {
 			queIndex = 0;
+		}
+	}
+
+	function playerFocusTrap(event) {
+		event.preventDefault();
+		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
+		const firstElement = focusableElements[0];
+		const lastElement = focusableElements[focusableElements.length - 1];
+		const activeElement = document.activeElement;
+		const shiftKeyPressed = event.shiftKey;
+
+		if (shiftKeyPressed && activeElement === firstElement) {
+			lastElement.focus();
+		} else if (!shiftKeyPressed && activeElement === lastElement) {
+			firstElement.focus();
 		}
 	}
 
