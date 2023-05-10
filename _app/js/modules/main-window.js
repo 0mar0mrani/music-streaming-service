@@ -8,6 +8,7 @@ export default async function mainWindow() {
 	let errorMessage = '';
 	let currentPage = 0;
 	let pageSize = 5;
+	let canFetch = true;
 	let scrolledToBottom = false;
 	let isLoading = false;
 	let releases = await fetchAllReleases();
@@ -37,7 +38,8 @@ export default async function mainWindow() {
 		const scrollCoordinatesFromBottom = window.innerHeight + mainWindow.scrollTop;
 		const mainWindowHeight = mainWindow.scrollHeight;
 
-		if (!scrolledToBottom && scrollCoordinatesFromBottom >= mainWindowHeight) {
+		if (canFetch && !scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowHeight - window.innerHeight)) {
+			canFetch = false;
 			currentPage += 1;
 			isLoading = true;
 			renderHTML();
@@ -46,6 +48,10 @@ export default async function mainWindow() {
 			scrolledToBottom = moreReleases.length === pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
 			renderHTML();
+
+			setTimeout(() => {
+				canFetch = true;
+			}, 500);
 		}
 	}
 
