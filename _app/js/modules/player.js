@@ -15,7 +15,14 @@ export default function player(releases) {
 	const audio = new Audio();
 	let currentVolume = 1;
 
+	let touchStart = null; // for drag player to close
+	let over50Percent = false;
+	let animationDelay = null;
+	const animationDuration = 0.7;
+
 	const playerElement = document.querySelector('.player');
+	const allElementsInPlayer = playerElement.querySelectorAll('*');
+
 	const mainWindow = document.querySelector('.main-window');
 
 	const titleElement = document.querySelector('.player__title');
@@ -55,6 +62,10 @@ export default function player(releases) {
 	closeButton.addEventListener('click', handleCloseButtonClick);
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
+
+	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart);
+	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove);
+	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 
 	function handleWindowResize() {
 		isAnimation = false;
@@ -132,7 +143,13 @@ export default function player(releases) {
 	}
 
 	function handleCloseButtonClick(event) {
-		event.stopPropagation(); 
+		event.stopPropagation();
+		playerElement.removeAttribute('style');
+		
+		for (const element of allElementsInPlayer) {
+			element.removeAttribute('style');
+		}
+		
 		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
@@ -152,6 +169,60 @@ export default function player(releases) {
 			renderHTML();
 		} else {
 			renderHTML('timeline');
+		}
+	}
+
+	function handlePlayerElementTouchstart(event) {
+		if (isMaximized) {
+			touchStart = event.touches[0].clientY;
+		}
+	}
+
+	function handlePlayerElementTouchmove(event) {		
+		if (isMaximized) {
+			event.preventDefault();
+			const touchY = event.touches[0].clientY;
+		 	const playerHeight = playerElement.offsetHeight;
+		 	const dragDistances = touchY - touchStart;
+		 	const touchPercentage = (dragDistances / playerHeight) * 100;
+			
+			animationDelay = (touchPercentage / 100) * animationDuration;
+
+			if (touchPercentage >= 0) {
+				over50Percent = touchPercentage >= 25 ? true : false
+
+				playerElement.style.animationPlayState = 'paused';
+				playerElement.style.animationDelay = `-${animationDelay}s`;
+				
+				for (const element of allElementsInPlayer) {
+					element.style.animationPlayState = 'paused';
+					element.style.animationDelay = `-${animationDelay}s`;
+				}				
+
+				playerElement.classList.remove('player--maximized');
+				playerElement.classList.add('player--minimized');
+			}
+		}
+	}
+
+	function handlePlayerElementTouchend() {
+		if (isMaximized) {
+			playerElement.style.animationPlayState = 'running';
+			
+			for (const element of allElementsInPlayer) {
+				element.style.animationPlayState = 'running';
+			}
+
+			if (!over50Percent) {
+				isMaximized = true;
+				playerElement.style.animationDelay = `-${animationDuration - animationDelay}s`;
+				
+				for (const element of allElementsInPlayer) {
+					element.style.animationDelay = `-${animationDuration - animationDelay}s`;
+				}
+
+				renderHTML();
+			}
 		}
 	}
 
