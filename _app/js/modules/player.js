@@ -85,7 +85,7 @@ export default function player(releases) {
 
 	function handlePlayerElementKeydown(event) {
 		const key = event.key;
-		
+
 		if (key === 'Enter') {
 			isAnimation = true;
 			isMaximized = true;
@@ -316,6 +316,8 @@ export default function player(releases) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
+			renderAccessability();
+			
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
 				mainWindow.classList.add('main-window--player-open');
@@ -343,6 +345,26 @@ export default function player(releases) {
 			renderMuteButton();
 			renderVolumeSlider();
 		}
+
+		function renderAccessability() {
+				if (isMobile) {
+					playerElement.setAttribute('role', 'button');
+					playerElement.setAttribute('tabindex', '0');
+	
+					if (isMaximized) {
+						timelineSlider.removeAttribute('tabindex');
+						playerElement.setAttribute('aria-expanded', 'true');
+					} else {
+						timelineSlider.setAttribute('tabindex', '-1');
+						playerElement.setAttribute('aria-expanded', 'false');
+					}
+				} else {
+					playerElement.removeAttribute('role');
+					playerElement.removeAttribute('tabindex');
+					timelineSlider.removeAttribute('tabindex');
+					playerElement.removeAttribute('aria-expanded');
+				}
+			}
 		
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
@@ -395,7 +417,6 @@ export default function player(releases) {
 			const formattedDuration = formatTime(duration);
 			timelineSlider.max = duration;
 			timelineSlider.value = currentTime;
-			console.log(duration);
 			
 			if (!isNaN(duration)) {
 				timelineCurrent.innerText = formattedCurrentTime;
