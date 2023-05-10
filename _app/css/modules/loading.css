@@ -1,0 +1,38 @@
+.loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	width: 10rem;
+	height: 10rem;
+	margin-left: calc(var(--player-width) / 2);
+	background-color: var(--color-secondary-default);
+}
+
+.loading--active {
+	display: flex;
+}
+
+/* This animation is take from: www.loading.io/css/ */
+.loading__animation {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 6.4rem;
+	height: 6.4rem;
+	margin: 0.8rem;
+	border: 0.8rem solid var(--color-primary-default);
+	border-radius: 50%;
+	animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: var(--color-primary-default) transparent transparent transparent;
+}
+
+@media only screen and (max-width: 900px) {
+	.loading {
+		margin-left: 0;
+	}
+}

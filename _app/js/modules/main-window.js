@@ -9,11 +9,13 @@ export default async function mainWindow() {
 	let currentPage = 0;
 	let pageSize = 5;
 	let scrolledToBottom = false;
+	let isLoading = false;
 	let releases = await fetchAllReleases();
 
 	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
+	const loading = document.querySelector('.loading');
 	let songsEl = null;
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
@@ -37,7 +39,10 @@ export default async function mainWindow() {
 
 		if (!scrolledToBottom && scrollCoordinatesFromBottom >= mainWindowHeight) {
 			currentPage += 1;
+			isLoading = true;
+			renderHTML();
 			const moreReleases = await fetchAllReleases();
+			isLoading = false;
 			scrolledToBottom = moreReleases.length === pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
 			renderHTML();
@@ -89,6 +94,7 @@ export default async function mainWindow() {
 	}
 
 	function renderHTML() {
+		renderLoading();
 		player.renderHTML();
 
 		mainWindow.innerHTML = '';
@@ -252,6 +258,10 @@ export default async function mainWindow() {
 
 		for (const songEl of songsEl) {
 			songEl.addEventListener('click', handleSongElClick);
+		}
+
+		function renderLoading() {
+			isLoading ? loading.classList.add('loading--active') : loading.classList.remove('loading--active');
 		}
 	}
 }

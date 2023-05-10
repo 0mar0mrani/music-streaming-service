@@ -1,4 +1,14 @@
-/* Maximized */
+/* Loading animation */
+@keyframes loading {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Player maximized */
 @keyframes controllers-maximized {
 	0% {
 		opacity: 0;
@@ -244,7 +254,7 @@
 }
 
 
-/* Minimized */
+/* Player minimized */
 @keyframes player-minimized {
 	0% {
 		top: 0;
