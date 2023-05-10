@@ -251,7 +251,7 @@ export default async function mainWindow() {
 		songsEl = document.querySelectorAll('.release__song');
 
 		for (const songEl of songsEl) {
-			songEl.addEventListener('dblclick', handleSongElClick);
+			songEl.addEventListener('click', handleSongElClick);
 		}
 	}
 }
