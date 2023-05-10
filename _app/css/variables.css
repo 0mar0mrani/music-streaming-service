@@ -35,6 +35,9 @@
 	--player-height: 9rem;
 	--navigation-height: 6rem;
 
+	/* Width */
+	--player-width: 15rem;
+
 	/* Duration */
 	--duration: 0.7s;
 
