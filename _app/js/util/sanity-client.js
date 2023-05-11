@@ -13,6 +13,37 @@ export function SanityClient(config) {
 		throw new Error('Sanity: project id, dataset, and API version must be defined');
 	}
 
+	async function mutate(mutations = [], params = {}) {
+		if (!token) {
+			throw new Error('Sanity: all mutation requests have to be authenticated');
+		}
+
+		let request_url = `https://${id}.api.sanity.io/v${version}/data/mutate/${dataset}`;
+
+		const request_options = {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ mutations }),
+		};
+
+		if (params) {
+			const mapped_params = Object.keys(params).map(key => `${key}=${params[key]}`);
+			request_url += `?${mapped_params.join('&')}`;
+		}
+
+		const response = await fetch(request_url, request_options);
+		const response_body = await response.json();
+
+		if (response.status < 400) {
+			return response_body;
+		} else {
+			throw new Error(response_body.error.description);
+		}
+	}
+
 	/**
 	 * @param {string} query GROQ Query
 	 * @param {object} params Parameters object
@@ -85,5 +116,6 @@ export function SanityClient(config) {
 
 	return {
 		fetch: query,
+		mutate: mutate,
 	};
 }
