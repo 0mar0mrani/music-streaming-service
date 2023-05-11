@@ -24,7 +24,9 @@ export default async function mainWindow() {
 	function handleSongElClick(event) {
 		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
 		const clickedReleaseNumber = event.currentTarget.closest('.release').dataset.releaseNumber;
+		const track = releases[clickedReleaseNumber].tracks[clickedTrackNumber];
 
+		addOneToPlays(track._id, track.plays + 1)
 		player.setCurrentTrack(clickedTrackNumber);
 		player.setCurrentRelease(clickedReleaseNumber);
 		player.setQue();
@@ -97,6 +99,19 @@ export default async function mainWindow() {
 		}, 0)
 
 		return totalSeconds;
+	}
+
+	async function addOneToPlays(trackID, newPlays) {
+		const mutations = [{
+				patch: {
+					id: trackID,
+					set: {
+						plays: newPlays,
+					},
+				}
+		}];  
+	
+		await sanity.mutate(mutations);
 	}
 
 	function renderHTML() {
