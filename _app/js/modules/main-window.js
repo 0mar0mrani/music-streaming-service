@@ -5,21 +5,28 @@ import formatSeconds from '../util/format-seconds.js';
 import playerModule from './player.js';
 
 export default async function mainWindow() {
+	let currentSection = 'playlist';
 	let errorMessage = '';
 	let currentPage = 0;
 	let pageSize = 5;
 	let canFetch = true;
 	let scrolledToBottom = false;
 	let isLoading = false;
-	let releases = await fetchAllReleases();
+	let releases = currentSection === 'release' && await fetchAllReleases();
+
 
 	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
 	const loading = document.querySelector('.loading');
 	let songsEl = null;
+	const navigationButtons = document.querySelectorAll('.navigation__button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
+
+	for(const navigationButton of navigationButtons) {
+		navigationButton.addEventListener('click', handleNavigationButtonClick);
+	}
 
 	function handleSongElClick(event) {
 		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
@@ -55,6 +62,15 @@ export default async function mainWindow() {
 				canFetch = true;
 			}, 500);
 		}
+	}
+
+	async function handleNavigationButtonClick(event) {
+		const clickedButtonName = event.currentTarget.querySelector('span').innerText.toLowerCase();
+		currentSection = clickedButtonName;
+
+		releases = currentSection === 'release' && await fetchAllReleases();
+
+		renderHTML();
 	}
 
 	async function fetchAllReleases() {
