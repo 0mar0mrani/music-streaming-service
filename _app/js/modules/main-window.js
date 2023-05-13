@@ -12,7 +12,9 @@ export default async function mainWindow() {
 	let canFetch = true;
 	let scrolledToBottom = false;
 	let isLoading = false;
+
 	let releases = currentSection === 'release' && await fetchAllReleases();
+	let playlists = currentSection === 'playlist' && await fetchPlaylists();
 
 
 	const player = playerModule(releases);
@@ -69,8 +71,28 @@ export default async function mainWindow() {
 		currentSection = clickedButtonName;
 
 		releases = currentSection === 'release' && await fetchAllReleases();
+		playlists = currentSection === 'playlist' && await fetchPlaylists();
 
 		renderHTML();
+	}
+
+	async function fetchPlaylists() {
+      const query = `*[_type == 'playlist'] {  
+			_id,
+			title,
+			songs[] {
+			  'releaseID': release->_id,
+			  'trackID': track->_id,
+			  'title': track->title,
+			  'artists': track->artists[]->name,
+			  'url': track->.audioFile.asset->url,
+			  'artworkURL': release->artwork.asset->url,
+			  'artworkAlt': release->artworkAlt,
+			}
+		 }`;
+		
+		const fetchPlaylists = await sanity.fetch(query);
+		return fetchPlaylists;
 	}
 
 	async function fetchAllReleases() {
