@@ -132,6 +132,7 @@ export default async function mainWindow() {
 
 	function renderHTML() {
 		renderLoading();
+		renderNavigationButtons();
 		player.renderHTML();
 
 		mainWindow.innerHTML = '';
@@ -148,6 +149,45 @@ export default async function mainWindow() {
 			container.append(message);
 			mainWindow.append(container)
 		} else {
+			if (currentSection === 'release') {
+				renderReleases();
+			} else if (currentSection === 'playlist') {
+
+			} else if (currentSection === 'search') {
+
+			}
+
+			if (scrolledToBottom) {
+				const message = document.createElement('div');
+				message.innerText = `You've reached bottom`;
+				message.className = 'main-window__message';
+				mainWindow.append(message);
+			}
+		}
+
+		songsEl = document.querySelectorAll('.release__song');
+
+		for (const songEl of songsEl) {
+			songEl.addEventListener('click', handleSongElClick);
+		}
+
+		function renderLoading() {
+			isLoading ? loading.classList.add('loading--active') : loading.classList.remove('loading--active');
+		}
+
+		function renderNavigationButtons() {
+			for (const navigationButton of navigationButtons) {
+				const buttonName = navigationButton.querySelector('span').innerText.toLocaleLowerCase();
+
+				navigationButton.classList.remove('navigation__button--active');
+				
+				if (buttonName === currentSection) {
+					navigationButton.classList.add('navigation__button--active');
+				}
+			}
+		}
+
+		function renderReleases() {
 			releases.forEach((release, index) => {
 				const container = document.createElement('li');
 				const releaseContainer = createReleaseDOM();
@@ -285,23 +325,6 @@ export default async function mainWindow() {
 	
 				mainWindow.append(container);
 			});
-
-			if (scrolledToBottom) {
-				const message = document.createElement('div');
-				message.innerText = `You've reached bottom`;
-				message.className = 'main-window__message';
-				mainWindow.append(message);
-			}
-		}
-
-		songsEl = document.querySelectorAll('.release__song');
-
-		for (const songEl of songsEl) {
-			songEl.addEventListener('click', handleSongElClick);
-		}
-
-		function renderLoading() {
-			isLoading ? loading.classList.add('loading--active') : loading.classList.remove('loading--active');
 		}
 	}
 }
