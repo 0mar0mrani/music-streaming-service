@@ -9,5 +9,9 @@ export default Structure => {
 		documentTypeListItem('track'),
 
 		documentTypeListItem('release'),
+
+		divider(),
+		
+		documentTypeListItem('playlist'),
 	])
 }
