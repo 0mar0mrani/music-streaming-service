@@ -30,6 +30,7 @@
 
 	/* Columns */
 	--columns-song:  4rem 47fr 47fr 6fr;
+	--columns-playlist:  4rem 6rem 47fr 47fr 6fr;
 
 	/* Height */
 	--player-height: 9rem;
