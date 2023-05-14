@@ -81,10 +81,12 @@ export default async function mainWindow() {
 			_id,
 			title,
 			songs[] {
+				'releaseTitle': release->title,
 			  'releaseID': release->_id,
 			  'trackID': track->_id,
 			  'title': track->title,
 			  'artists': track->artists[]->name,
+				'playTime': track->playTime,
 			  'url': track->.audioFile.asset->url,
 			  'artworkURL': release->artwork.asset->url,
 			  'artworkAlt': release->artworkAlt,
