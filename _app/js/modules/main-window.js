@@ -3,6 +3,7 @@ import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds.js';
 import playerModule from './player.js';
+import playlistModule from './playlist.js';
 
 export default async function mainWindow() {
 	let currentSection = 'playlist';
@@ -16,13 +17,13 @@ export default async function mainWindow() {
 	let releases = currentSection === 'release' && await fetchAllReleases();
 	let playlists = currentSection === 'playlist' && await fetchPlaylists();
 
-
 	const player = playerModule(releases);
 
 	const mainWindow = document.querySelector('.main-window');
 	const loading = document.querySelector('.loading');
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
+	let playlistElements = null;
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
 
@@ -82,16 +83,16 @@ export default async function mainWindow() {
 			title,
 			songs[] {
 				'releaseTitle': release->title,
-			  'releaseID': release->_id,
-			  'trackID': track->_id,
-			  'title': track->title,
-			  'artists': track->artists[]->name,
+				'releaseID': release->_id,
+				'trackID': track->_id,
+				'title': track->title,
+				'artists': track->artists[]->name,
 				'playTime': track->playTime,
-			  'url': track->.audioFile.asset->url,
-			  'artworkURL': release->artwork.asset->url,
-			  'artworkAlt': release->artworkAlt,
+				'url': track->.audioFile.asset->url,
+				'artworkURL': release->artwork.asset->url,
+				'artworkAlt': release->artworkAlt,
 			}
-		 }`;
+		}`;
 		
 		const fetchPlaylists = await sanity.fetch(query);
 		return fetchPlaylists;
@@ -177,6 +178,10 @@ export default async function mainWindow() {
 				renderReleases();
 			} else if (currentSection === 'playlist') {
 				renderPlaylist();
+				playlistElements = document.querySelectorAll('.playlist');
+				for (const playlistElement of playlistElements) {
+					playlistModule(playlistElement);
+				}
 
 				function renderPlaylist() {
 					for (const playlist of playlists) {
