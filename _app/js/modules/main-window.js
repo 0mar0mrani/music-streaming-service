@@ -176,7 +176,134 @@ export default async function mainWindow() {
 			if (currentSection === 'release') {
 				renderReleases();
 			} else if (currentSection === 'playlist') {
+				renderPlaylist();
 
+				function renderPlaylist() {
+					for (const playlist of playlists) {
+						const playlistContainer = document.createElement('li');
+						playlistContainer.className = 'playlist';
+
+						const button = createButtonDOM(playlist);
+						const songs = createSongsDOM(playlist);
+						
+						playlistContainer.append(button);
+						playlistContainer.append(songs);
+						
+						mainWindow.append(playlistContainer);
+					}
+
+					function createButtonDOM(playlist) {
+						const totalSecondsOfPlaylist = reduceTotalPlayTimeOfTracks(playlist.songs)
+
+						const button = document.createElement('button');
+						const info = document.createElement('div');
+						const title = document.createElement('h2');
+						const additionalInfo = document.createElement('div')
+						const songAmount = document.createElement('div');
+						const playlistPlayTime = document.createElement('div');
+						const iconContainer = document.createElement('div');
+						const icon = document.createElement('img');
+
+						button.className = 'playlist__button';
+						info.className = 'playlist__info';
+						title.className = 'playlist__title';
+						additionalInfo.className = 'playlist__additional-info';
+						iconContainer.className = 'playlist__icon';
+
+						title.innerText = playlist.title;
+						songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
+						playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
+						
+						icon.src = '/_app/assets/svg/close.svg';
+						icon.alt = 'close playlist'
+
+						additionalInfo.append(songAmount);
+						additionalInfo.append(playlistPlayTime);
+						info.append(title);
+						info.append(additionalInfo);
+						iconContainer.append(icon);
+						button.append(info);
+						button.append(iconContainer);
+
+						return button;
+					}
+					
+
+					function createSongsDOM(playlist) {
+						const container = document.createElement('div');
+						const header = document.createElement('div');
+						const number = document.createElement('div');
+						const empty = document.createElement('div');
+						const title = document.createElement('div');
+						const album = document.createElement('div');
+						const time = document.createElement('div');
+
+						const songsContainer = document.createElement('ul');
+
+						playlist.songs.forEach((song, index) => {
+							const songContainer = createSongDOM(song, index); 
+							songsContainer.append(songContainer);
+						})
+
+						number.innerText = '#';
+						title.innerText = 'Title';
+						album.innerText = 'Album';
+						time.innerText = 'Time';
+
+						container.className = 'playlist__songs-container';
+						header.className = 'playlist__song-header';
+						songsContainer.className = 'playlist__songs';
+
+						header.append(number);
+						header.append(empty);
+						header.append(title);
+						header.append(album);
+						header.append(time);
+						container.append(header);
+						container.append(songsContainer);
+
+						return container;
+
+						function createSongDOM(song, index) {
+							const container = document.createElement('li');
+							const songButton = document.createElement('button');
+							const number = document.createElement('div');
+							const artworkContainer = document.createElement('div');
+							const artwork = document.createElement('img');
+							const titleArtistContainer = document.createElement('div');
+							const title = document.createElement('h3');
+							const artists = document.createElement('div');
+							const album = document.createElement('div');
+							const time = document.createElement('div');
+
+							songButton.className = 'playlist__song';
+							number.className = 'playlist__number';
+							artworkContainer.className = 'playlist__artwork';
+							title.className = 'playlist__song-title';
+
+							number.innerText = index + 1;
+							title.innerText = song.title;
+							artists.innerText = song.artists.join(', ');
+							album.innerText = song.releaseTitle;
+							time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
+							
+							artwork.src = song.artworkURL;
+							artwork.alt = song.artworkAlt;
+
+							artworkContainer.append(artwork);
+							titleArtistContainer.append(title);
+							titleArtistContainer.append(artists);
+							songButton.append(number);
+							songButton.append(artworkContainer);
+							songButton.append(titleArtistContainer);
+							songButton.append(album);
+							songButton.append(time);
+							container.append(songButton);
+
+							return container;
+						}
+					}
+				}
 			} else if (currentSection === 'search') {
 
 			}
