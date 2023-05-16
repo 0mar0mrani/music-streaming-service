@@ -41,6 +41,7 @@
 
 	/* Duration */
 	--duration: 0.7s;
+	--duration-shorter: 0.1s;
 
 	/* Element Sizes */
 	--artwork: 7rem;
