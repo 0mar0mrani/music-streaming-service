@@ -1,6 +1,34 @@
 .header {
 	grid-column-start: 2;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	background-color: var(--color-secondary-default);
 	padding: var(--gap-medium) calc(var(--gap-medium) * 2);
 	align-self: self-start;
+}
+
+.header__add-playlist-button {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-small);
+	transition: color var(--duration-shorter) ease-in-out;
+}
+
+.header__add-playlist-icon {
+	width: 2.8rem;
+	height: 2.8rem;
+}
+
+.header__add-playlist-icon img {
+	filter: var(--filter-primary-default);
+	transition: filter var(--duration-shorter) ease-in-out;
+}
+
+.header__add-playlist-button:hover {
+	color: var(--color-primary-darkest);
+}
+
+.header__add-playlist-button:hover .header__add-playlist-icon img {
+	filter: var(--filter-primary-darkest);
 }
