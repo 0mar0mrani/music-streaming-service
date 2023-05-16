@@ -81,13 +81,9 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
-	function handleCreatePlaylistClick() {
-		const newPlaylist = {
-			title: 'New Playlist',
-			songs: [],
-		}
-
-		playlists.push(newPlaylist);
+	async function handleCreatePlaylistClick() {
+		await createNewPlaylist();
+		playlists = await fetchPlaylists(); 
 		renderHTML();
 	}
 
@@ -163,6 +159,18 @@ export default async function mainWindow() {
 			return [];
 		}
    }
+
+	async function createNewPlaylist() {
+		const mutations = [{
+			createOrReplace: {
+				_type: 'playlist',
+				title: `Playlist #${playlists.length + 1}`,
+				songs: [],
+			}
+		}];  
+
+		await sanity.mutate(mutations);
+	}
 
 	async function addOneToPlays(trackID, newPlays) {
 		const mutations = [{
