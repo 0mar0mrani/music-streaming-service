@@ -1,7 +1,5 @@
 .context-menu {
 	position: absolute;
-	top: 0;
-	left: 0;
 	display: none;
 	background-color: var(--color-primary-default);
 	color: var(--color-secondary-default);
@@ -17,6 +15,7 @@
 	text-transform: uppercase;
 	padding: var(--gap-small) var(--gap-extra-small);
 	border-bottom: solid 0.1rem var(--color-primary-darkest);
+	white-space: nowrap;
 }
 
 .context-menu__playlists {
@@ -29,6 +28,7 @@
 	width: 100%;
 	text-align: start;
 	padding: var(--gap-extra-small);
+	white-space: nowrap;
 }
 
 .context-menu__button:hover {
