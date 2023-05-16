@@ -24,12 +24,15 @@ export default async function mainWindow() {
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
 	let playlistElements = null;
+	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
 
 	for(const navigationButton of navigationButtons) {
 		navigationButton.addEventListener('click', handleNavigationButtonClick);
 	}
+
+	createPlaylist.addEventListener('click', handleCreatePlaylistClick);
 
 	function handleSongElClick(event) {
 		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
@@ -77,6 +80,15 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
+	function handleCreatePlaylistClick() {
+		const newPlaylist = {
+			title: 'New Playlist',
+			songs: [],
+		}
+
+		playlists.push(newPlaylist);
+		renderHTML();
+	}
 	async function fetchPlaylists() {
       const query = `*[_type == 'playlist'] {  
 			_id,
@@ -178,9 +190,10 @@ export default async function mainWindow() {
 				renderReleases();
 			} else if (currentSection === 'playlist') {
 				renderPlaylist();
+				
 				playlistElements = document.querySelectorAll('.playlist');
 				for (const playlistElement of playlistElements) {
-					playlistModule(playlistElement);
+					playlistModule(playlistElement);	
 				}
 
 				function renderPlaylist() {
