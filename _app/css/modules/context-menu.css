@@ -1,0 +1,36 @@
+.context-menu {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+	background-color: var(--color-primary-default);
+	color: var(--color-secondary-default);
+	padding: var(--gap-extra-small);
+}
+
+.context-menu--open {
+	display: block;
+}
+
+.context-menu__title {
+	line-height: 1;
+	text-transform: uppercase;
+	padding: var(--gap-small) var(--gap-extra-small);
+	border-bottom: solid 0.1rem var(--color-primary-darkest);
+}
+
+.context-menu__playlists {
+	margin-top: var(--gap-extra-small);
+}
+
+.context-menu__button {
+	transition: background var(--duration-shorter) ease-in-out;
+	line-height: 1;
+	width: 100%;
+	text-align: start;
+	padding: var(--gap-extra-small);
+}
+
+.context-menu__button:hover {
+	background-color: var(--color-primary-darker);
+}
