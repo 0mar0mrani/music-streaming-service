@@ -96,8 +96,11 @@ export default async function mainWindow() {
 	}
 
 	function handlePlaylistTitleInputBlur(event) {
-		const playlistButton = event.currentTarget.closest('.playlist__button');
-		console.log(playlistButton);
+		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
+		const playlistID = playlists[clickedPlaylist]._id;
+		const newTitle = event.currentTarget.value;
+		
+		mutatePlaylistTitle(playlistID, newTitle);
 	}
 
 	function handlePlaylistTitleInputKeydown(event) {
@@ -161,16 +164,6 @@ export default async function mainWindow() {
 		}
    }
 
-	renderHTML();
-
-	function reduceTotalPlayTimeOfTracks(tracks) {
-		const totalSeconds = tracks.reduce((accumulator, track) => {
-			return accumulator + track.playTime.minutes * 60 + track.playTime.seconds
-		}, 0)
-
-		return totalSeconds;
-	}
-
 	async function addOneToPlays(trackID, newPlays) {
 		const mutations = [{
 				patch: {
@@ -183,6 +176,30 @@ export default async function mainWindow() {
 	
 		await sanity.mutate(mutations);
 	}
+
+	async function mutatePlaylistTitle(playlistID, newTitle) {
+		const mutations = [{
+			patch: {
+				id: playlistID,
+				set: {
+					title: newTitle,
+				},
+			}
+		}];  
+
+		await sanity.mutate(mutations);
+	}
+
+	function reduceTotalPlayTimeOfTracks(tracks) {
+		const totalSeconds = tracks.reduce((accumulator, track) => {
+			return accumulator + track.playTime.minutes * 60 + track.playTime.seconds
+		}, 0)
+
+		return totalSeconds;
+	}
+
+	renderHTML();
+
 
 	function renderHTML() {
 		renderLoading();
@@ -222,18 +239,20 @@ export default async function mainWindow() {
 				}
 
 				function renderPlaylist() {
-					for (const playlist of playlists) {
+					playlists.forEach((playlist, index) => {
 						const playlistContainer = document.createElement('li');
 						playlistContainer.className = 'playlist';
 
 						const button = createButtonDOM(playlist);
 						const songs = createSongsDOM(playlist);
+
+						playlistContainer.dataset.id = index;
 						
 						playlistContainer.append(button);
 						playlistContainer.append(songs);
 						
 						mainWindow.append(playlistContainer);
-					}
+					}) 
 
 					function createButtonDOM(playlist) {
 						const totalSecondsOfPlaylist = reduceTotalPlayTimeOfTracks(playlist.songs)
