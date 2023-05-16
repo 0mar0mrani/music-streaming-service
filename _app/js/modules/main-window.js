@@ -24,6 +24,7 @@ export default async function mainWindow() {
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
 	let playlistElements = null;
+	let playlistTitleInputs = null;
 	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
@@ -89,6 +90,22 @@ export default async function mainWindow() {
 		playlists.push(newPlaylist);
 		renderHTML();
 	}
+
+	function handlePlaylistTitleInputClick(event) {
+		event.stopPropagation();
+	}
+
+	function handlePlaylistTitleInputBlur(event) {
+		const playlistButton = event.currentTarget.closest('.playlist__button');
+		console.log(playlistButton);
+	}
+
+	function handlePlaylistTitleInputKeydown(event) {
+		if (event.key === 'Enter') {
+			event.currentTarget.blur();
+		}
+	}
+
 	async function fetchPlaylists() {
       const query = `*[_type == 'playlist'] {  
 			_id,
@@ -192,8 +209,16 @@ export default async function mainWindow() {
 				renderPlaylist();
 				
 				playlistElements = document.querySelectorAll('.playlist');
+				playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
+
 				for (const playlistElement of playlistElements) {
 					playlistModule(playlistElement);	
+				}
+
+				for (const playlistTitleInput of playlistTitleInputs) {
+					playlistTitleInput.addEventListener('click', handlePlaylistTitleInputClick);
+					playlistTitleInput.addEventListener('blur', handlePlaylistTitleInputBlur);
+					playlistTitleInput.addEventListener('keydown', handlePlaylistTitleInputKeydown);
 				}
 
 				function renderPlaylist() {
@@ -216,6 +241,7 @@ export default async function mainWindow() {
 						const button = document.createElement('button');
 						const info = document.createElement('div');
 						const title = document.createElement('h2');
+						const titleInput = document.createElement('input');
 						const additionalInfo = document.createElement('div')
 						const songAmount = document.createElement('div');
 						const playlistPlayTime = document.createElement('div');
@@ -225,10 +251,11 @@ export default async function mainWindow() {
 						button.className = 'playlist__button';
 						info.className = 'playlist__info';
 						title.className = 'playlist__title';
+						titleInput.className = 'playlist__title-input';
 						additionalInfo.className = 'playlist__additional-info';
 						iconContainer.className = 'playlist__icon';
 
-						title.innerText = playlist.title;
+						titleInput.value = playlist.title;
 						songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
 						playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
 						
@@ -237,6 +264,7 @@ export default async function mainWindow() {
 
 						additionalInfo.append(songAmount);
 						additionalInfo.append(playlistPlayTime);
+						title.append(titleInput);
 						info.append(title);
 						info.append(additionalInfo);
 						iconContainer.append(icon);
