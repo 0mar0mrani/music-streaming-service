@@ -34,3 +34,9 @@ input[type="range"] {
 ul {
 	list-style: none;
 }
+
+input {
+	border: none;
+	color: inherit;
+	background-color: inherit;
+}
