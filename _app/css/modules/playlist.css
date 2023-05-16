@@ -24,7 +24,7 @@
 	justify-content: flex-start;
 }
 
-.playlist__title {
+.playlist__title-input {
 	font: var(--font-sub-header);
 	text-transform: uppercase;
 	text-align: start;
