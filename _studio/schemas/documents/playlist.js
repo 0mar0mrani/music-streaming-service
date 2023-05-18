@@ -31,7 +31,23 @@ export default {
 							to: [{ type:'track'}],
 							validation: Rule => Rule.required(),
 						}
-					]
+					],
+
+					preview: {
+						select: {
+							title: 'track.title',
+							artwork: 'release.artwork',
+						},
+				
+						prepare: fields => {
+							const { title, artwork } = fields;
+							
+							return {
+								title: `${title}`,
+								media: artwork,
+							}
+						}
+					}
 				}
 			],
 			validation: Rule => Rule.required(),
