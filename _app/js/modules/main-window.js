@@ -4,6 +4,7 @@ import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds.js';
 import playerModule from './player.js';
 import playlistModule from './playlist.js';
+import contextMenuModule from './context-menu.js';
 
 export default async function mainWindow() {
 	let currentSection = 'release';
@@ -14,27 +15,19 @@ export default async function mainWindow() {
 	let scrolledToBottom = false;
 	let isLoading = false;
 
-	const contextMenu = {
-		isOpen: false, 
-		coordinates: {
-			x: 0,
-			y: 0,
-		},
-		currentSong: {
-			track: null,
-			release: null,
-		}
+	const currentSong = {
+		track: null,
+		release: null,
 	}
 
 	let releases = currentSection === 'release' && await fetchAllReleases();
 	let playlists = await fetchPlaylists();
 
 	const player = playerModule(releases);
+	const contextMenu = contextMenuModule(playlists);
 
 	const mainWindow = document.querySelector('.main-window');
 	const loading = document.querySelector('.loading');
-	const contextMenuElement = document.querySelector('.context-menu');
-	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
 	let contextMenuPlaylistButtons = null;
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
@@ -54,12 +47,12 @@ export default async function mainWindow() {
 	
 	function handleWindowContextmenu(event) {
 		event.preventDefault();
-		contextMenu.isOpen = false;
+		contextMenu.setIsOpen(false);
 		renderHTML();
 	}
 
 	function handleWindowClick(event) {
-		contextMenu.isOpen = false;
+		contextMenu.setIsOpen(false);
 		renderHTML();
 	}
 
@@ -86,11 +79,11 @@ export default async function mainWindow() {
 		const releaseID = releases[clickedRelease]._id;
 		const trackID = releases[clickedRelease].tracks[clickedTrack]._id;
 
-		contextMenu.currentSong.track = trackID;
-		contextMenu.currentSong.release = releaseID;
+		currentSong.track = trackID;
+		currentSong.release = releaseID;
 
-		contextMenu.isOpen = true;
-		setContextMenuCoordinates(event);
+		contextMenu.setIsOpen(true);
+		contextMenu.setCoordinates(event);
 		renderHTML();
 	}
 
@@ -221,11 +214,11 @@ export default async function mainWindow() {
 						{
 							_key: Date.now(),
 							track: {
-								_ref: contextMenu.currentSong.track,
+								_ref: currentSong.track,
 								_type: 'reference'
 							},
 							release: {
-								_ref: contextMenu.currentSong.release,
+								_ref: currentSong.release,
 								_type: 'reference'
 							},
 						}
@@ -285,20 +278,9 @@ export default async function mainWindow() {
 
 	renderHTML();
 
-
-	function setContextMenuCoordinates(event) {
-		const xCoordinates = event.clientX;
-		const yCoordinates = event.clientY;
-
-		contextMenu.coordinates = {
-			x: xCoordinates,
-			y: yCoordinates,
-		}
-	}
-
 	function renderHTML() {
 		renderLoading();
-		renderContextMenu();
+		contextMenu.renderHTML();
 		renderNavigationButtons();
 		player.renderHTML();
 
@@ -486,40 +468,6 @@ export default async function mainWindow() {
 
 		function renderLoading() {
 			isLoading ? loading.classList.add('loading--active') : loading.classList.remove('loading--active');
-		}
-
-		function renderContextMenu() {
-			contextMenuElement.style.top = `${contextMenu.coordinates.y}px`;
-			contextMenuElement.style.left = `${contextMenu.coordinates.x}px`;
-
-			contextMenu.isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
-
-			contextMenuPlaylists.innerHTML = '';
-
-			playlists.forEach((playlist, index) => {
-				const playlistElement = document.createElement('li');
-				const playlistButton = document.createElement('button');
-
-				playlistButton.className = 'context-menu__button';
-
-				playlistButton.innerText = playlist.title;
-				playlistButton.dataset.id = index;
-
-				playlistElement.append(playlistButton);
-				contextMenuPlaylists.append(playlistElement)
-			})
-
-			renderPlacement();
-
-			function renderPlacement() {
-				const contextWidth = contextMenuElement.clientWidth;
-				const contextHeight = contextMenuElement.clientHeight;
-	
-				const contextMenuOutsideWindowRight = (window.innerWidth - (contextMenu.coordinates.x + contextWidth)) <= 0;
-				const contextMenuOutsideWindowBottom = (window.innerHeight - (contextMenu.coordinates.y + contextHeight)) <= 0;
-
-				contextMenuElement.style.transform = `translate(${contextMenuOutsideWindowRight ? '-100%' : '0'}, ${contextMenuOutsideWindowBottom ? '-100%' : '0'})`;
-			}
 		}
 
 		function renderNavigationButtons() {
