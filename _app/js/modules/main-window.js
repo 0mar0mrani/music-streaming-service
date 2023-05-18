@@ -19,6 +19,10 @@ export default async function mainWindow() {
 		coordinates: {
 			x: 0,
 			y: 0,
+		},
+		currentSong: {
+			track: null,
+			release: null,
 		}
 	}
 
@@ -31,6 +35,7 @@ export default async function mainWindow() {
 	const loading = document.querySelector('.loading');
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
+	let contextMenuPlaylistButtons = null;
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
 	let playlistElements = null;
@@ -76,6 +81,14 @@ export default async function mainWindow() {
 	function handleSongElContextmenu(event) {
 		event.preventDefault();
 		event.stopPropagation();
+		const clickedTrack = event.currentTarget.dataset.id;
+		const clickedRelease =  event.currentTarget.closest('.release').dataset.id;
+		const releaseID = releases[clickedRelease]._id;
+		const trackID = releases[clickedRelease].tracks[clickedTrack]._id;
+
+		contextMenu.currentSong.track = trackID;
+		contextMenu.currentSong.release = releaseID;
+
 		contextMenu.isOpen = true;
 		setContextMenuCoordinates(event);
 		renderHTML();
@@ -136,8 +149,15 @@ export default async function mainWindow() {
 		}
 	}
 
+	async function handleContextMenuPlaylistButtonClick(event) {
+		const clickedPlaylist = event.currentTarget.dataset.id;
+		const playlistID = playlists[clickedPlaylist]._id;
+		addSongToPlaylist(playlistID);
+		playlists = await fetchPlaylists();
+	}
+
 	async function fetchPlaylists() {
-      const query = `*[_type == 'playlist'] {  
+      const query = `*[_type == 'playlist'] | order(releaseDate asc) {  
 			_id,
 			title,
 			songs[] {
@@ -191,6 +211,32 @@ export default async function mainWindow() {
 		}
    }
 
+	async function addSongToPlaylist(playlistID) {
+		const mutations = [{
+			patch: {
+				id: playlistID,
+				insert: {
+					after: 'songs[-1]',
+					items: [
+						{
+							_key: Date.now(),
+							track: {
+								_ref: contextMenu.currentSong.track,
+								_type: 'reference'
+							},
+							release: {
+								_ref: contextMenu.currentSong.release,
+								_type: 'reference'
+							},
+						}
+					] 
+				},
+			}
+		}];  
+
+		console.log(await sanity.mutate(mutations));
+	}
+
 	async function createNewPlaylist() {
 		const mutations = [{
 			createOrReplace: {
@@ -205,12 +251,12 @@ export default async function mainWindow() {
 
 	async function addOneToPlays(trackID, newPlays) {
 		const mutations = [{
-				patch: {
-					id: trackID,
-					set: {
-						plays: newPlays,
-					},
-				}
+			patch: {
+				id: trackID,
+				set: {
+					plays: newPlays,
+				},
+			}
 		}];  
 	
 		await sanity.mutate(mutations);
@@ -495,8 +541,8 @@ export default async function mainWindow() {
 				const songHeaderContainer = createSongHeader();
 				const songsContainer = createSongsDOM();
 	
-				container.dataset.releaseNumber = index;
-				
+				container.dataset.id = index;
+
 				container.className = 'release';
 				songsContainer.className = 'release__songs';
 				
@@ -607,6 +653,8 @@ export default async function mainWindow() {
 						number.className = 'release__number';
 						title.className = 'release__track-title';
 						plays.className = 'release__plays';
+
+						songButton.dataset.id = index;
 	
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artist);
@@ -626,6 +674,11 @@ export default async function mainWindow() {
 	
 				mainWindow.append(container);
 			});
+		}
+
+		contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button');
+		for (const contextMenuPlaylistButton of contextMenuPlaylistButtons) {
+			contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
 		}
 	}
 }
