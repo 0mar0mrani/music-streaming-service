@@ -1,4 +1,4 @@
-export default function contextMenu(playlists) {
+export default function contextMenu(currentSection, playlists) {
 	let isOpen = false;
 	let coordinates = {
 		x: 0,
@@ -7,6 +7,8 @@ export default function contextMenu(playlists) {
 
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
+	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
+	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
 
 	function setIsOpen(boolean) {
 		isOpen = boolean;
@@ -23,29 +25,39 @@ export default function contextMenu(playlists) {
 	}
 
 	function renderHTML() {
-		contextMenuElement.style.top = `${coordinates.y}px`;
-		contextMenuElement.style.left = `${coordinates.x}px`;
-
 		isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
 
-		contextMenuPlaylists.innerHTML = '';
+		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
+		contextMenuPlaylistSection.classList.remove('context-menu__playlist-section--visible');
 
-		playlists.forEach((playlist, index) => {
-			const playlistElement = document.createElement('li');
-			const playlistButton = document.createElement('button');
+		if (currentSection === 'release') {
+			contextMenuReleaseSection.classList.add('context-menu__release-section--visible');
 
-			playlistButton.className = 'context-menu__button';
+			contextMenuPlaylists.innerHTML = '';
+	
+			playlists.forEach((playlist, index) => {
+				const playlistElement = document.createElement('li');
+				const playlistButton = document.createElement('button');
+	
+				playlistButton.className = 'context-menu__button';
+	
+				playlistButton.innerText = playlist.title;
+				playlistButton.dataset.id = index;
+	
+				playlistElement.append(playlistButton);
+				contextMenuPlaylists.append(playlistElement)
+			})
+		} else if (currentSection === 'playlist') {
+			contextMenuPlaylistSection.classList.add('context-menu__playlist-section--visible');
+		} 
 
-			playlistButton.innerText = playlist.title;
-			playlistButton.dataset.id = index;
-
-			playlistElement.append(playlistButton);
-			contextMenuPlaylists.append(playlistElement)
-		})
 
 		renderPlacement();
 
 		function renderPlacement() {
+			contextMenuElement.style.top = `${coordinates.y}px`;
+			contextMenuElement.style.left = `${coordinates.x}px`;
+
 			const contextWidth = contextMenuElement.clientWidth;
 			const contextHeight = contextMenuElement.clientHeight;
 

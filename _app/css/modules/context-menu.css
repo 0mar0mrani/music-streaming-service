@@ -10,6 +10,16 @@
 	display: block;
 }
 
+.context-menu__playlist-section,
+.context-menu__release-section {
+	display: none;
+}
+
+.context-menu__playlist-section--visible,
+.context-menu__release-section--visible {
+	display: block;
+}
+
 .context-menu__title {
 	line-height: 1;
 	text-transform: uppercase;
