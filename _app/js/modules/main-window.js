@@ -15,16 +15,17 @@ export default async function mainWindow() {
 	let scrolledToBottom = false;
 	let isLoading = false;
 
-	const currentSong = {
+	const current = {
 		track: null,
 		release: null,
+		playlist: null,
 	}
 
 	let releases = currentSection === 'release' && await fetchAllReleases();
 	let playlists = await fetchPlaylists();
 
 	const player = playerModule(releases);
-	const contextMenu = contextMenuModule(playlists);
+	let contextMenu = contextMenuModule(currentSection, playlists);
 
 	const mainWindow = document.querySelector('.main-window');
 	const loading = document.querySelector('.loading');
@@ -32,7 +33,9 @@ export default async function mainWindow() {
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
 	let playlistElements = null;
+	let playlistButtons = null;
 	let playlistTitleInputs = null;
+	let deletePlaylistButton = document.querySelector('.context-menu__delete-playlist');
 	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
@@ -44,6 +47,7 @@ export default async function mainWindow() {
 	}
 
 	createPlaylist.addEventListener('click', handleCreatePlaylistClick);
+	deletePlaylistButton.addEventListener('click', handleDeletePlaylistButtonClick)
 	
 	function handleWindowContextmenu(event) {
 		event.preventDefault();
@@ -79,8 +83,8 @@ export default async function mainWindow() {
 		const releaseID = releases[clickedRelease]._id;
 		const trackID = releases[clickedRelease].tracks[clickedTrack]._id;
 
-		currentSong.track = trackID;
-		currentSong.release = releaseID;
+		current.track = trackID;
+		current.release = releaseID;
 
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event);
@@ -115,6 +119,7 @@ export default async function mainWindow() {
 		releases = currentSection === 'release' && await fetchAllReleases();
 		playlists = currentSection === 'playlist' && await fetchPlaylists();
 
+		contextMenu = contextMenuModule(currentSection, playlists);
 		renderHTML();
 	}
 
@@ -159,6 +164,13 @@ export default async function mainWindow() {
 		current.playlist = playlistID;
 		renderHTML();
 	}
+
+	async function handleDeletePlaylistButtonClick() {
+		await deletePlaylist(current.playlist);
+		playlists = await fetchPlaylists();
+		renderHTML();
+	}
+
 	async function fetchPlaylists() {
       const query = `*[_type == 'playlist'] | order(releaseDate asc) {  
 			_id,
@@ -224,11 +236,11 @@ export default async function mainWindow() {
 						{
 							_key: Date.now(),
 							track: {
-								_ref: currentSong.track,
+								_ref: current.track,
 								_type: 'reference'
 							},
 							release: {
-								_ref: currentSong.release,
+								_ref: current.release,
 								_type: 'reference'
 							},
 						}
@@ -237,7 +249,7 @@ export default async function mainWindow() {
 			}
 		}];  
 
-		console.log(await sanity.mutate(mutations));
+		await sanity.mutate(mutations);
 	}
 
 	async function createNewPlaylist() {
@@ -246,6 +258,16 @@ export default async function mainWindow() {
 				_type: 'playlist',
 				title: `Playlist #${playlists.length + 1}`,
 				songs: [],
+			}
+		}];  
+
+		await sanity.mutate(mutations);
+	}
+
+	async function deletePlaylist(id) {
+		const mutations = [{
+			delete: {
+				id: id,
 			}
 		}];  
 
@@ -314,7 +336,12 @@ export default async function mainWindow() {
 				renderPlaylist();
 				
 				playlistElements = document.querySelectorAll('.playlist');
+				playlistButtons = document.querySelectorAll('.playlist__button');
 				playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
+
+				for (const playlistButton of playlistButtons) {
+					playlistButton.addEventListener('contextmenu', handlePlaylistButtonContextmenu)
+				}
 
 				for (const playlistElement of playlistElements) {
 					playlistModule(playlistElement);	
