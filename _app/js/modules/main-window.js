@@ -86,7 +86,7 @@ export default async function mainWindow() {
 		const clickedTrack = event.currentTarget.dataset.id;
 		const clickedRelease =  event.currentTarget.closest('.release').dataset.id;
 		const releaseID = releases[clickedRelease]._id;
-		const trackID = releases[clickedRelease].tracks[clickedTrack]._id;
+		const trackID = releases[clickedRelease].tracks[clickedTrack].trackID;
 
 		current.track = trackID;
 		current.release = releaseID;
