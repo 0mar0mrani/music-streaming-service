@@ -4,9 +4,10 @@ export default function playlist(node) {
 	const playlistElement = node;
 	const playlistButton = node.querySelector('.playlist__button');
 
-	playlistButton.addEventListener('click', handleClick);
+	playlistButton.addEventListener('click', handlePlaylistButtonClick);
 
-	function handleClick() {
+	function handlePlaylistButtonClick(event) {
+		event.stopPropagation();
 		isOpen = !isOpen;
 		renderHTML() 
 	}
