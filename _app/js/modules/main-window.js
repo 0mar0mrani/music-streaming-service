@@ -61,11 +61,16 @@ export default async function mainWindow() {
 	}
 
 	function handleSongElClick(event) {
-		const clickedTrackNumber = event.currentTarget.dataset.trackNumber;
-		const clickedReleaseNumber = event.currentTarget.closest('.release').dataset.releaseNumber;
-		const track = releases[clickedReleaseNumber].tracks[clickedTrackNumber];
+		event.stopPropagation();
 
-		addOneToPlays(track._id, track.plays + 1)
+		const clickedTrackNumber = event.currentTarget.dataset.id;
+		const clickedReleaseNumber = event.currentTarget.closest('.song-group').dataset.id;
+
+		const song = currentSection === 'release' 
+			? releases[clickedReleaseNumber].tracks[clickedTrackNumber] 
+			: playlists[clickedReleaseNumber].songs[clickedTrackNumber]
+
+		addOneToPlays(song.trackID, song.plays + 1)
 		player.setCurrentTrack(clickedTrackNumber);
 		player.setCurrentRelease(clickedReleaseNumber);
 		player.setQue();
@@ -179,6 +184,7 @@ export default async function mainWindow() {
 				'releaseTitle': release->title,
 				'releaseID': release->_id,
 				'trackID': track->_id,
+				'plays': track->plays,
 				'title': track->title,
 				'artists': track->artists[]->name,
 				'playTime': track->playTime,
@@ -204,7 +210,7 @@ export default async function mainWindow() {
 			releaseDate,
 			'artists': artists[]->name,
          tracks[]-> {
-				_id,
+				'trackID': _id,
 				title,
 				plays,
 				playTime,
@@ -356,7 +362,7 @@ export default async function mainWindow() {
 				function renderPlaylist() {
 					playlists.forEach((playlist, index) => {
 						const playlistContainer = document.createElement('li');
-						playlistContainer.className = 'playlist';
+						playlistContainer.className = 'playlist song-group';
 
 						const button = createButtonDOM(playlist);
 						const songs = createSongsDOM(playlist);
@@ -456,10 +462,12 @@ export default async function mainWindow() {
 							const album = document.createElement('div');
 							const time = document.createElement('div');
 
-							songButton.className = 'playlist__song';
+							songButton.className = 'song playlist__song';
 							number.className = 'playlist__number';
 							artworkContainer.className = 'playlist__artwork';
 							title.className = 'playlist__song-title';
+
+							songButton.dataset.id = index;
 
 							number.innerText = index + 1;
 							title.innerText = song.title;
@@ -496,7 +504,7 @@ export default async function mainWindow() {
 			}
 		}
 
-		songsEl = document.querySelectorAll('.release__song');
+		songsEl = document.querySelectorAll('.song');
 
 		for (const songEl of songsEl) {
 			songEl.addEventListener('click', handleSongElClick);
@@ -528,7 +536,7 @@ export default async function mainWindow() {
 	
 				container.dataset.id = index;
 
-				container.className = 'release';
+				container.className = 'release song-group';
 				songsContainer.className = 'release__songs';
 				
 				container.append(releaseContainer);
@@ -626,7 +634,7 @@ export default async function mainWindow() {
 						const plays = document.createElement('div');
 						const time = document.createElement('div');
 	
-						songButton.dataset.trackNumber = index;
+						songButton.dataset.id = index;
 	
 						number.innerText = index + 1;
 						title.innerText = track.title;
@@ -634,7 +642,7 @@ export default async function mainWindow() {
 						plays.innerText = formattedPlays;
 						time.innerText = formattedPlaytime;
 	
-						songButton.className = 'release__song';
+						songButton.className = 'song release__song';
 						number.className = 'release__number';
 						title.className = 'release__track-title';
 						plays.className = 'release__plays';
