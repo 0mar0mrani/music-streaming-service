@@ -149,6 +149,16 @@ export default async function mainWindow() {
 		playlists = await fetchPlaylists();
 	}
 
+	function handlePlaylistButtonContextmenu(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		contextMenu.setCoordinates(event)
+		contextMenu.setIsOpen(true);
+		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
+		const playlistID = playlists[clickedPlaylist]._id;
+		current.playlist = playlistID;
+		renderHTML();
+	}
 	async function fetchPlaylists() {
       const query = `*[_type == 'playlist'] | order(releaseDate asc) {  
 			_id,
