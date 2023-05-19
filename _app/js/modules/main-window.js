@@ -115,7 +115,6 @@ export default async function mainWindow() {
 			canFetch = false;
 			currentPage += 1;
 			isLoading = true;
-			console.log(isLoading);
 			renderHTML();
 			const moreReleases = await fetchAllReleases();
 			isLoading = false;
@@ -140,8 +139,11 @@ export default async function mainWindow() {
 	}
 
 	async function handleCreatePlaylistClick() {
+		isLoading = true;
+		renderHTML();
 		await createNewPlaylist();
 		playlists = await fetchPlaylists(); 
+		isLoading = false;
 		renderHTML();
 	}
 
@@ -183,8 +185,11 @@ export default async function mainWindow() {
 	}
 
 	async function handleDeletePlaylistButtonClick() {
+		isLoading = true;
+		renderHTML();
 		await deletePlaylist(current.playlist);
 		playlists = await fetchPlaylists();
+		isLoading = false;
 		renderHTML();
 	} 
 
@@ -193,8 +198,11 @@ export default async function mainWindow() {
 		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => current.playlistSongIndex !== index);
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
 		const playlistID = playlists[current.playlistIndex]._id;
+		isLoading = true;
+		renderHTML();
 		await setPlaylist(playlistID, playlistForSanity);
 		playlists = await fetchPlaylists();
+		isLoading = false;
 		renderHTML();
 	}
 
