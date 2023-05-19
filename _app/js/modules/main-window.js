@@ -36,8 +36,8 @@ export default async function mainWindow() {
 	let playlistElements = null;
 	let playlistButtons = null;
 	let playlistTitleInputs = null;
-	const deletePlaylistButton = document.querySelector('.context-menu__delete-playlist');
-	const removeSong = document.querySelector('.context-menu__remove-song');
+	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
+	const removeSong = document.querySelector('.context-menu__button--remove-song');
 	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
@@ -718,7 +718,7 @@ export default async function mainWindow() {
 			});
 		}
 
-		contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button');
+		contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
 		for (const contextMenuPlaylistButton of contextMenuPlaylistButtons) {
 			contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
 		}

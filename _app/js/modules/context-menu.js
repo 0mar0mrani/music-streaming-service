@@ -39,7 +39,7 @@ export default function contextMenu(currentSection, playlists) {
 				const playlistElement = document.createElement('li');
 				const playlistButton = document.createElement('button');
 	
-				playlistButton.className = 'context-menu__button';
+				playlistButton.className = 'context-menu__button context-menu__button--add-playlist';
 	
 				playlistButton.innerText = playlist.title;
 				playlistButton.dataset.id = index;

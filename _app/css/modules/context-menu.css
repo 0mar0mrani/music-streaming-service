@@ -20,6 +20,11 @@
 	display: block;
 }
 
+.context-menu__playlist-section {
+	display: flex;
+	flex-direction: column;
+}
+
 .context-menu__title {
 	line-height: 1;
 	text-transform: uppercase;
