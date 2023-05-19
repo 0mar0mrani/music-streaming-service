@@ -25,7 +25,7 @@ export default async function mainWindow() {
 	let releases = currentSection === 'release' && await fetchAllReleases();
 	let playlists = await fetchPlaylists();
 
-	const player = playerModule(releases);
+	const player = playerModule(currentSection, releases, playlists);
 	let contextMenu = contextMenuModule(currentSection, playlists);
 
 	const mainWindow = document.querySelector('.main-window');
@@ -131,6 +131,9 @@ export default async function mainWindow() {
 	async function handleNavigationButtonClick(event) {
 		const clickedButtonName = event.currentTarget.querySelector('span').innerText.toLowerCase();
 		currentSection = clickedButtonName;
+		player.setCurrentSection(currentSection);
+		player.setReleases(releases);
+		player.setPlaylist(playlists)
 		contextMenu = contextMenuModule(currentSection, playlists);
 		renderHTML();
 	}
@@ -206,7 +209,7 @@ export default async function mainWindow() {
 				'title': track->title,
 				'artists': track->artists[]->name,
 				'playTime': track->playTime,
-				'url': track->.audioFile.asset->url,
+				'trackURL': track->.audioFile.asset->url,
 				'artworkURL': release->artwork.asset->url,
 				'artworkAlt': release->artworkAlt,
 			}
