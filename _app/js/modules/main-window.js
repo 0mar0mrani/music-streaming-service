@@ -306,6 +306,22 @@ export default async function mainWindow() {
 		await sanity.mutate(mutations);
 	}
 
+	function preparePlaylistForSanity(playlist) {
+		return playlist.map((song, index) => {
+			return {
+				_key: Date.now() + index,
+				track: {
+					_ref: song.trackID,
+					_type: 'reference'
+				},
+				release: {
+					_ref: song.releaseID,
+					_type: 'reference'
+				},
+			}
+		});
+	}
+
 	function reduceTotalPlayTimeOfTracks(tracks) {
 		const totalSeconds = tracks.reduce((accumulator, track) => {
 			return accumulator + track.playTime.minutes * 60 + track.playTime.seconds
