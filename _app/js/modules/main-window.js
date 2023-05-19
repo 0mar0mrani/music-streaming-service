@@ -133,8 +133,9 @@ export default async function mainWindow() {
 		currentSection = clickedButtonName;
 		player.setCurrentSection(currentSection);
 		player.setReleases(releases);
-		player.setPlaylist(playlists)
-		contextMenu = contextMenuModule(currentSection, playlists);
+		player.setPlaylist(playlists);
+		contextMenu.setCurrentSection(currentSection);
+		contextMenu.setPlaylists(playlists);
 		renderHTML();
 	}
 
@@ -380,6 +381,8 @@ export default async function mainWindow() {
 		player.setCurrentSection(currentSection);
 		player.setReleases(releases);
 		player.setPlaylist(playlists)
+		contextMenu.setCurrentSection(currentSection);
+		contextMenu.setPlaylists(playlists);
 		isLoading = false;
 		renderHTML();
 	}

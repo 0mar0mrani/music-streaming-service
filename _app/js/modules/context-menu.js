@@ -10,7 +10,6 @@ export default function contextMenu(currentSection, playlists) {
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
 	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
-	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
 	const deletePlaylist = document.querySelector('.context-menu__button--delete-playlist'); 
 	const removeSong = document.querySelector('.context-menu__button--remove-song'); 
 
@@ -30,6 +29,14 @@ export default function contextMenu(currentSection, playlists) {
 			x: xCoordinates,
 			y: yCoordinates,
 		}
+	}
+
+	function setCurrentSection(string) {
+		currentSection = string;
+	}
+
+	function setPlaylists(string) {
+		playlists = string;
 	}
 
 	function renderHTML() {
@@ -83,6 +90,8 @@ export default function contextMenu(currentSection, playlists) {
 
 	return {
 		setIsOpen,
+		setCurrentSection,
+		setPlaylists,
 		setCoordinates,
 		setClickedElement,
 		renderHTML,
