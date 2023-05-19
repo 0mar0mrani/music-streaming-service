@@ -34,7 +34,7 @@
 }
 
 .context-menu__button {
-	transition: background var(--duration-shorter) ease-in-out;
+	transition: background var(--duration-shorter) ease-in-out, color var(--duration-shorter) ease-in-out;
 	line-height: 1;
 	width: 100%;
 	text-align: start;
@@ -43,5 +43,6 @@
 }
 
 .context-menu__button:hover {
-	background-color: var(--color-primary-darker);
+	background-color: var(--color-secondary-default);
+	color: var(--color-primary-default);
 }
