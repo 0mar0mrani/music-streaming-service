@@ -101,6 +101,7 @@ export default async function mainWindow() {
 		current.playlistSongIndex = Number(clickedSong);
 		current.playlistIndex = Number(songGroup);
 
+		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event);
 		renderHTML();
@@ -172,6 +173,7 @@ export default async function mainWindow() {
 	function handlePlaylistButtonContextmenu(event) {
 		event.stopPropagation();
 		event.preventDefault();
+		contextMenu.setClickedElement('playlist')
 		contextMenu.setCoordinates(event)
 		contextMenu.setIsOpen(true);
 		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;

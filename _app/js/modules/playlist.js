@@ -1,5 +1,5 @@
 export default function playlist(node) {
-	let isOpen = false;
+	let isOpen = true;
 
 	const playlistElement = node;
 	const playlistButton = node.querySelector('.playlist__button');

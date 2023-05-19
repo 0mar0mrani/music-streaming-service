@@ -5,13 +5,21 @@ export default function contextMenu(currentSection, playlists) {
 		y: 0,
 	}
 
+	let clickedElement = null;
+
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
 	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
 	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
+	const deletePlaylist = document.querySelector('.context-menu__button--delete-playlist'); 
+	const removeSong = document.querySelector('.context-menu__button--remove-song'); 
 
 	function setIsOpen(boolean) {
 		isOpen = boolean;
+	}
+
+	function setClickedElement(string) {
+		clickedElement = string;
 	}
 
 	function setCoordinates(event) {
@@ -28,7 +36,8 @@ export default function contextMenu(currentSection, playlists) {
 		isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
 
 		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
-		contextMenuPlaylistSection.classList.remove('context-menu__playlist-section--visible');
+		deletePlaylist.classList.remove('context-menu__button--delete-playlist-visible');
+		removeSong.classList.remove('context-menu__button--remove-song-visible');
 
 		if (currentSection === 'release') {
 			contextMenuReleaseSection.classList.add('context-menu__release-section--visible');
@@ -48,7 +57,11 @@ export default function contextMenu(currentSection, playlists) {
 				contextMenuPlaylists.append(playlistElement)
 			})
 		} else if (currentSection === 'playlist') {
-			contextMenuPlaylistSection.classList.add('context-menu__playlist-section--visible');
+			if (clickedElement === 'playlist') {
+				deletePlaylist.classList.add('context-menu__button--delete-playlist-visible');
+			} else if (clickedElement === 'song') {
+				removeSong.classList.add('context-menu__button--remove-song-visible');
+			}
 		} 
 
 
@@ -71,6 +84,7 @@ export default function contextMenu(currentSection, playlists) {
 	return {
 		setIsOpen,
 		setCoordinates,
+		setClickedElement,
 		renderHTML,
 	}
 }

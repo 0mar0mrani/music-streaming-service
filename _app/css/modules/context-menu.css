@@ -10,14 +10,16 @@
 	display: block;
 }
 
-.context-menu__playlist-section,
-.context-menu__release-section {
+.context-menu__release-section,
+.context-menu__button--delete-playlist,
+.context-menu__button--remove-song {
 	display: none;
 }
 
-.context-menu__playlist-section--visible,
-.context-menu__release-section--visible {
-	display: flex;
+.context-menu__release-section--visible,
+.context-menu__button--delete-playlist-visible,
+.context-menu__button--remove-song-visible {
+	display: block;
 	flex-direction: column;
 }
 
