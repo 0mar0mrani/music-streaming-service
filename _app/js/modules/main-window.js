@@ -28,7 +28,7 @@ export default async function mainWindow() {
 	const player = playerModule(currentSection, releases, playlists);
 	let contextMenu = contextMenuModule(currentSection, playlists);
 
-	const mainWindow = document.querySelector('.main-window');
+	const mainWindow = document.querySelector('.main-window-container');
 	const loading = document.querySelector('.loading');
 	let contextMenuPlaylistButtons = null;
 	let songsEl = null;
