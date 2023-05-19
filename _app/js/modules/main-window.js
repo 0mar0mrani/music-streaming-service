@@ -131,10 +131,6 @@ export default async function mainWindow() {
 	async function handleNavigationButtonClick(event) {
 		const clickedButtonName = event.currentTarget.querySelector('span').innerText.toLowerCase();
 		currentSection = clickedButtonName;
-
-		releases = currentSection === 'release' && await fetchAllReleases();
-		playlists = currentSection === 'playlist' && await fetchPlaylists();
-
 		contextMenu = contextMenuModule(currentSection, playlists);
 		renderHTML();
 	}
