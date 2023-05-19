@@ -17,10 +17,6 @@
 
 .context-menu__playlist-section--visible,
 .context-menu__release-section--visible {
-	display: block;
-}
-
-.context-menu__playlist-section {
 	display: flex;
 	flex-direction: column;
 }
