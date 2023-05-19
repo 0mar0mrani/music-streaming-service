@@ -18,7 +18,8 @@ export default async function mainWindow() {
 	const current = {
 		track: null,
 		release: null,
-		playlist: null,
+		playlistIndex: null,
+		playlistSongIndex: null,
 	}
 
 	let releases = currentSection === 'release' && await fetchAllReleases();
@@ -35,7 +36,8 @@ export default async function mainWindow() {
 	let playlistElements = null;
 	let playlistButtons = null;
 	let playlistTitleInputs = null;
-	let deletePlaylistButton = document.querySelector('.context-menu__delete-playlist');
+	const deletePlaylistButton = document.querySelector('.context-menu__delete-playlist');
+	const removeSong = document.querySelector('.context-menu__remove-song');
 	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
 	mainWindow.addEventListener('scroll', handleMainWindowScroll);
@@ -47,7 +49,8 @@ export default async function mainWindow() {
 	}
 
 	createPlaylist.addEventListener('click', handleCreatePlaylistClick);
-	deletePlaylistButton.addEventListener('click', handleDeletePlaylistButtonClick)
+	deletePlaylistButton.addEventListener('click', handleDeletePlaylistButtonClick);
+	removeSong.addEventListener('click', handleRemoveSongClick);
 	
 	function handleWindowContextmenu(event) {
 		event.preventDefault();
@@ -83,13 +86,20 @@ export default async function mainWindow() {
 	function handleSongElContextmenu(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		const clickedTrack = event.currentTarget.dataset.id;
-		const clickedRelease =  event.currentTarget.closest('.release').dataset.id;
-		const releaseID = releases[clickedRelease]._id;
-		const trackID = releases[clickedRelease].tracks[clickedTrack].trackID;
+		const clickedSong = event.currentTarget.dataset.id;
+		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
+		const releaseID = currentSection === 'release' 
+			? releases[songGroup]._id
+			: playlists[songGroup]._id
+
+		const trackID = currentSection === 'release'
+			? releases[songGroup].tracks[clickedSong].trackID
+			: playlists[songGroup].songs[clickedSong].trackID
 
 		current.track = trackID;
 		current.release = releaseID;
+		current.playlistSongIndex = Number(clickedSong);
+		current.playlistIndex = Number(songGroup);
 
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event);
@@ -172,6 +182,16 @@ export default async function mainWindow() {
 
 	async function handleDeletePlaylistButtonClick() {
 		await deletePlaylist(current.playlist);
+		playlists = await fetchPlaylists();
+		renderHTML();
+	} 
+
+	async function handleRemoveSongClick() {
+		const rightPlaylist = playlists[current.playlistIndex];
+		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => current.playlistSongIndex !== index);
+		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
+		const playlistID = playlists[current.playlistIndex]._id;
+		await setPlaylist(playlistID, playlistForSanity);
 		playlists = await fetchPlaylists();
 		renderHTML();
 	}
@@ -274,6 +294,19 @@ export default async function mainWindow() {
 		const mutations = [{
 			delete: {
 				id: id,
+			}
+		}];  
+
+		await sanity.mutate(mutations);
+	}
+
+	async function setPlaylist(playlistID, newPlaylist) {
+		const mutations = [{
+			patch: {
+				id: playlistID,
+				set: {
+					songs: newPlaylist,
+				},
 			}
 		}];  
 
