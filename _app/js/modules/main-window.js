@@ -369,6 +369,9 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ]) 
+		player.setCurrentSection(currentSection);
+		player.setReleases(releases);
+		player.setPlaylist(playlists)
 		isLoading = false;
 		renderHTML();
 	}
