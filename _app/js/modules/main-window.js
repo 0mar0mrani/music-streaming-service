@@ -22,8 +22,8 @@ export default async function mainWindow() {
 		playlistSongIndex: null,
 	}
 
-	let releases = currentSection === 'release' && await fetchAllReleases();
-	let playlists = await fetchPlaylists();
+	let releases = [];
+	let playlists = [];
 
 	const player = playerModule(currentSection, releases, playlists);
 	let contextMenu = contextMenuModule(currentSection, playlists);
@@ -115,6 +115,7 @@ export default async function mainWindow() {
 			canFetch = false;
 			currentPage += 1;
 			isLoading = true;
+			console.log(isLoading);
 			renderHTML();
 			const moreReleases = await fetchAllReleases();
 			isLoading = false;
@@ -364,7 +365,13 @@ export default async function mainWindow() {
 		return totalSeconds;
 	}
 
-	renderHTML();
+	async function onLoad() {
+		isLoading = true;
+		renderHTML();
+		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ]) 
+		isLoading = false;
+		renderHTML();
+	}
 
 	function renderHTML() {
 		renderLoading();
@@ -724,4 +731,6 @@ export default async function mainWindow() {
 			contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
 		}
 	}
+
+	onLoad();
 }
