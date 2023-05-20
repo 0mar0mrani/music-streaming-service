@@ -580,10 +580,10 @@ export default async function mainWindow() {
 
 		}
 
-		if (scrolledToBottom) {
+		if (scrolledToBottom && currentSection === 'release') {
 			const message = document.createElement('div');
 			message.innerText = `You've reached bottom`;
-			message.className = 'main-window__message';
+			message.className = 'main-window__reached-bottom';
 			mainWindow.append(message);
 		}
 
