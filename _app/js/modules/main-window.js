@@ -184,7 +184,7 @@ export default async function mainWindow() {
 
 	function handleContextMenuElementClick(event) {
 		event.stopPropagation();
-		const clickedButton = event.currentTarget;		
+		const clickedButton = event.currentTarget;
 
 		const pressedSongIndex = clickedButton.closest('.song').dataset.id;
 		const pressedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
@@ -193,11 +193,29 @@ export default async function mainWindow() {
 		current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex]._id;
 		
 		const coordinates = clickedButton.getBoundingClientRect();
-		
+
 		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 		renderHTML();
+	}
+
+	async function handleContextMenuElementKeydown(event) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			const pressedButton = event.currentTarget;
+			pressedButton.click();
+
+			const lastFocused = {
+				song: pressedButton.closest('.song').dataset.id,
+				songGroup: pressedButton.closest('.song-group').dataset.id, 
+			}
+
+			contextMenu.setLastFocused(lastFocused);
+	
+			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button');		
+			firstButtonInMenu.focus();
+		}
 	}
 
 	function handlePlaylistButtonContextmenu(event) {
@@ -446,6 +464,7 @@ export default async function mainWindow() {
 
 			for (const contextMenuElement of contextMenuElements) {
 				contextMenuElement.addEventListener('click', handleContextMenuElementClick);
+				contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
 			}
 		} else if (currentSection === 'playlist') {
 			renderPlaylist();

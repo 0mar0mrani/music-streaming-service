@@ -5,13 +5,38 @@ export default function contextMenu(currentSection, playlists) {
 		y: 0,
 	}
 
+	let lastFocused = {
+		song: null,
+		songGroup: null,
+	};
+
 	let clickedElement = null;
 
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
 	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
+	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
 	const deletePlaylist = document.querySelector('.context-menu__button--delete-playlist'); 
 	const removeSong = document.querySelector('.context-menu__button--remove-song'); 
+
+	contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
+
+	function handleContextMenuElementKeydown(event) {
+		if (event.key === 'Tab') {
+			const focusableElements = document.querySelectorAll('.context-menu__button')
+			const activeElement = document.activeElement;
+			const lastFocusableElement = focusableElements[focusableElements.length - 1]
+			
+			if (activeElement === lastFocusableElement) {
+				focusOnLastFocusedSong(event);
+				renderHTML();
+			}
+
+		} else if (event.key === 'Escape') {
+			focusOnLastFocusedSong(event);
+			renderHTML();
+		}
+	}
 
 	function setIsOpen(boolean) {
 		isOpen = boolean;
@@ -36,10 +61,29 @@ export default function contextMenu(currentSection, playlists) {
 		playlists = string;
 	}
 
+	function setLastFocused(object) {
+		lastFocused = object;
+	}
+
+	function findLastFocusedSong() {
+		const songGroups = document.querySelectorAll('.song-group');
+		const songs = songGroups[lastFocused.songGroup].querySelectorAll('.song');
+		const rightSong = songs[lastFocused.song];
+		return rightSong;
+	}
+
+	function focusOnLastFocusedSong(event) {
+		event.preventDefault();
+		isOpen = false;
+		const lastFocusedSong = findLastFocusedSong();
+		lastFocusedSong.focus();
+	}
+
 	function renderHTML() {
 		isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
 
 		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
+		contextMenuPlaylistSection.remove('context-menu__release-playlist--visible');
 		deletePlaylist.classList.remove('context-menu__button--delete-playlist-visible');
 		removeSong.classList.remove('context-menu__button--remove-song-visible');
 
@@ -61,6 +105,8 @@ export default function contextMenu(currentSection, playlists) {
 				contextMenuPlaylists.append(playlistElement)
 			})
 		} else if (currentSection === 'playlist') {
+			contextMenuPlaylistSection.classList.add('context-menu__release-playlist--visible');
+
 			if (clickedElement === 'playlist') {
 				deletePlaylist.classList.add('context-menu__button--delete-playlist-visible');
 			} else if (clickedElement === 'song') {
@@ -91,6 +137,7 @@ export default function contextMenu(currentSection, playlists) {
 		setPlaylists,
 		setCoordinates,
 		setClickedElement,
+		setLastFocused,
 		renderHTML,
 	}
 }
