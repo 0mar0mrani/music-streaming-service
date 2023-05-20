@@ -32,3 +32,20 @@
 .header__add-playlist-button:hover .header__add-playlist-icon img {
 	filter: var(--filter-primary-darkest);
 }
+
+.header__message-container {
+	position: relative;
+}
+
+.header__message {
+	transition: transform var(--duration-medium) ease-in-out, opacity var(--duration-medium) ease-in-out;
+	transform: translateY(var(--gap-medium));
+	opacity: 0;
+	pointer-events: none;
+}
+
+.header__message--open {
+	transform: translateY(0);
+	opacity: 1;
+	pointer-events: unset;
+}
