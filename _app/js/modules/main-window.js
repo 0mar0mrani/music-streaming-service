@@ -716,6 +716,8 @@ export default async function mainWindow() {
 						const artist = document.createElement('div');
 						const plays = document.createElement('div');
 						const time = document.createElement('div');
+						const menu = document.createElement('button');
+						const menuIcon = document.createElement('img');
 	
 						songButton.dataset.id = index;
 	
@@ -729,9 +731,15 @@ export default async function mainWindow() {
 						number.className = 'release__number';
 						title.className = 'release__track-title';
 						plays.className = 'release__plays';
+						menu.className = 'release__song-menu';
 
 						songButton.dataset.id = index;
-	
+
+						menuIcon.src = '/_app/assets/svg/context.svg';
+						menuIcon.alt = 'Open context menu';
+
+						menu.append(menuIcon);
+
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artist);
 	
@@ -739,6 +747,7 @@ export default async function mainWindow() {
 						songButton.append(titleArtistContainer);
 						songButton.append(plays);
 						songButton.append(time);
+						songButton.append(menu);
 	
 						songContainer.append(songButton);
 
