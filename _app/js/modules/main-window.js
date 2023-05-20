@@ -288,7 +288,14 @@ export default async function mainWindow() {
 			}
 		}];  
 
-		await sanity.mutate(mutations);
+		const query = await sanity.mutate(mutations);
+		const isError = typeof query === 'string';
+		
+		if (isError) {
+			header.setMessage(query);
+		} else {
+			header.setMessage('Song added');
+		}
 	}
 
 	async function createNewPlaylist() {
