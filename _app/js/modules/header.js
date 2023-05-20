@@ -3,6 +3,7 @@ export default function header() {
 	let isVisible = false;
 	let currentSection = '';
 
+	const headerTitle = document.querySelector('.header__title');
 	const messageElement = document.querySelector('.header__message');
 	const createPlaylist = document.querySelector('.header__add-playlist-button');
 
@@ -33,8 +34,10 @@ export default function header() {
 		}
 
 		if (currentSection === 'release') {
+			headerTitle.innerText = 'Release';
 			createPlaylist.classList.remove('header__add-playlist-button--visible');
 		} else if (currentSection === 'playlist') {
+			headerTitle.innerText = 'Playlist';
 			createPlaylist.classList.add('header__add-playlist-button--visible');
 		}
 	}
