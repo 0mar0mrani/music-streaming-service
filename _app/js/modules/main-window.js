@@ -5,6 +5,7 @@ import formatSeconds from '../util/format-seconds.js';
 import playerModule from './player.js';
 import playlistModule from './playlist.js';
 import contextMenuModule from './context-menu.js';
+import headerModule from './header.js';
 
 export default async function mainWindow() {
 	let currentSection = 'release';
@@ -27,6 +28,7 @@ export default async function mainWindow() {
 
 	const player = playerModule(currentSection, releases, playlists);
 	let contextMenu = contextMenuModule(currentSection, playlists);
+	const header = headerModule();
 
 	const mainWindow = document.querySelector('.main-window-container');
 	const loading = document.querySelector('.loading');
@@ -392,6 +394,7 @@ export default async function mainWindow() {
 		contextMenu.renderHTML();
 		renderNavigationButtons();
 		player.renderHTML();
+		header.renderHTML();
 
 		mainWindow.innerHTML = '';
 
