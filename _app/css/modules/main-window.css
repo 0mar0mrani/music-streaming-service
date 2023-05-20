@@ -26,7 +26,8 @@
 }
 
 /* Message: bottom scroll */
-.main-window__message {
+.main-window__reached-bottom {
+	text-align: center;
 	padding: var(--gap-large) var(--gap-extra-large);
 	border-top: solid 0.1rem var(--color-secondary-lighter);
 	border-bottom: solid 0.1rem var(--color-secondary-lighter);
