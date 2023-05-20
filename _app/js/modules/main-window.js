@@ -228,7 +228,14 @@ export default async function mainWindow() {
 		}`;
 		
 		const fetchPlaylists = await sanity.fetch(query);
+		const isError = typeof fetchPlaylists === 'string';
+		
+		if (isError) {
+			header.setMessage(fetchPlaylists);
+			return [];
+		} else {
 		return fetchPlaylists;
+	}
 	}
 
 	async function fetchAllReleases() {
@@ -255,13 +262,13 @@ export default async function mainWindow() {
       }`;
 
 		const fetchedReleases = await sanity.fetch(query);
-		const isError = typeof fetchedReleases !== 'string';
+		const isError = typeof fetchedReleases === 'string';
 		
 		if (isError) {
-			return fetchedReleases;
-		} else {
-			errorMessage = fetchedReleases;
+			header.setMessage(fetchedReleases);
 			return [];
+		} else {
+			return fetchedReleases;
 		}
    }
 
@@ -387,6 +394,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ]) 
+		header.setIsVisible(true); 
 		player.setCurrentSection(currentSection);
 		player.setReleases(releases);
 		player.setPlaylist(playlists)
@@ -405,18 +413,6 @@ export default async function mainWindow() {
 
 		mainWindow.innerHTML = '';
 
-		if (errorMessage) {
-			const container = document.createElement('div');
-			const message = document.createElement('div');
-
-			message.innerText = errorMessage;
-
-			container.className = 'error';
-			message.className = 'error__message';
-
-			container.append(message);
-			mainWindow.append(container)
-		} else {
 			if (currentSection === 'release') {
 				renderReleases();
 			} else if (currentSection === 'playlist') {
@@ -582,7 +578,6 @@ export default async function mainWindow() {
 				message.innerText = `You've reached bottom`;
 				message.className = 'main-window__message';
 				mainWindow.append(message);
-			}
 		}
 
 		songsEl = document.querySelectorAll('.song');
