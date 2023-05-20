@@ -138,6 +138,7 @@ export default async function mainWindow() {
 		player.setPlaylist(playlists);
 		contextMenu.setCurrentSection(currentSection);
 		contextMenu.setPlaylists(playlists);
+		header.setCurrentSection(currentSection);
 		renderHTML();
 	}
 
@@ -400,6 +401,7 @@ export default async function mainWindow() {
 		renderHTML();
 		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ])
 		header.setIsVisible(true); 
+		header.setCurrentSection(currentSection);
 		player.setCurrentSection(currentSection);
 		player.setReleases(releases);
 		player.setPlaylist(playlists)

@@ -9,10 +9,14 @@
 }
 
 .header__add-playlist-button {
-	display: flex;
+	display: none;
 	align-items: center;
 	gap: var(--gap-small);
 	transition: color var(--duration-shorter) ease-in-out;
+}
+
+.header__add-playlist-button--visible {
+	display: flex;
 }
 
 .header__add-playlist-icon {
