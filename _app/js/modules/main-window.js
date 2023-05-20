@@ -184,19 +184,19 @@ export default async function mainWindow() {
 
 	function handleContextMenuElementClick(event) {
 		event.stopPropagation();
-		const clickedButton = event.currentTarget;
 
+		const clickedButton = event.currentTarget;
 		const pressedSongIndex = clickedButton.closest('.song').dataset.id;
 		const pressedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
-
-		current.release = releases[pressedSongGroupIndex]._id;
-		current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex]._id;
-		
 		const coordinates = clickedButton.getBoundingClientRect();
-
+		
+		current.release = releases[pressedSongGroupIndex]._id;
+		current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
+		
 		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
+		
 		renderHTML();
 	}
 
