@@ -32,6 +32,7 @@ export default async function mainWindow() {
 
 	const mainWindow = document.querySelector('.main-window-container');
 	const loading = document.querySelector('.loading');
+	let contextMenuElements = null;
 	let contextMenuPlaylistButtons = null;
 	let songsEl = null;
 	const navigationButtons = document.querySelectorAll('.navigation__button');
@@ -105,7 +106,7 @@ export default async function mainWindow() {
 
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
-		contextMenu.setCoordinates(event);
+		contextMenu.setCoordinates(event.clientX, event.clientY);
 		renderHTML();
 	}
 
@@ -181,11 +182,22 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
+	function handleContextMenuElementClick(event) {
+		event.stopPropagation();
+		const clickedButton = event.currentTarget;		
+		const coordinates = clickedButton.getBoundingClientRect();
+		
+		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
+		contextMenu.setClickedElement('song');
+		contextMenu.setIsOpen(true);
+		renderHTML();
+	}
+
 	function handlePlaylistButtonContextmenu(event) {
 		event.stopPropagation();
 		event.preventDefault();
-		contextMenu.setClickedElement('playlist')
-		contextMenu.setCoordinates(event)
+		contextMenu.setClickedElement('playlist');
+		contextMenu.setCoordinates(event.clientX, event.clientY);
 		contextMenu.setIsOpen(true);
 		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
@@ -422,6 +434,12 @@ export default async function mainWindow() {
 
 		if (currentSection === 'release') {
 			renderReleases();
+
+			contextMenuElements = document.querySelectorAll('.release__song-menu');
+
+			for (const contextMenuElement of contextMenuElements) {
+				contextMenuElement.addEventListener('click', handleContextMenuElementClick);
+			}
 		} else if (currentSection === 'playlist') {
 			renderPlaylist();
 			

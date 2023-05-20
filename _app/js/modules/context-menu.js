@@ -21,10 +21,7 @@ export default function contextMenu(currentSection, playlists) {
 		clickedElement = string;
 	}
 
-	function setCoordinates(event) {
-		const xCoordinates = event.clientX;
-		const yCoordinates = event.clientY;
-
+	function setCoordinates(xCoordinates, yCoordinates) {
 		coordinates = {
 			x: xCoordinates,
 			y: yCoordinates,
