@@ -14,13 +14,12 @@ export default function contextMenu() {
 		songGroup: null,
 	};
 
-
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
 	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
 	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
-	const deletePlaylist = document.querySelector('.context-menu__button--delete-playlist'); 
-	const removeSong = document.querySelector('.context-menu__button--remove-song'); 
+	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist'); 
+	const deleteSongButton = document.querySelector('.context-menu__button--remove-song'); 
 
 	contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
 
@@ -29,8 +28,6 @@ export default function contextMenu() {
 			const focusableElements = document.querySelectorAll('.context-menu__button--visible')
 			const activeElement = document.activeElement;
 			const lastFocusableElement = focusableElements[focusableElements.length - 1]
-
-			console.log(focusableElements);
 			
 			if (activeElement === lastFocusableElement) {
 				focusOnLastFocusedElement(event);
@@ -91,14 +88,42 @@ export default function contextMenu() {
 	}
 
 	function renderHTML() {
-		isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
-
 		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
 		contextMenuPlaylistSection.classList.remove('context-menu__playlist-section--visible');
-		deletePlaylist.classList.remove('context-menu__button--visible');
-		removeSong.classList.remove('context-menu__button--visible');
+		deletePlaylistButton.classList.remove('context-menu__button--visible');
+		deleteSongButton.classList.remove('context-menu__button--visible');
 
 		if (currentSection === 'release') {
+			renderPlaylists();
+		} else if (currentSection === 'playlist') {
+			renderDeleteSongAndPlaylist();
+		} 
+
+		renderPlacement();
+		renderVisibility();
+
+		function renderVisibility() {
+			if (isOpen) {
+				contextMenuElement.classList.add('context-menu--open');
+			} else {
+				contextMenuElement.classList.remove('context-menu--open');
+			}
+		} 
+
+		function renderPlacement() {
+			contextMenuElement.style.top = `${coordinates.y}px`;
+			contextMenuElement.style.left = `${coordinates.x}px`;
+
+			const contextWidth = contextMenuElement.clientWidth;
+			const contextHeight = contextMenuElement.clientHeight;
+
+			const contextMenuOutsideWindowRight = (window.innerWidth - (coordinates.x + contextWidth)) <= 0;
+			const contextMenuOutsideWindowBottom = (window.innerHeight - (coordinates.y + contextHeight)) <= 0;
+
+			contextMenuElement.style.transform = `translate(${contextMenuOutsideWindowRight ? '-100%' : '0'}, ${contextMenuOutsideWindowBottom ? '-100%' : '0'})`;
+		}
+
+		function renderPlaylists() {
 			contextMenuReleaseSection.classList.add('context-menu__release-section--visible');
 
 			contextMenuPlaylists.innerHTML = '';
@@ -115,30 +140,16 @@ export default function contextMenu() {
 				playlistElement.append(playlistButton);
 				contextMenuPlaylists.append(playlistElement)
 			})
-		} else if (currentSection === 'playlist') {
+		}
+
+		function renderDeleteSongAndPlaylist() {
 			contextMenuPlaylistSection.classList.add('context-menu__playlist-section--visible');
 
 			if (clickedElement === 'playlist') {
-				deletePlaylist.classList.add('context-menu__button--visible');
+				deletePlaylistButton.classList.add('context-menu__button--visible');
 			} else if (clickedElement === 'song') {
-				removeSong.classList.add('context-menu__button--visible');
+				deleteSongButton.classList.add('context-menu__button--visible');
 			}
-		} 
-
-
-		renderPlacement();
-
-		function renderPlacement() {
-			contextMenuElement.style.top = `${coordinates.y}px`;
-			contextMenuElement.style.left = `${coordinates.x}px`;
-
-			const contextWidth = contextMenuElement.clientWidth;
-			const contextHeight = contextMenuElement.clientHeight;
-
-			const contextMenuOutsideWindowRight = (window.innerWidth - (coordinates.x + contextWidth)) <= 0;
-			const contextMenuOutsideWindowBottom = (window.innerHeight - (coordinates.y + contextHeight)) <= 0;
-
-			contextMenuElement.style.transform = `translate(${contextMenuOutsideWindowRight ? '-100%' : '0'}, ${contextMenuOutsideWindowBottom ? '-100%' : '0'})`;
 		}
 	}
 
