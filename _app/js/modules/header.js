@@ -1,18 +1,19 @@
 export default function header() {
-	let message = '';
-	let isVisible = false;
 	let currentSection = '';
+	let message = '';
+	let isMessageVisible = false;
+	const messageDuration = 2 * 1000;
 
-	const headerTitle = document.querySelector('.header__title');
+	const headerTitleElement = document.querySelector('.header__title');
 	const messageElement = document.querySelector('.header__message');
-	const createPlaylist = document.querySelector('.header__add-playlist-button');
+	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
 
 	function setMessage(string) {
 		message = string;
 	}
 
-	function setIsVisible(boolean) {
-		isVisible = boolean;
+	function setIsMessageVisible(boolean) {
+		isMessageVisible = boolean;
 	}
 
 	function setCurrentSection(string) {
@@ -20,31 +21,38 @@ export default function header() {
 	}
 
 	function renderHTML() {		
-		if (isVisible) {
-			messageElement.innerText = message;
-			messageElement.classList.add('header__message--open');
+		renderMessage();
+		renderTitleAndButton();
 
-			setTimeout(() => {
-				isVisible = false;
-				message = '';
-				renderHTML(); 
-			}, 2000)
-		} else {
-			messageElement.classList.remove('header__message--open');
+		function renderMessage() {
+			if (isMessageVisible) {
+				messageElement.innerText = message;
+				messageElement.classList.add('header__message--open');
+	
+				setTimeout(() => {
+					isMessageVisible = false;
+					message = '';
+					renderHTML(); 
+				}, messageDuration)
+			} else {
+				messageElement.classList.remove('header__message--open');
+			}
 		}
 
-		if (currentSection === 'release') {
-			headerTitle.innerText = 'Release';
-			createPlaylist.classList.remove('header__add-playlist-button--visible');
-		} else if (currentSection === 'playlist') {
-			headerTitle.innerText = 'Playlist';
-			createPlaylist.classList.add('header__add-playlist-button--visible');
+		function renderTitleAndButton() {
+			if (currentSection === 'release') {
+				headerTitleElement.innerText = 'Release';
+				createPlaylistButton.classList.remove('header__add-playlist-button--visible');
+			} else if (currentSection === 'playlist') {
+				headerTitleElement.innerText = 'Playlist';
+				createPlaylistButton.classList.add('header__add-playlist-button--visible');
+			}
 		}
 	}
 	
 	return {
 		setMessage,
-		setIsVisible,
+		setIsMessageVisible,
 		setCurrentSection,
 		renderHTML,
 	}

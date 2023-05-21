@@ -188,7 +188,7 @@ export default async function mainWindow() {
 		renderHTML();
 		await addSongToPlaylist(playlistID);
 		playlists = await fetchPlaylists();
-		header.setIsVisible(true);
+		header.setIsMessageVisible(true);
 		isLoading = false;
 		renderHTML();
 	}
@@ -453,7 +453,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ])
-		header.setIsVisible(true); 
+		header.setIsMessageVisible(true); 
 		header.setCurrentSection(current.section);
 		player.setCurrentSection(current.section);
 		player.setReleases(releases);
