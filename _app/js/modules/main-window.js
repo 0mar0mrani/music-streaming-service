@@ -7,8 +7,7 @@ import contextMenuModule from './context-menu.js';
 import headerModule from './header.js';
 
 export default async function mainWindow() {
-	let currentSection = 'playlist';
-	let errorMessage = '';
+	let currentSection = 'release';
 	let currentPage = 0;
 	let pageSize = 5;
 	let canFetch = true;
