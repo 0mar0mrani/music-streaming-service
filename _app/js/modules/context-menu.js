@@ -30,12 +30,12 @@ export default function contextMenu(currentSection, playlists) {
 			console.log(focusableElements);
 			
 			if (activeElement === lastFocusableElement) {
-				focusOnLastFocusedSong(event);
+				focusOnLastFocusedElement(event);
 				renderHTML();
 			}
 
 		} else if (event.key === 'Escape') {
-			focusOnLastFocusedSong(event);
+			focusOnLastFocusedElement(event);
 			renderHTML();
 		}
 	}
@@ -67,18 +67,24 @@ export default function contextMenu(currentSection, playlists) {
 		lastFocused = object;
 	}
 
-	function findLastFocusedSong() {
-		const songGroups = document.querySelectorAll('.song-group');
-		const songs = songGroups[lastFocused.songGroup].querySelectorAll('.song');
-		const rightSong = songs[lastFocused.song];
-		return rightSong;
+	function findLastFocusedElement() {
+		if (clickedElement === 'playlist') {
+			const menuButtons = document.querySelectorAll('.context-menu-button');
+			const lastFocusedMenuButton = menuButtons[lastFocused.songGroup];
+			return lastFocusedMenuButton;
+		} else {
+			const songGroups = document.querySelectorAll('.song-group');
+			const songs = songGroups[lastFocused.songGroup].querySelectorAll('.song');
+			const lastFocusedSong = songs[lastFocused.song];
+			return lastFocusedSong;
+		}
 	}
 
-	function focusOnLastFocusedSong(event) {
+	function focusOnLastFocusedElement(event) {
 		event.preventDefault();
 		isOpen = false;
-		const lastFocusedSong = findLastFocusedSong();
-		lastFocusedSong.focus();
+		const lastFocusedElement = findLastFocusedElement();
+		lastFocusedElement.focus();
 	}
 
 	function renderHTML() {
