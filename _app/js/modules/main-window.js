@@ -190,8 +190,13 @@ export default async function mainWindow() {
 		const pressedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
 		const coordinates = clickedButton.getBoundingClientRect();
 		
-		current.release = releases[pressedSongGroupIndex]._id;
-		current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
+		if (currentSection === 'release') {
+			current.release = releases[pressedSongGroupIndex]._id;
+			current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
+		} else if (currentSection === 'playlist') {
+			current.playlistIndex = pressedSongGroupIndex;
+			current.playlistSongIndex = pressedSongIndex
+		}
 		
 		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
 		contextMenu.setClickedElement('song');
@@ -210,10 +215,10 @@ export default async function mainWindow() {
 				song: pressedButton.closest('.song').dataset.id,
 				songGroup: pressedButton.closest('.song-group').dataset.id, 
 			}
-
+			
 			contextMenu.setLastFocused(lastFocused);
 	
-			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button');		
+			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button--visible');		
 			firstButtonInMenu.focus();
 		}
 	}
@@ -241,7 +246,7 @@ export default async function mainWindow() {
 
 	async function handleRemoveSongClick() {
 		const rightPlaylist = playlists[current.playlistIndex];
-		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => current.playlistSongIndex !== index);
+		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.playlistSongIndex) !== index);
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
 		const playlistID = playlists[current.playlistIndex]._id;
 		isLoading = true;
