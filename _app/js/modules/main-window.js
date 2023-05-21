@@ -19,6 +19,7 @@ export default async function mainWindow() {
 	const current = {
 		track: null,
 		release: null,
+		playlist: null,
 		playlistIndex: null,
 		playlistSongIndex: null,
 	}
@@ -186,9 +187,10 @@ export default async function mainWindow() {
 		event.stopPropagation();
 
 		const clickedButton = event.currentTarget;
-		const pressedSongIndex = clickedButton.closest('.song').dataset.id;
+		const pressedSongIndex = clickedButton.closest('.song')?.dataset.id;
 		const pressedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
 		const coordinates = clickedButton.getBoundingClientRect();
+		const clickedOnPlaylistHeader = pressedSongIndex === undefined;
 		
 		if (currentSection === 'release') {
 			current.release = releases[pressedSongGroupIndex]._id;
@@ -196,10 +198,17 @@ export default async function mainWindow() {
 		} else if (currentSection === 'playlist') {
 			current.playlistIndex = pressedSongGroupIndex;
 			current.playlistSongIndex = pressedSongIndex
+
+			if (clickedOnPlaylistHeader) {
+				const playlistID = playlists[pressedSongGroupIndex]._id;
+				current.playlist = playlistID;
+				contextMenu.setClickedElement('playlist');
+			} else {
+				contextMenu.setClickedElement('song');
+			}
 		}
 		
 		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
-		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 
 		renderHTML();
@@ -212,10 +221,10 @@ export default async function mainWindow() {
 			pressedButton.click();
 
 			const lastFocused = {
-				song: pressedButton.closest('.song').dataset.id,
+				song: pressedButton.closest('.song')?.dataset.id,
 				songGroup: pressedButton.closest('.song-group').dataset.id, 
 			}
-			
+
 			contextMenu.setLastFocused(lastFocused);
 	
 			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button--visible');		
@@ -507,6 +516,10 @@ export default async function mainWindow() {
 
 					const button = document.createElement('button');
 					const info = document.createElement('div');
+					const infoSection1 = document.createElement('div');
+					const infoSection2 = document.createElement('div');
+					const menuButton = document.createElement('button');
+					const menuIcon = document.createElement('img');
 					const title = document.createElement('h2');
 					const titleInput = document.createElement('input');
 					const additionalInfo = document.createElement('div')
@@ -517,9 +530,12 @@ export default async function mainWindow() {
 
 					button.className = 'playlist__button';
 					info.className = 'playlist__info';
+					infoSection1.className = 'playlist__info-section-1';
+					infoSection2.className = 'playlist__info-section-2';
 					title.className = 'playlist__title';
 					titleInput.className = 'playlist__title-input';
 					additionalInfo.className = 'playlist__additional-info';
+					menuButton.className = 'playlist__menu-button context-menu-button';
 					iconContainer.className = 'playlist__icon';
 
 					titleInput.value = playlist.title;
@@ -529,11 +545,19 @@ export default async function mainWindow() {
 					icon.src = '/_app/assets/svg/close.svg';
 					icon.alt = 'close playlist'
 
+					menuIcon.src = '/_app/assets/svg/context-vertical.svg';
+					menuIcon.alt = 'Open playlist context menu'
+
+					menuButton.append(menuIcon);
+
 					additionalInfo.append(songAmount);
 					additionalInfo.append(playlistPlayTime);
 					title.append(titleInput);
-					info.append(title);
-					info.append(additionalInfo);
+					infoSection1.append(title);
+					infoSection1.append(additionalInfo);
+					infoSection2.append(menuButton);
+					info.append(infoSection1);
+					info.append(infoSection2);
 					iconContainer.append(icon);
 					button.append(info);
 					button.append(iconContainer);
