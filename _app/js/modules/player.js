@@ -50,11 +50,11 @@ export default function player() {
 	const muteButtonIcon = document.querySelector('.player__mute img');
 
 	const timelineSlider = document.querySelector('.player__timeline');
-	const timelineCurrent = document.querySelector('.player__current');
-	const timelineDuration = document.querySelector('.player__duration');
+	const timelineCurrentElement = document.querySelector('.player__current');
+	const timelineDurationElement = document.querySelector('.player__duration');
 
 	const closeButton = document.querySelector('.player__close');
-	const accessabilitySkipToPlayer = document.querySelector('.accessibility__player');
+	const accessabilitySkipToPlayerElement = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
@@ -387,12 +387,12 @@ export default function player() {
 				}
 
 				if (isPlaying) {
-					accessabilitySkipToPlayer.innerHTML = '';
+					accessabilitySkipToPlayerElement.innerHTML = '';
 					const link = document.createElement('a');
 					link.innerText = 'Go to controllers';
 					link.className = 'accessibility__skip';
 					link.href = '#player';
-					accessabilitySkipToPlayer.append(link);
+					accessabilitySkipToPlayerElement.append(link);
 				}
 			}
 		
@@ -449,8 +449,8 @@ export default function player() {
 			timelineSlider.value = currentTime;
 			
 			if (!isNaN(duration)) {
-				timelineCurrent.innerText = formattedCurrentTime;
-				timelineDuration.innerText = formattedDuration;
+				timelineCurrentElement.innerText = formattedCurrentTime;
+				timelineDurationElement.innerText = formattedDuration;
 			}
 
 			timelineSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - percentage}% 50% / 200%`;			
