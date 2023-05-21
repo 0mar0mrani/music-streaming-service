@@ -43,7 +43,7 @@ export default async function mainWindow() {
 	const navigationButtonElements = document.querySelectorAll('.navigation__button');
 	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
 
-	let contextMenuElements = null;
+	let contextMenuAddToPlaylistButtons = null;
 	let contextMenuPlaylistButtons = null;
 	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
 	const deleteSongButton = document.querySelector('.context-menu__button--remove-song');
@@ -193,7 +193,7 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
-	function handleContextMenuElementClick(event) {
+	function handleContextMenuAddToPlaylistButtonClick(event) {
 		event.stopPropagation();
 
 		const clickedButton = event.currentTarget;
@@ -224,7 +224,7 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
-	async function handleContextMenuElementKeydown(event) {
+	async function handleContextMenuAddToPlaylistButtonKeydown(event) {
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			const pressedButton = event.currentTarget;
@@ -475,194 +475,21 @@ export default async function mainWindow() {
 
 		if (current.section === 'release') {
 			renderReleases();
-
 		} else if (current.section === 'playlist') {
 			renderPlaylist();
-			
-			playlistElements = document.querySelectorAll('.playlist');
-			playlistHeaderElements = document.querySelectorAll('.playlist__button');
-			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
+			setQueryselectorAndEventlistenerPlaylist();
+		} 
 
-			for (const playlistHeaderElement of playlistHeaderElements) {
-				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu)
+		setQueryselectorAndEventlistener();
+		renderReachedBottomMessage();
+
+		function renderReachedBottomMessage() {
+			if (current.section === 'release' && release.scrolledToBottom) {
+				const message = document.createElement('div');
+				message.innerText = `You've reached bottom`;
+				message.className = 'main-window__reached-bottom';
+				mainWindowElement.append(message);
 			}
-			
-			for (const playlistTitleInput of playlistTitleInputs) {
-				playlistTitleInput.addEventListener('click', handlePlaylistTitleInputClick);
-				playlistTitleInput.addEventListener('blur', handlePlaylistTitleInputBlur);
-				playlistTitleInput.addEventListener('keydown', handlePlaylistTitleInputKeydown);
-			}
-
-			function renderPlaylist() {
-				playlists.forEach((playlist, index) => {
-					const playlistContainer = document.createElement('li');
-					const noSongs = document.createElement('div')
-					noSongs.className = 'playlist__no-songs';
-					playlistContainer.className = 'playlist song-group';
-
-					const button = createButtonDOM(playlist);
-					const songs = createSongsDOM(playlist);
-
-					playlistContainer.dataset.id = index;
-
-					noSongs.innerText = 'No songs in playlist';
-					
-					playlistContainer.append(button);
-					playlist.songs.length !== 0 ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
-					
-					mainWindowElement.append(playlistContainer);
-				}) 
-
-				function createButtonDOM(playlist) {
-					const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs)
-
-					const container = document.createElement('div');
-					const info = document.createElement('div');
-					const menuButton = document.createElement('button');
-					const menuIcon = document.createElement('img');
-					const title = document.createElement('h2');
-					const titleInput = document.createElement('input');
-					const additionalInfo = document.createElement('div')
-					const songAmount = document.createElement('div');
-					const playlistPlayTime = document.createElement('div');
-
-					container.className = 'playlist__button';
-					info.className = 'playlist__info';
-					title.className = 'playlist__title';
-					titleInput.className = 'playlist__title-input';
-					additionalInfo.className = 'playlist__additional-info';
-					menuButton.className = 'playlist__menu-button context-menu-button';
-
-					titleInput.value = playlist.title;
-					songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
-					playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
-
-					menuIcon.src = '/_app/assets/svg/context-vertical.svg';
-					menuIcon.alt = 'Open playlist context menu'
-
-					menuButton.append(menuIcon);
-					additionalInfo.append(songAmount);
-					additionalInfo.append(playlistPlayTime);
-					title.append(titleInput);
-					info.append(title);
-					playlist.songs.length !== 0 && info.append(additionalInfo);
-					container.append(info);
-					container.append(menuButton);
-
-					return container;
-				}
-				
-
-				function createSongsDOM(playlist) {
-					const container = document.createElement('div');
-					const header = document.createElement('div');
-					const number = document.createElement('div');
-					const empty = document.createElement('div');
-					const title = document.createElement('div');
-					const album = document.createElement('div');
-					const time = document.createElement('div');
-
-					const songsContainer = document.createElement('ul');
-
-					playlist.songs.forEach((song, index) => {
-						const songContainer = createSongDOM(song, index); 
-						songsContainer.append(songContainer);
-					})
-
-					number.innerText = '#';
-					title.innerText = 'Title';
-					album.innerText = 'Album';
-					time.innerText = 'Time';
-
-					container.className = 'playlist__songs-container';
-					header.className = 'playlist__song-header';
-					album.className = 'playlist__album-header';
-					songsContainer.className = 'playlist__songs';
-
-					header.append(number);
-					header.append(empty);
-					header.append(title);
-					header.append(album);
-					header.append(time);
-					container.append(header);
-					container.append(songsContainer);
-
-					return container;
-
-					function createSongDOM(song, index) {
-						const container = document.createElement('li');
-						const songButton = document.createElement('button');
-						const number = document.createElement('div');
-						const artworkContainer = document.createElement('div');
-						const artwork = document.createElement('img');
-						const titleArtistContainer = document.createElement('div');
-						const title = document.createElement('h3');
-						const artists = document.createElement('div');
-						const album = document.createElement('div');
-						const time = document.createElement('div');
-						const menu = document.createElement('button');
-						const menuIcon = document.createElement('img');
-						
-						songButton.className = 'song playlist__song';
-						number.className = 'playlist__number';
-						artworkContainer.className = 'playlist__artwork';
-						title.className = 'playlist__song-title';
-						menu.className = 'playlist__song-menu context-menu-button';
-						album.className = 'playlist__album';
-
-						songButton.dataset.id = index;
-
-						number.innerText = index + 1;
-						title.innerText = song.title;
-						artists.innerText = song.artists.join(', ');
-						album.innerText = song.releaseTitle;
-						time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
-						
-						artwork.src = song.artworkURL;
-						menuIcon.src = '/_app/assets/svg/context.svg';
-
-						artwork.alt = song.artworkAlt;
-						menuIcon.alt = 'Open context menu';
-
-						menu.append(menuIcon);
-						artworkContainer.append(artwork);
-						titleArtistContainer.append(title);
-						titleArtistContainer.append(artists);
-						songButton.append(number);
-						songButton.append(artworkContainer);
-						songButton.append(titleArtistContainer);
-						songButton.append(album);
-						songButton.append(time);
-						songButton.append(menu)
-						container.append(songButton);
-
-						return container;
-					}
-				}
-			}
-		} else if (current.section === 'search') {
-
-		}
-
-		if (release.scrolledToBottom && current.section === 'release') {
-			const message = document.createElement('div');
-			message.innerText = `You've reached bottom`;
-			message.className = 'main-window__reached-bottom';
-			mainWindowElement.append(message);
-		}
-
-		contextMenuElements = document.querySelectorAll('.context-menu-button');
-
-		for (const contextMenuElement of contextMenuElements) {
-			contextMenuElement.addEventListener('click', handleContextMenuElementClick);
-			contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
-		}
-
-		songButtons = document.querySelectorAll('.song');
-
-		for (const songButton of songButtons) {
-			songButton.addEventListener('click', handleSongButtonClick);
-			songButton.addEventListener('contextmenu', handleSongButtonContextmenu);
 		}
 
 		function renderLoading() {
@@ -832,9 +659,188 @@ export default async function mainWindow() {
 			});
 		}
 
-		contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
-		for (const contextMenuPlaylistButton of contextMenuPlaylistButtons) {
-			contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
+		function renderPlaylist() {
+			playlists.forEach((playlist, index) => {
+				const playlistContainer = document.createElement('li');
+				const noSongs = document.createElement('div')
+				noSongs.className = 'playlist__no-songs';
+				playlistContainer.className = 'playlist song-group';
+
+				const button = createButtonDOM(playlist);
+				const songs = createSongsDOM(playlist);
+
+				playlistContainer.dataset.id = index;
+
+				noSongs.innerText = 'No songs in playlist';
+				
+				playlistContainer.append(button);
+				playlist.songs.length !== 0 ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
+				
+				mainWindowElement.append(playlistContainer);
+			}) 
+
+			function createButtonDOM(playlist) {
+				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs)
+
+				const container = document.createElement('div');
+				const info = document.createElement('div');
+				const menuButton = document.createElement('button');
+				const menuIcon = document.createElement('img');
+				const title = document.createElement('h2');
+				const titleInput = document.createElement('input');
+				const additionalInfo = document.createElement('div')
+				const songAmount = document.createElement('div');
+				const playlistPlayTime = document.createElement('div');
+
+				container.className = 'playlist__button';
+				info.className = 'playlist__info';
+				title.className = 'playlist__title';
+				titleInput.className = 'playlist__title-input';
+				additionalInfo.className = 'playlist__additional-info';
+				menuButton.className = 'playlist__menu-button context-menu-button';
+
+				titleInput.value = playlist.title;
+				songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
+				playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
+
+				menuIcon.src = '/_app/assets/svg/context-vertical.svg';
+				menuIcon.alt = 'Open playlist context menu'
+
+				menuButton.append(menuIcon);
+				additionalInfo.append(songAmount);
+				additionalInfo.append(playlistPlayTime);
+				title.append(titleInput);
+				info.append(title);
+				playlist.songs.length !== 0 && info.append(additionalInfo);
+				container.append(info);
+				container.append(menuButton);
+
+				return container;
+			}
+			
+
+			function createSongsDOM(playlist) {
+				const container = document.createElement('div');
+				const header = document.createElement('div');
+				const number = document.createElement('div');
+				const empty = document.createElement('div');
+				const title = document.createElement('div');
+				const album = document.createElement('div');
+				const time = document.createElement('div');
+
+				const songsContainer = document.createElement('ul');
+
+				playlist.songs.forEach((song, index) => {
+					const songContainer = createSongDOM(song, index); 
+					songsContainer.append(songContainer);
+				})
+
+				number.innerText = '#';
+				title.innerText = 'Title';
+				album.innerText = 'Album';
+				time.innerText = 'Time';
+
+				container.className = 'playlist__songs-container';
+				header.className = 'playlist__song-header';
+				album.className = 'playlist__album-header';
+				songsContainer.className = 'playlist__songs';
+
+				header.append(number);
+				header.append(empty);
+				header.append(title);
+				header.append(album);
+				header.append(time);
+				container.append(header);
+				container.append(songsContainer);
+
+				return container;
+
+				function createSongDOM(song, index) {
+					const container = document.createElement('li');
+					const songButton = document.createElement('button');
+					const number = document.createElement('div');
+					const artworkContainer = document.createElement('div');
+					const artwork = document.createElement('img');
+					const titleArtistContainer = document.createElement('div');
+					const title = document.createElement('h3');
+					const artists = document.createElement('div');
+					const album = document.createElement('div');
+					const time = document.createElement('div');
+					const menu = document.createElement('button');
+					const menuIcon = document.createElement('img');
+					
+					songButton.className = 'song playlist__song';
+					number.className = 'playlist__number';
+					artworkContainer.className = 'playlist__artwork';
+					title.className = 'playlist__song-title';
+					menu.className = 'playlist__song-menu context-menu-button';
+					album.className = 'playlist__album';
+
+					songButton.dataset.id = index;
+
+					number.innerText = index + 1;
+					title.innerText = song.title;
+					artists.innerText = song.artists.join(', ');
+					album.innerText = song.releaseTitle;
+					time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
+					
+					artwork.src = song.artworkURL;
+					menuIcon.src = '/_app/assets/svg/context.svg';
+
+					artwork.alt = song.artworkAlt;
+					menuIcon.alt = 'Open context menu';
+
+					menu.append(menuIcon);
+					artworkContainer.append(artwork);
+					titleArtistContainer.append(title);
+					titleArtistContainer.append(artists);
+					songButton.append(number);
+					songButton.append(artworkContainer);
+					songButton.append(titleArtistContainer);
+					songButton.append(album);
+					songButton.append(time);
+					songButton.append(menu)
+					container.append(songButton);
+
+					return container;
+				}
+			}
+		}
+
+		function setQueryselectorAndEventlistener() {
+			songButtons = document.querySelectorAll('.song');
+			contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
+			contextMenuAddToPlaylistButtons = document.querySelectorAll('.context-menu-button');
+			
+			for (const songButton of songButtons) {
+				songButton.addEventListener('click', handleSongButtonClick);
+				songButton.addEventListener('contextmenu', handleSongButtonContextmenu);
+			}
+
+			for (const contextMenuPlaylistButton of contextMenuPlaylistButtons) {
+				contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
+			}
+
+			for (const contextMenuAddToPlaylistButton of contextMenuAddToPlaylistButtons) {
+				contextMenuAddToPlaylistButton.addEventListener('click', handleContextMenuAddToPlaylistButtonClick);
+				contextMenuAddToPlaylistButton.addEventListener('keydown', handleContextMenuAddToPlaylistButtonKeydown);
+			}	
+		}
+
+		function setQueryselectorAndEventlistenerPlaylist() {
+			playlistElements = document.querySelectorAll('.playlist');
+			playlistHeaderElements = document.querySelectorAll('.playlist__button');
+			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
+
+			for (const playlistHeaderElement of playlistHeaderElements) {
+				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu)
+			}
+			
+			for (const playlistTitleInput of playlistTitleInputs) {
+				playlistTitleInput.addEventListener('click', handlePlaylistTitleInputClick);
+				playlistTitleInput.addEventListener('blur', handlePlaylistTitleInputBlur);
+				playlistTitleInput.addEventListener('keydown', handlePlaylistTitleInputKeydown);
+			}
 		}
 	}
 
