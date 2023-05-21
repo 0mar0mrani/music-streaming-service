@@ -196,7 +196,7 @@ export default async function mainWindow() {
 		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
-		
+
 		renderHTML();
 	}
 
@@ -589,11 +589,14 @@ export default async function mainWindow() {
 						const artists = document.createElement('div');
 						const album = document.createElement('div');
 						const time = document.createElement('div');
-
+						const menu = document.createElement('button');
+						const menuIcon = document.createElement('img');
+						
 						songButton.className = 'song playlist__song';
 						number.className = 'playlist__number';
 						artworkContainer.className = 'playlist__artwork';
 						title.className = 'playlist__song-title';
+						menu.className = 'playlist__song-menu';
 
 						songButton.dataset.id = index;
 
@@ -604,8 +607,12 @@ export default async function mainWindow() {
 						time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
 						
 						artwork.src = song.artworkURL;
-						artwork.alt = song.artworkAlt;
+						menuIcon.src = '/_app/assets/svg/context.svg';
 
+						artwork.alt = song.artworkAlt;
+						menuIcon.alt = 'Open context menu';
+
+						menu.append(menuIcon);
 						artworkContainer.append(artwork);
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artists);
@@ -614,6 +621,7 @@ export default async function mainWindow() {
 						songButton.append(titleArtistContainer);
 						songButton.append(album);
 						songButton.append(time);
+						songButton.append(menu)
 						container.append(songButton);
 
 						return container;
