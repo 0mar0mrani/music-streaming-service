@@ -7,26 +7,31 @@ import contextMenuModule from './context-menu.js';
 import headerModule from './header.js';
 
 export default async function mainWindow() {
-	let currentSection = 'release';
-	let currentPage = 0;
-	let pageSize = 5;
-	let canFetch = true;
-	let scrolledToBottom = false;
-	let isLoading = false;
-
-	const current = {
-		track: null,
-		release: null,
-		playlist: null,
-		playlistIndex: null,
-		playlistSongIndex: null,
-	}
-
 	let releases = [];
 	let playlists = [];
+	let isLoading = false;
 
-	const player = playerModule(currentSection, releases, playlists);
-	let contextMenu = contextMenuModule(currentSection, playlists);
+	const release = {
+		currentPage: 0,
+		pageSize: 5,
+		canFetch: true,
+		scrolledToBottom: false,
+	}
+
+	const current = {
+		section: 'release',
+		song: {
+			id: null,
+			index: null,
+		},
+		songGroup: {
+			id: null,
+			index: null,
+		},
+	}
+
+	const player = playerModule(current.section, releases, playlists);
+	let contextMenu = contextMenuModule(current.section, playlists);
 	const header = headerModule();
 
 	const mainWindow = document.querySelector('.main-window-container');
@@ -68,16 +73,16 @@ export default async function mainWindow() {
 	function handleSongElClick(event) {
 		event.stopPropagation();
 
-		const clickedTrackNumber = event.currentTarget.dataset.id;
-		const clickedReleaseNumber = event.currentTarget.closest('.song-group').dataset.id;
+		const clickedSong = event.currentTarget.dataset.id;
+		const clickedSongGroup = event.currentTarget.closest('.song-group').dataset.id;
 
-		const song = currentSection === 'release' 
-			? releases[clickedReleaseNumber].tracks[clickedTrackNumber] 
-			: playlists[clickedReleaseNumber].songs[clickedTrackNumber]
+		const song = current.section === 'release' 
+			? releases[clickedSongGroup].tracks[clickedSong] 
+			: playlists[clickedSongGroup].songs[clickedSong]
 
 		addOneToPlays(song.trackID, song.plays + 1)
-		player.setCurrentTrack(clickedTrackNumber);
-		player.setCurrentRelease(clickedReleaseNumber);
+		player.setCurrentTrack(clickedSong);
+		player.setCurrentRelease(clickedSongGroup);
 		player.setQue();
 		player.loadTrackFromQue();
 		player.toggleIsPlaying(true);
@@ -90,18 +95,18 @@ export default async function mainWindow() {
 		event.stopPropagation();
 		const clickedSong = event.currentTarget.dataset.id;
 		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
-		const releaseID = currentSection === 'release' 
+		const releaseID = current.section === 'release' 
 			? releases[songGroup]._id
 			: playlists[songGroup]._id
 
-		const trackID = currentSection === 'release'
+		const trackID = current.section === 'release'
 			? releases[songGroup].tracks[clickedSong].trackID
 			: playlists[songGroup].songs[clickedSong].trackID
 
-		current.track = trackID;
-		current.release = releaseID;
-		current.playlistSongIndex = Number(clickedSong);
-		current.playlistIndex = Number(songGroup);
+		current.song.id = trackID;
+		current.song.index = Number(clickedSong);
+		current.songGroup.id = releaseID;
+		current.songGroup.index = Number(songGroup);
 
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
@@ -113,32 +118,32 @@ export default async function mainWindow() {
 		const scrollCoordinatesFromBottom = window.innerHeight + mainWindow.scrollTop;
 		const mainWindowHeight = mainWindow.scrollHeight;
 
-		if (canFetch && !scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowHeight - window.innerHeight)) {
-			canFetch = false;
-			currentPage += 1;
+		if (release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowHeight - window.innerHeight)) {
+			release.canFetch = false;
+			release.currentPage += 1;
 			isLoading = true;
 			renderHTML();
 			const moreReleases = await fetchAllReleases();
 			isLoading = false;
-			scrolledToBottom = moreReleases.length === pageSize ? false : true;
+			release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
 			renderHTML();
 
 			setTimeout(() => {
-				canFetch = true;
+				release.canFetch = true;
 			}, 500);
 		}
 	}
 
 	async function handleNavigationButtonClick(event) {
 		const clickedButtonName = event.currentTarget.querySelector('span').innerText.toLowerCase();
-		currentSection = clickedButtonName;
-		player.setCurrentSection(currentSection);
+		current.section = clickedButtonName;
+		player.setCurrentSection(current.section);
 		player.setReleases(releases);
 		player.setPlaylist(playlists);
-		contextMenu.setCurrentSection(currentSection);
+		contextMenu.setCurrentSection(current.section);
 		contextMenu.setPlaylists(playlists);
-		header.setCurrentSection(currentSection);
+		header.setCurrentSection(current.section);
 		renderHTML();
 	}
 
@@ -160,7 +165,7 @@ export default async function mainWindow() {
 		const playlistID = playlists[clickedPlaylist]._id;
 		const newTitle = event.currentTarget.value;
 		
-		mutatePlaylistTitle(playlistID, newTitle);
+		changePlaylistTitle(playlistID, newTitle);
 	}
 
 	function handlePlaylistTitleInputKeydown(event) {
@@ -190,16 +195,16 @@ export default async function mainWindow() {
 		const coordinates = clickedButton.getBoundingClientRect();
 		const clickedOnPlaylistHeader = pressedSongIndex === undefined;
 		
-		if (currentSection === 'release') {
-			current.release = releases[pressedSongGroupIndex]._id;
-			current.track = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
-		} else if (currentSection === 'playlist') {
-			current.playlistIndex = pressedSongGroupIndex;
-			current.playlistSongIndex = pressedSongIndex
+		if (current.section === 'release') {
+			current.songGroup.id = releases[pressedSongGroupIndex]._id;
+			current.song.id = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
+		} else if (current.section === 'playlist') {
+			current.songGroup.index = pressedSongGroupIndex;
+			current.song.index = pressedSongIndex
 
 			if (clickedOnPlaylistHeader) {
 				const playlistID = playlists[pressedSongGroupIndex]._id;
-				current.playlist = playlistID;
+				current.songGroup.id = playlistID;
 				contextMenu.setClickedElement('playlist');
 			} else {
 				contextMenu.setClickedElement('song');
@@ -217,7 +222,7 @@ export default async function mainWindow() {
 			event.preventDefault();
 			const pressedButton = event.currentTarget;
 			pressedButton.click();
-
+			
 			const lastFocused = {
 				song: pressedButton.closest('.song')?.dataset.id,
 				songGroup: pressedButton.closest('.song-group').dataset.id, 
@@ -238,24 +243,24 @@ export default async function mainWindow() {
 		contextMenu.setIsOpen(true);
 		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
-		current.playlist = playlistID;
+		current.songGroup.id = playlistID;
 		renderHTML();
 	}
 
 	async function handleDeletePlaylistButtonClick() {
 		isLoading = true;
 		renderHTML();
-		await deletePlaylist(current.playlist);
+		await deletePlaylist(current.songGroup.id);
 		playlists = await fetchPlaylists();
 		isLoading = false;
 		renderHTML();
 	} 
 
 	async function handleRemoveSongClick() {
-		const rightPlaylist = playlists[current.playlistIndex];
-		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.playlistSongIndex) !== index);
+		const rightPlaylist = playlists[current.songGroup.index];
+		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
-		const playlistID = playlists[current.playlistIndex]._id;
+		const playlistID = playlists[current.songGroup.index]._id;
 		isLoading = true;
 		renderHTML();
 		await setPlaylist(playlistID, playlistForSanity);
@@ -294,8 +299,8 @@ export default async function mainWindow() {
 	}
 
 	async function fetchAllReleases() {
-		const sliceStart = currentPage * pageSize;
-		const sliceEnd = currentPage * pageSize + pageSize;
+		const sliceStart = release.currentPage * release.pageSize;
+		const sliceEnd = release.currentPage * release.pageSize + release.pageSize;
 
       const query = `*[_type == 'release' ] [${sliceStart}...${sliceEnd}] | order(releaseDate desc)  {
 			_id,
@@ -337,11 +342,11 @@ export default async function mainWindow() {
 						{
 							_key: Date.now(),
 							track: {
-								_ref: current.track,
+								_ref: current.song.id,
 								_type: 'reference'
 							},
 							release: {
-								_ref: current.release,
+								_ref: current.songGroup.id,
 								_type: 'reference'
 							},
 						}
@@ -408,7 +413,7 @@ export default async function mainWindow() {
 		await sanity.mutate(mutations);
 	}
 
-	async function mutatePlaylistTitle(playlistID, newTitle) {
+	async function changePlaylistTitle(playlistID, newTitle) {
 		const mutations = [{
 			patch: {
 				id: playlistID,
@@ -450,11 +455,11 @@ export default async function mainWindow() {
 		renderHTML();
 		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ])
 		header.setIsVisible(true); 
-		header.setCurrentSection(currentSection);
-		player.setCurrentSection(currentSection);
+		header.setCurrentSection(current.section);
+		player.setCurrentSection(current.section);
 		player.setReleases(releases);
 		player.setPlaylist(playlists)
-		contextMenu.setCurrentSection(currentSection);
+		contextMenu.setCurrentSection(current.section);
 		contextMenu.setPlaylists(playlists);
 		isLoading = false;
 		renderHTML();
@@ -469,10 +474,10 @@ export default async function mainWindow() {
 
 		mainWindow.innerHTML = '';
 
-		if (currentSection === 'release') {
+		if (current.section === 'release') {
 			renderReleases();
 
-		} else if (currentSection === 'playlist') {
+		} else if (current.section === 'playlist') {
 			renderPlaylist();
 			
 			playlistElements = document.querySelectorAll('.playlist');
@@ -636,11 +641,11 @@ export default async function mainWindow() {
 					}
 				}
 			}
-		} else if (currentSection === 'search') {
+		} else if (current.section === 'search') {
 
 		}
 
-		if (scrolledToBottom && currentSection === 'release') {
+		if (release.scrolledToBottom && current.section === 'release') {
 			const message = document.createElement('div');
 			message.innerText = `You've reached bottom`;
 			message.className = 'main-window__reached-bottom';
@@ -671,7 +676,7 @@ export default async function mainWindow() {
 
 				navigationButton.classList.remove('navigation__button--active');
 				
-				if (buttonName === currentSection) {
+				if (buttonName === current.section) {
 					navigationButton.classList.add('navigation__button--active');
 				}
 			}
