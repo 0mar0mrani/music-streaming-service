@@ -1,7 +1,10 @@
 import { sanity } from '../sanity.js'
+
 import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
-import formatSeconds from '../util/format-seconds.js';
+import formatSeconds from '../util/format-seconds-to-time.js';
+import formatTimeToSeconds from '../util/format-time-to-seconds.js';
+
 import playerModule from './player.js';
 import contextMenuModule from './context-menu.js';
 import headerModule from './header.js';
@@ -446,14 +449,6 @@ export default async function mainWindow() {
 		});
 	}
 
-	function reduceTotalPlayTimeOfTracks(tracks) {
-		const totalSeconds = tracks.reduce((accumulator, track) => {
-			return accumulator + track.playTime.minutes * 60 + track.playTime.seconds
-		}, 0)
-
-		return totalSeconds;
-	}
-
 	async function onLoad() {
 		isLoading = true;
 		renderHTML();
@@ -519,7 +514,7 @@ export default async function mainWindow() {
 				}) 
 
 				function createButtonDOM(playlist) {
-					const totalSecondsOfPlaylist = reduceTotalPlayTimeOfTracks(playlist.songs)
+					const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs)
 
 					const container = document.createElement('div');
 					const info = document.createElement('div');
@@ -728,7 +723,7 @@ export default async function mainWindow() {
 				}
 	
 				function createReleaseDOM() {
-					const totalSecondsOfRelease = reduceTotalPlayTimeOfTracks(release.tracks)
+					const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
 	
 					const releaseContainer = document.createElement('div');
 					const artworkContainer = document.createElement('div');
@@ -837,11 +832,9 @@ export default async function mainWindow() {
 			});
 		}
 
-		contextMenuPlaylistButtons = docum
-		ent.querySelectorAll('.context-menu__button--add-playlist');
+		contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
 		for (const contextMenuPlaylistButton of contextMenuPlaylistButtons) {
-			c
-			ontextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
+			contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
 		}
 	}
 

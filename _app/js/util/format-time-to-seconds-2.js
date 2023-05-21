@@ -1,4 +1,4 @@
-export default function formatTime(seconds) {
+export default function formatTimeToSeconds(seconds) {
 	seconds = seconds.toFixed(2); 
 	const minutes = Math.floor(seconds / 60);
 	const remainingSeconds = seconds % 60;

@@ -1,5 +1,5 @@
-import shuffle from "../util/shuffle.js";
-import formatTime from "../util/format-time.js";
+import shuffle from '../util/shuffle.js';
+import formatTimeToSeconds2 from '../util/format-time-to-seconds-2.js';
 
 export default function player() {
 	let currentSection = null;
@@ -443,8 +443,8 @@ export default function player() {
 			const duration = audio.duration;
 			const currentTime = audio.currentTime;
 			const percentage = (currentTime / duration) * 100;
-			const formattedCurrentTime = formatTime(currentTime);
-			const formattedDuration = formatTime(duration);
+			const formattedCurrentTime = formatTimeToSeconds2(currentTime);
+			const formattedDuration = formatTimeToSeconds2(duration);
 			timelineSlider.max = duration;
 			timelineSlider.value = currentTime;
 			
