@@ -8,7 +8,7 @@ import contextMenuModule from './context-menu.js';
 import headerModule from './header.js';
 
 export default async function mainWindow() {
-	let currentSection = 'release';
+	let currentSection = 'playlist';
 	let errorMessage = '';
 	let currentPage = 0;
 	let pageSize = 5;
@@ -460,12 +460,6 @@ export default async function mainWindow() {
 		if (currentSection === 'release') {
 			renderReleases();
 
-			contextMenuElements = document.querySelectorAll('.release__song-menu');
-
-			for (const contextMenuElement of contextMenuElements) {
-				contextMenuElement.addEventListener('click', handleContextMenuElementClick);
-				contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
-			}
 		} else if (currentSection === 'playlist') {
 			renderPlaylist();
 			
@@ -596,7 +590,7 @@ export default async function mainWindow() {
 						number.className = 'playlist__number';
 						artworkContainer.className = 'playlist__artwork';
 						title.className = 'playlist__song-title';
-						menu.className = 'playlist__song-menu';
+						menu.className = 'playlist__song-menu context-menu-button';
 
 						songButton.dataset.id = index;
 
@@ -637,6 +631,13 @@ export default async function mainWindow() {
 			message.innerText = `You've reached bottom`;
 			message.className = 'main-window__reached-bottom';
 			mainWindow.append(message);
+		}
+
+		contextMenuElements = document.querySelectorAll('.context-menu-button');
+
+		for (const contextMenuElement of contextMenuElements) {
+			contextMenuElement.addEventListener('click', handleContextMenuElementClick);
+			contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
 		}
 
 		songsEl = document.querySelectorAll('.song');
@@ -783,7 +784,7 @@ export default async function mainWindow() {
 						number.className = 'release__number';
 						title.className = 'release__track-title';
 						plays.className = 'release__plays';
-						menu.className = 'release__song-menu';
+						menu.className = 'release__song-menu context-menu-button';
 
 						songButton.dataset.id = index;
 

@@ -23,9 +23,11 @@ export default function contextMenu(currentSection, playlists) {
 
 	function handleContextMenuElementKeydown(event) {
 		if (event.key === 'Tab') {
-			const focusableElements = document.querySelectorAll('.context-menu__button')
+			const focusableElements = document.querySelectorAll('.context-menu__button--visible')
 			const activeElement = document.activeElement;
 			const lastFocusableElement = focusableElements[focusableElements.length - 1]
+
+			console.log(focusableElements);
 			
 			if (activeElement === lastFocusableElement) {
 				focusOnLastFocusedSong(event);
@@ -83,9 +85,9 @@ export default function contextMenu(currentSection, playlists) {
 		isOpen ? contextMenuElement.classList.add('context-menu--open') : contextMenuElement.classList.remove('context-menu--open');
 
 		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
-		contextMenuPlaylistSection.remove('context-menu__release-playlist--visible');
-		deletePlaylist.classList.remove('context-menu__button--delete-playlist-visible');
-		removeSong.classList.remove('context-menu__button--remove-song-visible');
+		contextMenuPlaylistSection.classList.remove('context-menu__playlist-section--visible');
+		deletePlaylist.classList.remove('context-menu__button--visible');
+		removeSong.classList.remove('context-menu__button--visible');
 
 		if (currentSection === 'release') {
 			contextMenuReleaseSection.classList.add('context-menu__release-section--visible');
@@ -96,7 +98,7 @@ export default function contextMenu(currentSection, playlists) {
 				const playlistElement = document.createElement('li');
 				const playlistButton = document.createElement('button');
 	
-				playlistButton.className = 'context-menu__button context-menu__button--add-playlist';
+				playlistButton.className = 'context-menu__button context-menu__button--visible context-menu__button--add-playlist';
 	
 				playlistButton.innerText = playlist.title;
 				playlistButton.dataset.id = index;
@@ -105,12 +107,12 @@ export default function contextMenu(currentSection, playlists) {
 				contextMenuPlaylists.append(playlistElement)
 			})
 		} else if (currentSection === 'playlist') {
-			contextMenuPlaylistSection.classList.add('context-menu__release-playlist--visible');
+			contextMenuPlaylistSection.classList.add('context-menu__playlist-section--visible');
 
 			if (clickedElement === 'playlist') {
-				deletePlaylist.classList.add('context-menu__button--delete-playlist-visible');
+				deletePlaylist.classList.add('context-menu__button--visible');
 			} else if (clickedElement === 'song') {
-				removeSong.classList.add('context-menu__button--remove-song-visible');
+				removeSong.classList.add('context-menu__button--visible');
 			}
 		} 
 

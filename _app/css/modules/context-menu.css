@@ -11,12 +11,15 @@
 }
 
 .context-menu__release-section,
+.context-menu__playlist-section,
 .context-menu__button--delete-playlist,
 .context-menu__button--remove-song {
 	display: none;
 }
 
+.context-menu__button--visible,
 .context-menu__release-section--visible,
+.context-menu__playlist-section--visible,
 .context-menu__button--delete-playlist-visible,
 .context-menu__button--remove-song-visible {
 	display: block;
