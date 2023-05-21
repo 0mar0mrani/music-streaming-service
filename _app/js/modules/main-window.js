@@ -589,6 +589,7 @@ export default async function mainWindow() {
 
 					container.className = 'playlist__songs-container';
 					header.className = 'playlist__song-header';
+					album.className = 'playlist__album-header';
 					songsContainer.className = 'playlist__songs';
 
 					header.append(number);
@@ -620,6 +621,7 @@ export default async function mainWindow() {
 						artworkContainer.className = 'playlist__artwork';
 						title.className = 'playlist__song-title';
 						menu.className = 'playlist__song-menu context-menu-button';
+						album.className = 'playlist__album';
 
 						songButton.dataset.id = index;
 

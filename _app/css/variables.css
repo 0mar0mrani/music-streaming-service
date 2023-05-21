@@ -52,7 +52,8 @@
 
 @media only screen and (max-width: 700px) {
 	:root {
-		--columns-song:  47fr 6fr;
+		--columns-song:  47fr 6fr 4rem;
+		--columns-playlist:  4rem 6rem 47fr 6fr 4rem;
 	}
 }
 
