@@ -56,8 +56,15 @@
 }
 
 .playlist__menu-button {
+	display: none;
 	width: 3rem;
 	height: 3rem;
+}
+
+.playlist__button:hover .playlist__menu-button,
+.playlist__button:focus .playlist__menu-button,
+.playlist__button:focus-within .playlist__menu-button {
+	display: block;
 }
 
 .playlist__menu-button img {
