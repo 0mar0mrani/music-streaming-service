@@ -20,7 +20,8 @@
 
 .playlist__info {
 	display: flex;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .playlist__title-input {
@@ -71,29 +72,10 @@
 	filter: var(--filter-primary-default);
 }
 
-.playlist__info-section-2 {
-	height: 3rem;
-	margin-left: var(--gap-medium);
-}
-
-.playlist__icon {
-	width: 3rem;
-	height: 3rem;
-	filter: var(--filter-primary-default);
-}
-
-.playlist--open .playlist__icon {
-	transform: rotate(180deg);
-}
 
 /* Songs section */
 .playlist__songs-container {
-	display: none;
 	transition: 0.1s background-color ease-in-out;
-}
-
-.playlist--open .playlist__songs-container {
-	display: block;
 }
 
 .playlist__song-header {

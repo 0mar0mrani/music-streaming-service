@@ -3,7 +3,6 @@ import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds.js';
 import playerModule from './player.js';
-import playlistModule from './playlist.js';
 import contextMenuModule from './context-menu.js';
 import headerModule from './header.js';
 
@@ -484,11 +483,7 @@ export default async function mainWindow() {
 			for (const playlistButton of playlistButtons) {
 				playlistButton.addEventListener('contextmenu', handlePlaylistButtonContextmenu)
 			}
-
-			for (const playlistElement of playlistElements) {
-				playlistModule(playlistElement);	
-			}
-
+			
 			for (const playlistTitleInput of playlistTitleInputs) {
 				playlistTitleInput.addEventListener('click', handlePlaylistTitleInputClick);
 				playlistTitleInput.addEventListener('blur', handlePlaylistTitleInputBlur);
@@ -514,10 +509,8 @@ export default async function mainWindow() {
 				function createButtonDOM(playlist) {
 					const totalSecondsOfPlaylist = reduceTotalPlayTimeOfTracks(playlist.songs)
 
-					const button = document.createElement('button');
+					const container = document.createElement('div');
 					const info = document.createElement('div');
-					const infoSection1 = document.createElement('div');
-					const infoSection2 = document.createElement('div');
 					const menuButton = document.createElement('button');
 					const menuIcon = document.createElement('img');
 					const title = document.createElement('h2');
@@ -525,44 +518,31 @@ export default async function mainWindow() {
 					const additionalInfo = document.createElement('div')
 					const songAmount = document.createElement('div');
 					const playlistPlayTime = document.createElement('div');
-					const iconContainer = document.createElement('div');
-					const icon = document.createElement('img');
 
-					button.className = 'playlist__button';
+					container.className = 'playlist__button';
 					info.className = 'playlist__info';
-					infoSection1.className = 'playlist__info-section-1';
-					infoSection2.className = 'playlist__info-section-2';
 					title.className = 'playlist__title';
 					titleInput.className = 'playlist__title-input';
 					additionalInfo.className = 'playlist__additional-info';
 					menuButton.className = 'playlist__menu-button context-menu-button';
-					iconContainer.className = 'playlist__icon';
 
 					titleInput.value = playlist.title;
 					songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
 					playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
-					
-					icon.src = '/_app/assets/svg/close.svg';
-					icon.alt = 'close playlist'
 
 					menuIcon.src = '/_app/assets/svg/context-vertical.svg';
 					menuIcon.alt = 'Open playlist context menu'
 
 					menuButton.append(menuIcon);
-
 					additionalInfo.append(songAmount);
 					additionalInfo.append(playlistPlayTime);
 					title.append(titleInput);
-					infoSection1.append(title);
-					infoSection1.append(additionalInfo);
-					infoSection2.append(menuButton);
-					info.append(infoSection1);
-					info.append(infoSection2);
-					iconContainer.append(icon);
-					button.append(info);
-					button.append(iconContainer);
+					info.append(title);
+					info.append(additionalInfo);
+					container.append(info);
+					container.append(menuButton);
 
-					return button;
+					return container;
 				}
 				
 
