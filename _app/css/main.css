@@ -10,6 +10,8 @@
 @import './modules/main-window.css';
 @import './modules/release.css';
 @import './modules/player.css';
+@import './modules/playlist.css';
+@import './modules/context-menu.css';
 
 @import './modules/error.css';
 @import './modules/loading.css';

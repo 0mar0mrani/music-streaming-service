@@ -1,0 +1,53 @@
+.context-menu {
+	position: absolute;
+	display: none;
+	background-color: var(--color-primary-default);
+	color: var(--color-secondary-default);
+	padding: var(--gap-extra-small);
+}
+
+.context-menu--open {
+	display: block;
+}
+
+.context-menu__release-section,
+.context-menu__playlist-section,
+.context-menu__button--delete-playlist,
+.context-menu__button--remove-song {
+	display: none;
+}
+
+.context-menu__button--visible,
+.context-menu__release-section--visible,
+.context-menu__playlist-section--visible,
+.context-menu__button--delete-playlist-visible,
+.context-menu__button--remove-song-visible {
+	display: block;
+	flex-direction: column;
+}
+
+.context-menu__title {
+	line-height: 1;
+	text-transform: uppercase;
+	padding: var(--gap-small) var(--gap-extra-small);
+	border-bottom: solid 0.1rem var(--color-primary-darkest);
+	white-space: nowrap;
+}
+
+.context-menu__playlists {
+	margin-top: var(--gap-extra-small);
+}
+
+.context-menu__button {
+	transition: background var(--duration-shorter) ease-in-out, color var(--duration-shorter) ease-in-out;
+	line-height: 1;
+	width: 100%;
+	text-align: start;
+	padding: var(--gap-extra-small);
+	white-space: nowrap;
+}
+
+.context-menu__button:hover {
+	background-color: var(--color-secondary-default);
+	color: var(--color-primary-default);
+}

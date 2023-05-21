@@ -1,7 +1,7 @@
 import shuffle from "../util/shuffle.js";
 import formatTime from "../util/format-time.js";
 
-export default function player(releases) {
+export default function player(currentSection, releases, playlists) {
 	let que = [];
 	let queIndex = null;
 	let currentTrack = null; 
@@ -260,7 +260,11 @@ export default function player(releases) {
 	}
 
 	function setQue() {
-		que = [...releases[currentRelease].tracks];
+		if (currentSection === 'release') {
+			que = [...releases[currentRelease].tracks];
+		} else if (currentSection === 'playlist') {
+			que = [...playlists[currentRelease].songs];
+		}
 	}
 
 	function loadTrackFromQue() {
@@ -290,6 +294,18 @@ export default function player(releases) {
 		} else {
 			queIndex = 0;
 		}
+	}
+
+	function setCurrentSection(string) {
+		currentSection = string;
+	}
+
+	function setReleases(array) {
+		releases = array;
+	}
+
+	function setPlaylist(array) {
+		playlists = array;
 	}
 
 	function playerFocusTrap(event) {
@@ -439,6 +455,9 @@ export default function player(releases) {
 	}
 
 	return {
+		setCurrentSection,
+		setReleases,
+		setPlaylist,
 		setCurrentTrack,
 		setCurrentRelease,
 		setQue,

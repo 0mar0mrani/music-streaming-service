@@ -29,7 +29,8 @@
 	--gap-extra-large: 4rem;
 
 	/* Columns */
-	--columns-song:  4rem 47fr 47fr 6fr;
+	--columns-song:  4rem 47fr 47fr 6fr 4rem;
+	--columns-playlist:  4rem 6rem 47fr 47fr 6fr 4rem;
 
 	/* Height */
 	--player-height: 9rem;
@@ -40,6 +41,8 @@
 
 	/* Duration */
 	--duration: 0.7s;
+	--duration-medium: 0.3s;
+	--duration-shorter: 0.1s;
 
 	/* Element Sizes */
 	--artwork: 7rem;
@@ -49,7 +52,8 @@
 
 @media only screen and (max-width: 700px) {
 	:root {
-		--columns-song:  47fr 6fr;
+		--columns-song:  47fr 6fr 4rem;
+		--columns-playlist:  4rem 6rem 47fr 6fr 4rem;
 	}
 }
 

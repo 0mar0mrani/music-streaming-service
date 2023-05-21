@@ -19,10 +19,6 @@
 				</div>
 			</div>
 
-			<header class="header">
-				<h1>New releases</h1>
-			</header>
-
 			<nav class="navigation">
 				<button class="navigation__button navigation__button--active">
 					<span>Release</span>
@@ -37,12 +33,46 @@
 				</button>
 			</nav>
 
+			<header class="header">
+				<h1 class="header__title">
+					<!-- header.js will render here based on currentSection -->
+				</h1>
+
+				<div class="header__message-container">
+					<div class="header__message"></div>
+				</div>
+
+				<button class="header__add-playlist-button">
+					<div class="header__add-playlist-button-title">
+						Create playlist
+					</div>
+
+					<div class="header__add-playlist-icon">
+						<img src="/_app/assets/svg/plus.svg" alt="Create new playlist">
+					</div>
+				</button>
+			</header>
+
 			<main class="main-window-container">
 				<ul class="main-window" id="main-window"></ul>
 			</main>
 
 			<div class="loading">
 				<div class="loading__animation"></div>
+			</div>
+
+			<div class="context-menu">
+				<div class="context-menu__release-section">
+					<div class="context-menu__title">Add to playlist</div>
+	
+					<ul class="context-menu__playlists"></ul>
+				</div>
+
+				<div class="context-menu__playlist-section">
+					<button class="context-menu__button context-menu__button--delete-playlist" >Delete playlist</button>
+
+					<button class="context-menu__button context-menu__button--remove-song">Remove song</button>
+				</div>
 			</div>
 
 			<section class="player-container">
@@ -116,6 +146,7 @@
 					</div>
 				</div>
 			</section>
+			
 		</div>
 	</body>
 </html>
