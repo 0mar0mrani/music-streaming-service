@@ -1,6 +1,7 @@
 .main-window-container {
 	grid-row: 2 / 3;
 	overflow-y: auto;
+	height: 100%;
 }
 
 .main-window {
