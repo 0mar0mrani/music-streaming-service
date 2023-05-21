@@ -118,3 +118,27 @@
 .playlist__number {
 	font: var(--font-sub-header);
 }
+
+.playlist__song-menu {
+	justify-self: center;
+	width: 3rem;
+	height: 3rem;
+}
+
+.playlist__song .playlist__song-menu {
+	display: none;
+}
+
+.playlist__song:hover .playlist__song-menu,
+.playlist__song:focus .playlist__song-menu,
+.playlist__song:focus-within .playlist__song-menu {
+	display: block;
+}
+
+.playlist__song-menu img {
+	filter: var(--filter-primary-default);
+}
+
+.playlist__song-menu:hover img {
+	filter: var(--filter-primary-darkest);
+}
