@@ -1,5 +1,9 @@
-export default function contextMenu(currentSection, playlists) {
+export default function contextMenu() {
+	let currentSection = null;
+	let playlists = null;
 	let isOpen = false;
+	let clickedElement = null;
+	
 	let coordinates = {
 		x: 0,
 		y: 0,
@@ -10,7 +14,6 @@ export default function contextMenu(currentSection, playlists) {
 		songGroup: null,
 	};
 
-	let clickedElement = null;
 
 	const contextMenuElement = document.querySelector('.context-menu');
 	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');

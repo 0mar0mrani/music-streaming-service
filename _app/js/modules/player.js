@@ -1,7 +1,10 @@
 import shuffle from "../util/shuffle.js";
 import formatTime from "../util/format-time.js";
 
-export default function player(currentSection, releases, playlists) {
+export default function player() {
+	let currentSection = null;
+	let releases = null;
+	let playlists = null;
 	let que = [];
 	let queIndex = null;
 	let currentTrack = null; 

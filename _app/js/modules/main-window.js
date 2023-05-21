@@ -30,8 +30,8 @@ export default async function mainWindow() {
 		},
 	}
 
-	const player = playerModule(current.section, releases, playlists);
-	let contextMenu = contextMenuModule(current.section, playlists);
+	const player = playerModule();
+	let contextMenu = contextMenuModule();
 	const header = headerModule();
 
 	const mainWindow = document.querySelector('.main-window-container');
