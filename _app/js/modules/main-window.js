@@ -493,15 +493,19 @@ export default async function mainWindow() {
 			function renderPlaylist() {
 				playlists.forEach((playlist, index) => {
 					const playlistContainer = document.createElement('li');
+					const noSongs = document.createElement('div')
+					noSongs.className = 'playlist__no-songs';
 					playlistContainer.className = 'playlist song-group';
 
 					const button = createButtonDOM(playlist);
 					const songs = createSongsDOM(playlist);
 
 					playlistContainer.dataset.id = index;
+
+					noSongs.innerText = 'No songs in playlist';
 					
 					playlistContainer.append(button);
-					playlistContainer.append(songs);
+					playlist.songs.length !== 0 ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
 					
 					mainWindow.append(playlistContainer);
 				}) 
@@ -538,7 +542,7 @@ export default async function mainWindow() {
 					additionalInfo.append(playlistPlayTime);
 					title.append(titleInput);
 					info.append(title);
-					info.append(additionalInfo);
+					playlist.songs.length !== 0 && info.append(additionalInfo);
 					container.append(info);
 					container.append(menuButton);
 
