@@ -54,7 +54,6 @@ export default async function mainWindow() {
 	let playlistHeaderElements = null;
 	let playlistTitleInputs = null;
 	
-
 	mainWindowElement.addEventListener('scroll', handleMainWindowElementScroll);
 	window.addEventListener('contextmenu', handleWindowContextmenu);
 	window.addEventListener('click', handleWindowClick);
@@ -88,10 +87,10 @@ export default async function mainWindow() {
 			: playlists[clickedSongGroup].songs[clickedSong]
 
 		addOneToPlays(song.trackID, song.plays + 1)
-		player.setCurrentTrack(clickedSong);
-		player.setCurrentRelease(clickedSongGroup);
+		player.setCurrentSong(clickedSong);
+		player.setCurrentSongGroup(clickedSongGroup);
 		player.setQue();
-		player.loadTrackFromQue();
+		player.loadSongFromQue();
 		player.toggleIsPlaying(true);
 		player.renderAudio();
 		renderHTML();

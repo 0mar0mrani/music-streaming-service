@@ -7,8 +7,8 @@ export default function player() {
 	let playlists = null;
 	let que = [];
 	let queIndex = null;
-	let currentTrack = null; 
-	let currentRelease = null;
+	let currentSong = null; 
+	let currentSongGroup = null;
 	let isPlaying = false;
 	let isShuffle = false;
 	let isRepeat = false;
@@ -114,16 +114,16 @@ export default function player() {
 	}
 
 	function handlePreviousButtonClick() {
-		!isRepeat && previousTrack();
-		loadTrackFromQue();
+		!isRepeat && previousSong();
+		loadSongFromQue();
 		isPlaying = true;
 		renderAudio();
 		renderHTML();
 	}
 
 	function handleNextButtonClick() {
-		!isRepeat && nextTrack();
-		loadTrackFromQue();
+		!isRepeat && nextSong();
+		loadSongFromQue();
 		isPlaying = true;
 		renderAudio();
 		renderHTML();
@@ -131,7 +131,7 @@ export default function player() {
 
 	function handleShuffleButtonClick() {
 		isShuffle = !isShuffle;
-		const currentTrackID = currentTrack._id;
+		const currentTrackID = currentSong._id;
 		
 		if (isShuffle) {
 			que = shuffle(que, 2);
@@ -191,8 +191,8 @@ export default function player() {
 		const reachedEnd = audio.currentTime === audio.duration;
 
 		if (reachedEnd) {
-			!isRepeat && nextTrack();
-			loadTrackFromQue();
+			!isRepeat && nextSong();
+			loadSongFromQue();
 			renderAudio();
 			renderHTML();
 		} else {
@@ -254,25 +254,25 @@ export default function player() {
 		}
 	}
 
-	function setCurrentTrack(clickedTrackNumber) {
-		queIndex = Number(clickedTrackNumber);
+	function setCurrentSong(clickedSongNumber) {
+		queIndex = Number(clickedSongNumber);
 	}
 
-	function setCurrentRelease(clickedReleaseNumber) {
-		currentRelease = Number(clickedReleaseNumber);
+	function setCurrentSongGroup(clickedSongGroupNumber) {
+		currentSongGroup = Number(clickedSongGroupNumber);
 	}
 
 	function setQue() {
 		if (currentSection === 'release') {
-			que = [...releases[currentRelease].tracks];
+			que = [...releases[currentSongGroup].tracks];
 		} else if (currentSection === 'playlist') {
-			que = [...playlists[currentRelease].songs];
+			que = [...playlists[currentSongGroup].songs];
 		}
 	}
 
-	function loadTrackFromQue() {
-		currentTrack = que[queIndex];
-		audio.src = currentTrack.trackURL;
+	function loadSongFromQue() {
+		currentSong = que[queIndex];
+		audio.src = currentSong.trackURL;
 	}
 
 	function toggleIsPlaying(boolean) {
@@ -283,7 +283,7 @@ export default function player() {
 		}
 	}
 
-	function nextTrack() {
+	function nextSong() {
 		if (queIndex < que.length - 1) {
 			queIndex += 1;
 		} else {
@@ -291,7 +291,7 @@ export default function player() {
 		}
 	}
 
-	function previousTrack() {
+	function previousSong() {
 		if (queIndex > 0) {
 			queIndex -= 1;
 		} else {
@@ -342,9 +342,7 @@ export default function player() {
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
 				mainWindow.classList.add('main-window--player-open');
-				titleElement.innerText = currentTrack.title;
-				artistElement.innerText = currentTrack.artists.join(', ');
-				artworkElement.src = currentTrack.artworkURL;
+				renderInfo();
 			}
 
 			if (isAnimation) {
@@ -365,6 +363,12 @@ export default function player() {
 			renderRepeatButton();
 			renderMuteButton();
 			renderVolumeSlider();
+		}
+
+		function renderInfo() {
+			titleElement.innerText = currentSong.title;
+			artistElement.innerText = currentSong.artists.join(', ');
+			artworkElement.src = currentSong.artworkURL;
 		}
 
 		function renderAccessability() {
@@ -461,10 +465,10 @@ export default function player() {
 		setCurrentSection,
 		setReleases,
 		setPlaylist,
-		setCurrentTrack,
-		setCurrentRelease,
+		setCurrentSong,
+		setCurrentSongGroup,
 		setQue,
-		loadTrackFromQue,
+		loadSongFromQue,
 		toggleIsPlaying,
 		renderAudio,
 		renderHTML,
