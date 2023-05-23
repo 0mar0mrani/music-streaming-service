@@ -511,46 +511,23 @@ export default async function mainWindow() {
 
 		function renderReleases() {
 			releases.forEach((release, index) => {
-				const container = document.createElement('li');
-				const releaseContainer = createReleaseDOM();
-				const songHeaderContainer = createSongHeader();
-				const songsContainer = createSongsDOM();
-	
-				container.dataset.id = index;
+				const container = createContainerDOM(index);
+				const releaseHeader = createReleaseHeaderDOM();
+				const songsHeader = createSongsHeaderDOM();
+				const songs = createSongsDOM();
+					
+				container.append(releaseHeader);
+				container.append(songsHeader);
+				container.append(songs);
 
-				container.className = 'release song-group';
-				songsContainer.className = 'release__songs';
-				
-				container.append(releaseContainer);
-				container.append(songHeaderContainer);
-				container.append(songsContainer);
-	
-				function createSongHeader() {
-					const songHeaderContainer = document.createElement('div');
-					const number = document.createElement('div');
-					const title = document.createElement('div');
-					const plays = document.createElement('div');
-					const time = document.createElement('div');
-	
-					songHeaderContainer.className = 'release__song-header';
-	
-					number.innerText = '#';
-					title.innerText = 'title';
-					plays.innerText = 'plays';
-					time.innerText = 'time';
-
-					number.className = 'release__header-number';
-					plays.className = 'release__header-plays';
-	
-					songHeaderContainer.append(number);
-					songHeaderContainer.append(title);
-					songHeaderContainer.append(plays);
-					songHeaderContainer.append(time);
-	
-					return songHeaderContainer;
+				function createContainerDOM(index) {
+					const container = document.createElement('li');
+					container.dataset.id = index;
+					container.className = 'release song-group';
+					return container;
 				}
-	
-				function createReleaseDOM() {
+
+				function createReleaseHeaderDOM() {
 					const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
 	
 					const releaseContainer = document.createElement('div');
@@ -585,19 +562,41 @@ export default async function mainWindow() {
 	
 					artworkContainer.append(artwork);
 					releaseContainer.append(artworkContainer);
-	
 					moreMetaDataContainer.append(releaseDate);
 					moreMetaDataContainer.append(amountOfSongs);
 					moreMetaDataContainer.append(playTime);
-	
 					metaDataContainer.append(title);
 					metaDataContainer.append(artist);
 					metaDataContainer.append(releaseType);
 					metaDataContainer.append(moreMetaDataContainer);
-	
 					releaseContainer.append(metaDataContainer);
 	
 					return releaseContainer;
+				}
+	
+				function createSongsHeaderDOM() {
+					const songsHeaderContainer = document.createElement('div');
+					const number = document.createElement('div');
+					const title = document.createElement('div');
+					const plays = document.createElement('div');
+					const time = document.createElement('div');
+	
+					songsHeaderContainer.className = 'release__song-header';
+	
+					number.innerText = '#';
+					title.innerText = 'title';
+					plays.innerText = 'plays';
+					time.innerText = 'time';
+
+					number.className = 'release__header-number';
+					plays.className = 'release__header-plays';
+	
+					songsHeaderContainer.append(number);
+					songsHeaderContainer.append(title);
+					songsHeaderContainer.append(plays);
+					songsHeaderContainer.append(time);
+	
+					return songsHeaderContainer;
 				}
 	
 				function createSongsDOM() {
@@ -626,6 +625,7 @@ export default async function mainWindow() {
 						plays.innerText = formattedPlays;
 						time.innerText = formattedPlaytime;
 	
+						songsContainer.className = 'release__songs';
 						songButton.className = 'song release__song';
 						number.className = 'release__number';
 						title.className = 'release__track-title';
@@ -638,18 +638,15 @@ export default async function mainWindow() {
 						menuIcon.alt = 'Open context menu';
 
 						menu.append(menuIcon);
-
 						titleArtistContainer.append(title);
 						titleArtistContainer.append(artist);
-	
 						songButton.append(number);
 						songButton.append(titleArtistContainer);
 						songButton.append(plays);
 						songButton.append(time);
 						songButton.append(menu);
-	
 						songContainer.append(songButton);
-
+						
 						songsContainer.append(songContainer);
 					});
 	
