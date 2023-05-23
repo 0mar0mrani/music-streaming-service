@@ -716,16 +716,9 @@ export default async function mainWindow() {
 				return container;
 			}
 			
-
 			function createSongsDOM(playlist) {
 				const container = document.createElement('div');
-				const header = document.createElement('div');
-				const number = document.createElement('div');
-				const empty = document.createElement('div');
-				const title = document.createElement('div');
-				const album = document.createElement('div');
-				const time = document.createElement('div');
-
+				const songsHeader = createSongsHeaderDOM(playlist);
 				const songsContainer = document.createElement('ul');
 
 				playlist.songs.forEach((song, index) => {
@@ -733,75 +726,88 @@ export default async function mainWindow() {
 					songsContainer.append(songContainer);
 				})
 
+				container.className = 'playlist__songs-container';
+				songsContainer.className = 'playlist__songs';
+				
+				container.append(songsHeader);
+				container.append(songsContainer);
+
+				return container;
+			}
+
+			function createSongsHeaderDOM(playlist) {
+				const songsHeader = document.createElement('div');
+				const number = document.createElement('div');
+				const empty = document.createElement('div');
+				const title = document.createElement('div');
+				const album = document.createElement('div');
+				const time = document.createElement('div');
+
 				number.innerText = '#';
 				title.innerText = 'Title';
 				album.innerText = 'Album';
 				time.innerText = 'Time';
 
-				container.className = 'playlist__songs-container';
-				header.className = 'playlist__song-header';
+				songsHeader.className = 'playlist__song-header';
 				album.className = 'playlist__album-header';
-				songsContainer.className = 'playlist__songs';
 
-				header.append(number);
-				header.append(empty);
-				header.append(title);
-				header.append(album);
-				header.append(time);
-				container.append(header);
-				container.append(songsContainer);
+				songsHeader.append(number);
+				songsHeader.append(empty);
+				songsHeader.append(title);
+				songsHeader.append(album);
+				songsHeader.append(time);
+
+				return songsHeader;
+			}
+
+			function createSongDOM(song, index) {
+				const container = document.createElement('li');
+				const songButton = document.createElement('button');
+				const number = document.createElement('div');
+				const artworkContainer = document.createElement('div');
+				const artwork = document.createElement('img');
+				const titleArtistContainer = document.createElement('div');
+				const title = document.createElement('h3');
+				const artists = document.createElement('div');
+				const album = document.createElement('div');
+				const time = document.createElement('div');
+				const menu = document.createElement('button');
+				const menuIcon = document.createElement('img');
+				
+				songButton.className = 'song playlist__song';
+				number.className = 'playlist__number';
+				artworkContainer.className = 'playlist__artwork';
+				title.className = 'playlist__song-title';
+				menu.className = 'playlist__song-menu context-menu-button';
+				album.className = 'playlist__album';
+
+				songButton.dataset.id = index;
+
+				number.innerText = index + 1;
+				title.innerText = song.title;
+				artists.innerText = song.artists.join(', ');
+				album.innerText = song.releaseTitle;
+				time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
+				
+				artwork.src = song.artworkURL;
+				menuIcon.src = '/_app/assets/svg/context.svg';
+
+				artwork.alt = song.artworkAlt;
+				menuIcon.alt = 'Open context menu';
+
+				menu.append(menuIcon);
+				artworkContainer.append(artwork);
+				titleArtistContainer.append(title);
+				titleArtistContainer.append(artists);
+				songButton.append(number);
+				songButton.append(artworkContainer);
+				songButton.append(titleArtistContainer);
+				songButton.append(album);
+				songButton.append(time);
+				songButton.append(menu)
+				container.append(songButton);
 
 				return container;
-
-				function createSongDOM(song, index) {
-					const container = document.createElement('li');
-					const songButton = document.createElement('button');
-					const number = document.createElement('div');
-					const artworkContainer = document.createElement('div');
-					const artwork = document.createElement('img');
-					const titleArtistContainer = document.createElement('div');
-					const title = document.createElement('h3');
-					const artists = document.createElement('div');
-					const album = document.createElement('div');
-					const time = document.createElement('div');
-					const menu = document.createElement('button');
-					const menuIcon = document.createElement('img');
-					
-					songButton.className = 'song playlist__song';
-					number.className = 'playlist__number';
-					artworkContainer.className = 'playlist__artwork';
-					title.className = 'playlist__song-title';
-					menu.className = 'playlist__song-menu context-menu-button';
-					album.className = 'playlist__album';
-
-					songButton.dataset.id = index;
-
-					number.innerText = index + 1;
-					title.innerText = song.title;
-					artists.innerText = song.artists.join(', ');
-					album.innerText = song.releaseTitle;
-					time.innerText = `${song.playTime.minutes.toString().padStart(2, '0')}:${song.playTime.seconds.toString().padStart(2, '0')}`;
-					
-					artwork.src = song.artworkURL;
-					menuIcon.src = '/_app/assets/svg/context.svg';
-
-					artwork.alt = song.artworkAlt;
-					menuIcon.alt = 'Open context menu';
-
-					menu.append(menuIcon);
-					artworkContainer.append(artwork);
-					titleArtistContainer.append(title);
-					titleArtistContainer.append(artists);
-					songButton.append(number);
-					songButton.append(artworkContainer);
-					songButton.append(titleArtistContainer);
-					songButton.append(album);
-					songButton.append(time);
-					songButton.append(menu)
-					container.append(songButton);
-
-					return container;
-				}
 			}
 
 			function createNoSongs() {
