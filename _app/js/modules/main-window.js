@@ -84,9 +84,9 @@ export default async function mainWindow() {
 
 		const song = current.section === 'release' 
 			? releases[clickedSongGroup].tracks[clickedSong] 
-			: playlists[clickedSongGroup].songs[clickedSong]
+			: playlists[clickedSongGroup].songs[clickedSong];
 
-		addOneToPlays(song.trackID, song.plays + 1)
+		addOneToPlays(song.trackID, song.plays + 1);
 		player.setCurrentSong(clickedSong);
 		player.setCurrentSongGroup(clickedSongGroup);
 		player.setQue();
@@ -103,11 +103,11 @@ export default async function mainWindow() {
 		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
 		const releaseID = current.section === 'release' 
 			? releases[songGroup]._id
-			: playlists[songGroup]._id
+			: playlists[songGroup]._id;
 
 		const trackID = current.section === 'release'
 			? releases[songGroup].tracks[clickedSong].trackID
-			: playlists[songGroup].songs[clickedSong].trackID
+			: playlists[songGroup].songs[clickedSong].trackID;
 
 		current.song.id = trackID;
 		current.song.index = Number(clickedSong);
@@ -117,6 +117,7 @@ export default async function mainWindow() {
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event.clientX, event.clientY);
+
 		renderHTML();
 	}
 
@@ -130,9 +131,9 @@ export default async function mainWindow() {
 			isLoading = true;
 			renderHTML();
 			const moreReleases = await fetchAllReleases();
-			isLoading = false;
 			release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
+			isLoading = false;
 			renderHTML();
 
 			setTimeout(() => {
@@ -229,12 +230,12 @@ export default async function mainWindow() {
 			const pressedButton = event.currentTarget;
 			pressedButton.click();
 			
-			const lastFocused = {
+			const lastFocusedElement = {
 				song: pressedButton.closest('.song')?.dataset.id,
 				songGroup: pressedButton.closest('.song-group').dataset.id, 
 			}
 
-			contextMenu.setLastFocused(lastFocused);
+			contextMenu.setLastFocused(lastFocusedElement);
 	
 			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button--visible');		
 			firstButtonInMenu.focus();
@@ -263,10 +264,11 @@ export default async function mainWindow() {
 	} 
 
 	async function handleDeleteSongButtonClick() {
-		const rightPlaylist = playlists[current.songGroup.index];
+		const clickedSongGroup = current.songGroup.index
+		const rightPlaylist = playlists[clickedSongGroup];
 		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
-		const playlistID = playlists[current.songGroup.index]._id;
+		const playlistID = playlists[clickedSongGroup]._id;
 		isLoading = true;
 		renderHTML();
 		await setPlaylist(playlistID, playlistForSanity);
@@ -465,17 +467,17 @@ export default async function mainWindow() {
 
 	function renderHTML() {
 		renderLoading();
-		contextMenu.renderHTML();
 		renderNavigationButtons();
-		player.renderHTML();
 		header.renderHTML();
+		contextMenu.renderHTML();
+		player.renderHTML();
 
 		mainWindowElement.innerHTML = '';
 
 		if (current.section === 'release') {
 			renderReleases();
 		} else if (current.section === 'playlist') {
-			renderPlaylist();
+			renderPlaylists();
 			setQueryselectorAndEventlistenerPlaylist();
 		} 
 
@@ -658,28 +660,25 @@ export default async function mainWindow() {
 			});
 		}
 
-		function renderPlaylist() {
+		function renderPlaylists() {
 			playlists.forEach((playlist, index) => {
+				const isNoSongsInPlaylist = playlist.songs.length !== 0;
 				const playlistContainer = document.createElement('li');
-				const noSongs = document.createElement('div')
-				noSongs.className = 'playlist__no-songs';
 				playlistContainer.className = 'playlist song-group';
-
-				const button = createButtonDOM(playlist);
-				const songs = createSongsDOM(playlist);
-
 				playlistContainer.dataset.id = index;
 
-				noSongs.innerText = 'No songs in playlist';
+				const header = createHeaderDOM(playlist);
+				const songs = createSongsDOM(playlist);
+				const noSongs = createNoSongs();
 				
-				playlistContainer.append(button);
-				playlist.songs.length !== 0 ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
-				
+				playlistContainer.append(header);
+				isNoSongsInPlaylist ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
 				mainWindowElement.append(playlistContainer);
 			}) 
 
-			function createButtonDOM(playlist) {
-				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs)
+			function createHeaderDOM(playlist) {
+				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs);
+				const isSongsInPlaylist = playlist.songs.length !== 0;
 
 				const container = document.createElement('div');
 				const info = document.createElement('div');
@@ -688,10 +687,10 @@ export default async function mainWindow() {
 				const title = document.createElement('h2');
 				const titleInput = document.createElement('input');
 				const additionalInfo = document.createElement('div')
-				const songAmount = document.createElement('div');
-				const playlistPlayTime = document.createElement('div');
+				const songsAmount = document.createElement('div');
+				const playTime = document.createElement('div');
 
-				container.className = 'playlist__button';
+				container.className = 'playlist__header';
 				info.className = 'playlist__info';
 				title.className = 'playlist__title';
 				titleInput.className = 'playlist__title-input';
@@ -699,18 +698,18 @@ export default async function mainWindow() {
 				menuButton.className = 'playlist__menu-button context-menu-button';
 
 				titleInput.value = playlist.title;
-				songAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
-				playlistPlayTime.innerText = formatSeconds(totalSecondsOfPlaylist);
+				songsAmount.innerText = `${playlist.songs.length} ${playlist.songs.length === 1 ? 'song' : 'songs'}`;
+				playTime.innerText = formatSeconds(totalSecondsOfPlaylist);
 
 				menuIcon.src = '/_app/assets/svg/context-vertical.svg';
-				menuIcon.alt = 'Open playlist context menu'
+				menuIcon.alt = 'Open playlist menu';
 
 				menuButton.append(menuIcon);
-				additionalInfo.append(songAmount);
-				additionalInfo.append(playlistPlayTime);
+				additionalInfo.append(songsAmount);
+				additionalInfo.append(playTime);
 				title.append(titleInput);
 				info.append(title);
-				playlist.songs.length !== 0 && info.append(additionalInfo);
+				isSongsInPlaylist && info.append(additionalInfo);
 				container.append(info);
 				container.append(menuButton);
 
@@ -804,6 +803,13 @@ export default async function mainWindow() {
 					return container;
 				}
 			}
+
+			function createNoSongs() {
+				const noSongs = document.createElement('div')
+				noSongs.className = 'playlist__no-songs';
+				noSongs.innerText = 'No songs in playlist';
+				return noSongs;
+			}
 		}
 
 		function setQueryselectorAndEventlistener() {
@@ -828,7 +834,7 @@ export default async function mainWindow() {
 
 		function setQueryselectorAndEventlistenerPlaylist() {
 			playlistElements = document.querySelectorAll('.playlist');
-			playlistHeaderElements = document.querySelectorAll('.playlist__button');
+			playlistHeaderElements = document.querySelectorAll('.playlist__header');
 			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
 
 			for (const playlistHeaderElement of playlistHeaderElements) {
