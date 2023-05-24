@@ -216,7 +216,7 @@ export default function player() {
 			
 			animationDelay = (touchPercentage / 100) * animationDuration;
 
-			if (touchPercentage >= 0) {
+			if (touchPercentage >= 0 && touchPercentage < 99) {
 				over50Percent = touchPercentage >= 25 ? true : false
 
 				playerElement.style.animationPlayState = 'paused';
