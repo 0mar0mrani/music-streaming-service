@@ -278,7 +278,7 @@ export default async function mainWindow() {
 	}
 
 	async function fetchPlaylists() {
-      const query = `*[_type == 'playlist'] | order(releaseDate asc) {  
+      const query = `*[_type == 'playlist'] | order(_createdAt asc) {  
 			_id,
 			title,
 			songs[] {
