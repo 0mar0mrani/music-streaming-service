@@ -133,6 +133,7 @@ export default async function mainWindow() {
 			const moreReleases = await fetchAllReleases();
 			release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
+			player.setReleases(releases);
 			isLoading = false;
 			renderHTML();
 
