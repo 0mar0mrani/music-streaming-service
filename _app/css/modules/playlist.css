@@ -5,7 +5,7 @@
 }
 
 /* Playlist button */
-.playlist__button {
+.playlist__header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -14,8 +14,8 @@
 	transition: 0.1s background-color ease-in-out;
 }
 
-.playlist__button:hover,
-.playlist__button:hover + .playlist__songs-container {
+.playlist__header:hover,
+.playlist__header:hover + .playlist__songs-container {
 	background-color: var(--color-secondary-lighter);
 }
 
@@ -63,9 +63,9 @@
 	height: 3rem;
 }
 
-.playlist__button:hover .playlist__menu-button,
-.playlist__button:focus .playlist__menu-button,
-.playlist__button:focus-within .playlist__menu-button {
+.playlist__header:hover .playlist__menu-button,
+.playlist__header:focus .playlist__menu-button,
+.playlist__header:focus-within .playlist__menu-button {
 	display: block;
 }
 

@@ -1,11 +1,14 @@
-import shuffle from "../util/shuffle.js";
-import formatTime from "../util/format-time.js";
+import shuffle from '../util/shuffle.js';
+import formatTimeToSeconds2 from '../util/format-time-to-seconds-2.js';
 
-export default function player(currentSection, releases, playlists) {
+export default function player() {
+	let currentSection = null;
+	let releases = null;
+	let playlists = null;
 	let que = [];
 	let queIndex = null;
-	let currentTrack = null; 
-	let currentRelease = null;
+	let currentSong = null; 
+	let currentSongGroup = null;
 	let isPlaying = false;
 	let isShuffle = false;
 	let isRepeat = false;
@@ -47,11 +50,11 @@ export default function player(currentSection, releases, playlists) {
 	const muteButtonIcon = document.querySelector('.player__mute img');
 
 	const timelineSlider = document.querySelector('.player__timeline');
-	const timelineCurrent = document.querySelector('.player__current');
-	const timelineDuration = document.querySelector('.player__duration');
+	const timelineCurrentElement = document.querySelector('.player__current');
+	const timelineDurationElement = document.querySelector('.player__duration');
 
 	const closeButton = document.querySelector('.player__close');
-	const accessabilitySkipToPlayer = document.querySelector('.accessibility__player');
+	const accessabilitySkipToPlayerElement = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
 	playerElement.addEventListener('click', handlePlayerElementClick);
@@ -111,16 +114,16 @@ export default function player(currentSection, releases, playlists) {
 	}
 
 	function handlePreviousButtonClick() {
-		!isRepeat && previousTrack();
-		loadTrackFromQue();
+		!isRepeat && previousSong();
+		loadSongFromQue();
 		isPlaying = true;
 		renderAudio();
 		renderHTML();
 	}
 
 	function handleNextButtonClick() {
-		!isRepeat && nextTrack();
-		loadTrackFromQue();
+		!isRepeat && nextSong();
+		loadSongFromQue();
 		isPlaying = true;
 		renderAudio();
 		renderHTML();
@@ -128,7 +131,7 @@ export default function player(currentSection, releases, playlists) {
 
 	function handleShuffleButtonClick() {
 		isShuffle = !isShuffle;
-		const currentTrackID = currentTrack._id;
+		const currentTrackID = currentSong._id;
 		
 		if (isShuffle) {
 			que = shuffle(que, 2);
@@ -188,8 +191,8 @@ export default function player(currentSection, releases, playlists) {
 		const reachedEnd = audio.currentTime === audio.duration;
 
 		if (reachedEnd) {
-			!isRepeat && nextTrack();
-			loadTrackFromQue();
+			!isRepeat && nextSong();
+			loadSongFromQue();
 			renderAudio();
 			renderHTML();
 		} else {
@@ -251,25 +254,25 @@ export default function player(currentSection, releases, playlists) {
 		}
 	}
 
-	function setCurrentTrack(clickedTrackNumber) {
-		queIndex = Number(clickedTrackNumber);
+	function setCurrentSong(clickedSongNumber) {
+		queIndex = Number(clickedSongNumber);
 	}
 
-	function setCurrentRelease(clickedReleaseNumber) {
-		currentRelease = Number(clickedReleaseNumber);
+	function setCurrentSongGroup(clickedSongGroupNumber) {
+		currentSongGroup = Number(clickedSongGroupNumber);
 	}
 
 	function setQue() {
 		if (currentSection === 'release') {
-			que = [...releases[currentRelease].tracks];
+			que = [...releases[currentSongGroup].tracks];
 		} else if (currentSection === 'playlist') {
-			que = [...playlists[currentRelease].songs];
+			que = [...playlists[currentSongGroup].songs];
 		}
 	}
 
-	function loadTrackFromQue() {
-		currentTrack = que[queIndex];
-		audio.src = currentTrack.trackURL;
+	function loadSongFromQue() {
+		currentSong = que[queIndex];
+		audio.src = currentSong.trackURL;
 	}
 
 	function toggleIsPlaying(boolean) {
@@ -280,7 +283,7 @@ export default function player(currentSection, releases, playlists) {
 		}
 	}
 
-	function nextTrack() {
+	function nextSong() {
 		if (queIndex < que.length - 1) {
 			queIndex += 1;
 		} else {
@@ -288,7 +291,7 @@ export default function player(currentSection, releases, playlists) {
 		}
 	}
 
-	function previousTrack() {
+	function previousSong() {
 		if (queIndex > 0) {
 			queIndex -= 1;
 		} else {
@@ -339,9 +342,7 @@ export default function player(currentSection, releases, playlists) {
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
 				mainWindow.classList.add('main-window--player-open');
-				titleElement.innerText = currentTrack.title;
-				artistElement.innerText = currentTrack.artists.join(', ');
-				artworkElement.src = currentTrack.artworkURL;
+				renderInfo();
 			}
 
 			if (isAnimation) {
@@ -364,6 +365,12 @@ export default function player(currentSection, releases, playlists) {
 			renderVolumeSlider();
 		}
 
+		function renderInfo() {
+			titleElement.innerText = currentSong.title;
+			artistElement.innerText = currentSong.artists.join(', ');
+			artworkElement.src = currentSong.artworkURL;
+		}
+
 		function renderAccessability() {
 				if (isMobile) {
 					playerElement.setAttribute('role', 'button');
@@ -384,12 +391,12 @@ export default function player(currentSection, releases, playlists) {
 				}
 
 				if (isPlaying) {
-					accessabilitySkipToPlayer.innerHTML = '';
+					accessabilitySkipToPlayerElement.innerHTML = '';
 					const link = document.createElement('a');
 					link.innerText = 'Go to controllers';
 					link.className = 'accessibility__skip';
 					link.href = '#player';
-					accessabilitySkipToPlayer.append(link);
+					accessabilitySkipToPlayerElement.append(link);
 				}
 			}
 		
@@ -440,14 +447,14 @@ export default function player(currentSection, releases, playlists) {
 			const duration = audio.duration;
 			const currentTime = audio.currentTime;
 			const percentage = (currentTime / duration) * 100;
-			const formattedCurrentTime = formatTime(currentTime);
-			const formattedDuration = formatTime(duration);
+			const formattedCurrentTime = formatTimeToSeconds2(currentTime);
+			const formattedDuration = formatTimeToSeconds2(duration);
 			timelineSlider.max = duration;
 			timelineSlider.value = currentTime;
 			
 			if (!isNaN(duration)) {
-				timelineCurrent.innerText = formattedCurrentTime;
-				timelineDuration.innerText = formattedDuration;
+				timelineCurrentElement.innerText = formattedCurrentTime;
+				timelineDurationElement.innerText = formattedDuration;
 			}
 
 			timelineSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - percentage}% 50% / 200%`;			
@@ -458,10 +465,10 @@ export default function player(currentSection, releases, playlists) {
 		setCurrentSection,
 		setReleases,
 		setPlaylist,
-		setCurrentTrack,
-		setCurrentRelease,
+		setCurrentSong,
+		setCurrentSongGroup,
 		setQue,
-		loadTrackFromQue,
+		loadSongFromQue,
 		toggleIsPlaying,
 		renderAudio,
 		renderHTML,

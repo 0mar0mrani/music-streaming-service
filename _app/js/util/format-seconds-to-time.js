@@ -1,4 +1,4 @@
-export default function formatSeconds(totalSeconds) {
+export default function formatSecondsToTime(totalSeconds) {
 	const minutes = Math.floor(totalSeconds / 60);
 	const seconds = totalSeconds % 60;
 
