@@ -84,6 +84,7 @@ export default function player() {
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
+		removeInlineStyling();
 		renderHTML();
 	}
 
@@ -172,12 +173,7 @@ export default function player() {
 
 	function handleCloseButtonClick(event) {
 		event.stopPropagation();
-		playerElement.removeAttribute('style');
-		
-		for (const element of allElementsInPlayer) {
-			element.removeAttribute('style');
-		}
-		
+		removeInlineStyling();
 		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
@@ -334,8 +330,15 @@ export default function player() {
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
    }
 
-	function renderHTML(string) {
+	function removeInlineStyling() {
+		playerElement.removeAttribute('style');
+		
+		for (const element of allElementsInPlayer) {
+			element.removeAttribute('style');
+		}
+	}
 
+	function renderHTML(string) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
