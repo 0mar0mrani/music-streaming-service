@@ -71,8 +71,8 @@ export default function player() {
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
-	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart);
-	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove);
+	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false });
+	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
 	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 
 	function handleWindowResize() {
@@ -213,21 +213,21 @@ export default function player() {
 			animationDelay = (touchPercentage / 100) * animationDuration;
 
 			if (touchPercentage >= 0 && touchPercentage < 99) {
-				over50Percent = touchPercentage >= 25 ? true : false
+            over50Percent = touchPercentage >= 25 ? true : false
 
             playerElement.style.animationTimingFunction = 'linear';
-				playerElement.style.animationPlayState = 'paused';
-				playerElement.style.animationDelay = `-${animationDelay}s`;
-				
-				for (const element of allElementsInPlayer) {
+            playerElement.style.animationPlayState = 'paused';
+            playerElement.style.animationDelay = `-${animationDelay}s`;
+            
+            for (const element of allElementsInPlayer) {
                element.style.animationTimingFunction = 'linear';
-					element.style.animationPlayState = 'paused';
-					element.style.animationDelay = `-${animationDelay}s`;
-				}				
+               element.style.animationPlayState = 'paused';
+               element.style.animationDelay = `-${animationDelay}s`;
+            }           
 
-				playerElement.classList.remove('player--maximized');
-				playerElement.classList.add('player--minimized');
-			}
+            playerElement.classList.remove('player--maximized');
+            playerElement.classList.add('player--minimized');
+         }
 		}
 	}
 
