@@ -219,10 +219,12 @@ export default function player() {
 			if (touchPercentage >= 0 && touchPercentage < 99) {
 				over50Percent = touchPercentage >= 25 ? true : false
 
+            playerElement.style.animationTimingFunction = 'linear';
 				playerElement.style.animationPlayState = 'paused';
 				playerElement.style.animationDelay = `-${animationDelay}s`;
 				
 				for (const element of allElementsInPlayer) {
+               element.style.animationTimingFunction = 'linear';
 					element.style.animationPlayState = 'paused';
 					element.style.animationDelay = `-${animationDelay}s`;
 				}				
