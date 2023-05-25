@@ -112,7 +112,9 @@
 	text-align: start;
 }
 
-.playlist__song:hover {
+.playlist__song:hover,
+.playlist__song:active,
+.playlist__song:focus {
 	background-color: var(--color-secondary-lighter);
 }
 
@@ -144,7 +146,8 @@
 	filter: var(--filter-primary-default);
 }
 
-.playlist__song-menu:hover img {
+.playlist__song-menu:hover img,
+.playlist__song-menu:active img {
 	filter: var(--filter-primary-darkest);
 }
 

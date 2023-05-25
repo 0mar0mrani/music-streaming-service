@@ -86,7 +86,9 @@
 	text-align: start;
 }
 
-.release__song:hover {
+.release__song:hover,
+.release__song:active,
+.release__song:focus {
 	background-color: var(--color-secondary-lighter);
 }
 
@@ -116,7 +118,8 @@
 	filter: var(--filter-primary-default);
 }
 
-.release__song-menu:hover img {
+.release__song-menu:hover img,
+.release__song-menu:active img {
 	filter: var(--filter-primary-darkest);
 }
 

@@ -28,11 +28,13 @@
 	filter: var(--filter-primary-default);
 }
 
-.header__add-playlist-button:hover {
+.header__add-playlist-button:hover,
+.header__add-playlist-button:active {
 	color: var(--color-primary-darkest);
 }
 
-.header__add-playlist-button:hover .header__add-playlist-icon img {
+.header__add-playlist-button:hover .header__add-playlist-icon img,
+.header__add-playlist-button:active .header__add-playlist-icon img {
 	filter: var(--filter-primary-darkest);
 }
 

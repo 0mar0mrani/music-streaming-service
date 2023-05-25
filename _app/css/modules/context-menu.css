@@ -50,7 +50,9 @@
 	white-space: nowrap;
 }
 
-.context-menu__button:hover {
+.context-menu__button:hover,
+.context-menu__button:active, 
+.context-menu__button:focus  {
 	background-color: var(--color-secondary-default);
 	color: var(--color-primary-default);
 }
