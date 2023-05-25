@@ -37,7 +37,8 @@ export default async function mainWindow() {
 	let contextMenu = contextMenuModule();
 	const header = headerModule();
 
-	const mainWindowElement = document.querySelector('.main-window-container');
+	const mainWindowContainer = document.querySelector('.main-window-container');
+	const mainWindowElement = document.querySelector('.main-window');
 	const loadingElement = document.querySelector('.loading');
 
 	const navigationButtonElements = document.querySelectorAll('.navigation__button');
@@ -54,7 +55,7 @@ export default async function mainWindow() {
 	let playlistHeaderElements = null;
 	let playlistTitleInputs = null;
 	
-	mainWindowElement.addEventListener('scroll', handleMainWindowElementScroll);
+	mainWindowContainer.addEventListener('scroll', handleMainWindowContainerScroll);
 	window.addEventListener('contextmenu', handleWindowContextmenu);
 	window.addEventListener('click', handleWindowClick);
 	createPlaylistButton.addEventListener('click', handleCreatePlaylistButtonClick);
@@ -121,9 +122,9 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
-	async function handleMainWindowElementScroll() {
-		const scrollCoordinatesFromBottom = window.innerHeight + mainWindowElement.scrollTop;
-		const mainWindowHeight = mainWindowElement.scrollHeight;
+	async function handleMainWindowContainerScroll() {
+		const scrollCoordinatesFromBottom = window.innerHeight + mainWindowContainer.scrollTop;
+		const mainWindowHeight = mainWindowContainer.scrollHeight;
 
 		if (release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowHeight - window.innerHeight)) {
 			release.canFetch = false;
