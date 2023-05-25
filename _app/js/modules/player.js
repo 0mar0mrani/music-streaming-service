@@ -89,8 +89,9 @@ export default function player() {
 
 	function handlePlayerElementKeydown(event) {
 		const key = event.key;
+		const pressedKeyOnPlayerElement = event.target.classList.contains('player');
 
-		if (key === 'Enter') {
+		if (pressedKeyOnPlayerElement && key === 'Enter') {
 			isAnimation = true;
 			isMaximized = true;
 		}
