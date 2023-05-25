@@ -43,7 +43,6 @@
 }
 
 .context-menu__button {
-	transition: background var(--duration-shorter) ease-in-out, color var(--duration-shorter) ease-in-out;
 	line-height: 1;
 	width: 100%;
 	text-align: start;

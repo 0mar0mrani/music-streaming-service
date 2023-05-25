@@ -11,7 +11,6 @@
 	align-items: center;
 	width: 100%;
 	padding: var(--gap-medium);
-	transition: 0.1s background-color ease-in-out;
 }
 
 .playlist__header:hover,
@@ -82,10 +81,6 @@
 
 
 /* Songs section */
-.playlist__songs-container {
-	transition: 0.1s background-color ease-in-out;
-}
-
 .playlist__song-header {
 	display: grid;
 	grid-template-columns: var(--columns-playlist); 
@@ -115,7 +110,6 @@
 	border: none;
 	font: var(--font-small-text);
 	text-align: start;
-	transition: 0.1s background-color ease-in-out, 0.1s color ease-in-out;
 }
 
 .playlist__song:hover {
