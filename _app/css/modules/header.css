@@ -13,7 +13,6 @@
 	display: none;
 	align-items: center;
 	gap: var(--gap-small);
-	transition: color var(--duration-shorter) ease-in-out;
 }
 
 .header__add-playlist-button--visible {
@@ -27,14 +26,15 @@
 
 .header__add-playlist-icon img {
 	filter: var(--filter-primary-default);
-	transition: filter var(--duration-shorter) ease-in-out;
 }
 
-.header__add-playlist-button:hover {
+.header__add-playlist-button:hover,
+.header__add-playlist-button:active {
 	color: var(--color-primary-darkest);
 }
 
-.header__add-playlist-button:hover .header__add-playlist-icon img {
+.header__add-playlist-button:hover .header__add-playlist-icon img,
+.header__add-playlist-button:active .header__add-playlist-icon img {
 	filter: var(--filter-primary-darkest);
 }
 
