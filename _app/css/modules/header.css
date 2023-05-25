@@ -5,7 +5,7 @@
 	justify-content: space-between;
 	align-items: center;
 	background-color: var(--color-secondary-default);
-	padding: var(--gap-medium) var(--gap-medium);
+	padding: var(--gap-medium) var(--gap-large);
 	align-self: self-start;
 }
 
