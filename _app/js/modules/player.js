@@ -447,6 +447,8 @@ export default function player() {
 			} else {
 				volumeSlider.value = currentVolume;
 			}
+
+			volumeSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - audio.volume * 100}% 50% / 200%`;	
 		}
 
 		function renderTimeline() {
