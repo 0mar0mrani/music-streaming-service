@@ -71,8 +71,8 @@ export default function player() {
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
-	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart);
-	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove);
+	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false });
+	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
 	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 
 	function handleWindowResize() {
@@ -84,6 +84,7 @@ export default function player() {
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
+		removeInlineStyling();
 		renderHTML();
 	}
 
@@ -173,12 +174,7 @@ export default function player() {
 
 	function handleCloseButtonClick(event) {
 		event.stopPropagation();
-		playerElement.removeAttribute('style');
-		
-		for (const element of allElementsInPlayer) {
-			element.removeAttribute('style');
-		}
-		
+		removeInlineStyling();
 		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
@@ -217,20 +213,22 @@ export default function player() {
 			
 			animationDelay = (touchPercentage / 100) * animationDuration;
 
-			if (touchPercentage >= 0) {
-				over50Percent = touchPercentage >= 25 ? true : false
+			if (touchPercentage >= 0 && touchPercentage < 99) {
+            over50Percent = touchPercentage >= 25 ? true : false
 
-				playerElement.style.animationPlayState = 'paused';
-				playerElement.style.animationDelay = `-${animationDelay}s`;
-				
-				for (const element of allElementsInPlayer) {
-					element.style.animationPlayState = 'paused';
-					element.style.animationDelay = `-${animationDelay}s`;
-				}				
+            playerElement.style.animationTimingFunction = 'linear';
+            playerElement.style.animationPlayState = 'paused';
+            playerElement.style.animationDelay = `-${animationDelay}s`;
+            
+            for (const element of allElementsInPlayer) {
+               element.style.animationTimingFunction = 'linear';
+               element.style.animationPlayState = 'paused';
+               element.style.animationDelay = `-${animationDelay}s`;
+            }           
 
-				playerElement.classList.remove('player--maximized');
-				playerElement.classList.add('player--minimized');
-			}
+            playerElement.classList.remove('player--maximized');
+            playerElement.classList.add('player--minimized');
+         }
 		}
 	}
 
@@ -333,8 +331,15 @@ export default function player() {
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
    }
 
-	function renderHTML(string) {
+	function removeInlineStyling() {
+		playerElement.removeAttribute('style');
+		
+		for (const element of allElementsInPlayer) {
+			element.removeAttribute('style');
+		}
+	}
 
+	function renderHTML(string) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
