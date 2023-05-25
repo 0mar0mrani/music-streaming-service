@@ -6,7 +6,7 @@
 .release__release-container {
 	display: flex;
 	gap: var(--gap-large);
-	margin: 0 var(--gap-large) var(--gap-large) var(--gap-large);
+	margin-bottom: var(--gap-large);
 }
 
 .release__meta-data-container {
