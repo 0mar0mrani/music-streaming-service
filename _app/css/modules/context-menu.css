@@ -1,13 +1,17 @@
 .context-menu {
 	position: absolute;
-	display: none;
 	background-color: var(--color-primary-default);
 	color: var(--color-secondary-default);
 	padding: var(--gap-extra-small);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
 }
 
 .context-menu--open {
-	display: block;
+	opacity: 1;
+	visibility: unset;
+	pointer-events: unset;
 }
 
 .context-menu__release-section,
