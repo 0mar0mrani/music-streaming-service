@@ -41,10 +41,10 @@ export default function header() {
 
 		function renderTitleAndButton() {
 			if (currentSection === 'release') {
-				headerTitleElement.innerText = 'Release';
+				headerTitleElement.innerText = 'Releases';
 				createPlaylistButton.classList.remove('header__add-playlist-button--visible');
 			} else if (currentSection === 'playlist') {
-				headerTitleElement.innerText = 'Playlist';
+				headerTitleElement.innerText = 'Playlists';
 				createPlaylistButton.classList.add('header__add-playlist-button--visible');
 			}
 		}
