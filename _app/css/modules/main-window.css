@@ -9,7 +9,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: var(--gap-extra-large);
-	padding: var(--gap-medium);
+	padding: 0 var(--gap-large);
 }
 
 .main-window-container::-webkit-scrollbar {
