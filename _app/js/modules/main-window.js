@@ -230,8 +230,10 @@ export default async function mainWindow() {
 
 	async function handleContextMenuAddToPlaylistButtonKeydown(event) {
 		if (event.key === 'Enter') {
-			event.preventDefault();
 			const pressedButton = event.currentTarget;
+			const isPlaylistMenuPressed = pressedButton.classList.contains('playlist__menu-button');
+
+			event.preventDefault();
 			pressedButton.click();
 			
 			const lastFocusedElement = {
@@ -246,7 +248,11 @@ export default async function mainWindow() {
 			if (current.section === 'release') {
 				buttonToFocus = document.querySelector('.context-menu .context-menu__button--visible');		
 			} else {
-				buttonToFocus = document.querySelector('.context-menu__button--remove-song');
+				if (isPlaylistMenuPressed) {
+					buttonToFocus = document.querySelector('.context-menu__button--delete-playlist');
+				} else {
+					buttonToFocus = document.querySelector('.context-menu__button--remove-song');
+				}
 			}
 
 			buttonToFocus.focus();	
