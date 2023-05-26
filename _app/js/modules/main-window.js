@@ -170,12 +170,14 @@ export default async function mainWindow() {
 		event.stopPropagation();
 	}
 
-	function handlePlaylistTitleInputBlur(event) {
+	async function handlePlaylistTitleInputBlur(event) {
 		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
 		const newTitle = event.currentTarget.value;
 		
-		changePlaylistTitle(playlistID, newTitle);
+		await changePlaylistTitle(playlistID, newTitle);
+		header.setIsMessageVisible(true);
+		renderHTML();
 	}
 
 	function handlePlaylistTitleInputKeydown(event) {
@@ -460,7 +462,12 @@ export default async function mainWindow() {
 			}
 		}];  
 
-		await sanity.mutate(mutations);
+		const update = await sanity.mutate(mutations);
+		const isError = typeof update === 'string';
+
+		if (isError) {
+			header.setMessage(update);
+		}
 	}
 
 	function preparePlaylistForSanity(playlist) {
