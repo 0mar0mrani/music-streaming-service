@@ -270,6 +270,7 @@ export default async function mainWindow() {
 		await deletePlaylist(current.songGroup.id);
 		playlists = await fetchPlaylists();
 		isLoading = false;
+		header.setIsMessageVisible(true);
 		renderHTML();
 	} 
 
@@ -409,7 +410,12 @@ export default async function mainWindow() {
 			}
 		}];  
 
-		await sanity.mutate(mutations);
+		const update = await sanity.mutate(mutations);
+		const isError = typeof update === 'string';
+
+		if (isError) {
+			header.setMessage(update);
+		}
 	}
 
 	async function setPlaylist(playlistID, newPlaylist) {
