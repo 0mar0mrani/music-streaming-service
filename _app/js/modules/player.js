@@ -18,7 +18,7 @@ export default function player() {
 	let isRepeat = false;
 	let isMute = false;
 	let currentVolume = 1;
-
+	
 	// mobile player state 
 	let isMobile = true;
 	const mobileBreakpoint = 900;
@@ -28,38 +28,32 @@ export default function player() {
 	let draggedOver25Percent = false; 
 	let animationPosition = null; // decides where in the animation (keyframe) on drag down
 	const animationDuration = 0.7; // this has to be the same duration as animation duration
-
+	
 	const playerElement = document.querySelector('.player');
 	const allElementsInPlayer = playerElement.querySelectorAll('*');
-
-	const mainWindow = document.querySelector('.main-window');
-
+	const mainWindowElement = document.querySelector('.main-window');
 	const titleElement = document.querySelector('.player__title');
 	const artistElement = document.querySelector('.player__artist');
 	const artworkElement = document.querySelector('.player__artwork img');
-
 	const playButton = document.querySelector('.player__play');
 	const playButtonIcon = document.querySelector('.player__play img');
-
 	const previousButton = document.querySelector('.player__previous');
 	const nextButton = document.querySelector('.player__next');
-
 	const shuffleButton = document.querySelector('.player__shuffle');
-
 	const repeatButton = document.querySelector('.player__repeat');
-
 	const volumeSlider = document.querySelector('.player__volume');
 	const muteButton = document.querySelector('.player__mute');
 	const muteButtonIcon = document.querySelector('.player__mute img');
-
 	const timelineSlider = document.querySelector('.player__timeline');
 	const timelineCurrentElement = document.querySelector('.player__current');
 	const timelineDurationElement = document.querySelector('.player__duration');
-
 	const closeButton = document.querySelector('.player__close');
 	const accessabilitySkipToPlayerElement = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
+	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false }); // passive: false tells browser to expect preventDefault(), this was done to remove warning in console
+	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
+	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 	playerElement.addEventListener('click', handlePlayerElementClick);
 	playerElement.addEventListener('keydown', handlePlayerElementKeydown)
 	playButton.addEventListener('click', handlePlayButtonClick);
@@ -74,14 +68,66 @@ export default function player() {
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
-	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false });
-	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
-	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
-
 	function handleWindowResize() {
 		isMobile = window.innerWidth <= mobileBreakpoint ? true : false;
 		isAnimation = false;
 		renderHTML();
+	}
+
+	function handlePlayerElementTouchstart(event) {
+		if (isMaximized) {
+			touchStart = event.touches[0].clientY;
+		}
+	}
+
+	function handlePlayerElementTouchmove(event) {		
+		if (isMaximized) {
+			event.preventDefault();
+			const touchY = event.touches[0].clientY;
+		 	const playerHeight = playerElement.offsetHeight;
+		 	const dragDistances = touchY - touchStart;
+		 	const touchPercentage = (dragDistances / playerHeight) * 100;
+			
+			animationPosition = (touchPercentage / 100) * animationDuration;
+
+			if (touchPercentage >= 0 && touchPercentage < 99) {
+            draggedOver25Percent = touchPercentage >= 25 ? true : false
+
+            playerElement.style.animationTimingFunction = 'linear';
+            playerElement.style.animationPlayState = 'paused';
+            playerElement.style.animationDelay = `-${animationPosition}s`;
+            
+            for (const element of allElementsInPlayer) {
+               element.style.animationTimingFunction = 'linear';
+               element.style.animationPlayState = 'paused';
+               element.style.animationDelay = `-${animationPosition}s`;
+            }           
+
+            playerElement.classList.remove('player--maximized');
+            playerElement.classList.add('player--minimized');
+         }
+		}
+	}
+
+	function handlePlayerElementTouchend() {
+		if (isMaximized) {
+			playerElement.style.animationPlayState = 'running';
+			
+			for (const element of allElementsInPlayer) {
+				element.style.animationPlayState = 'running';
+			}
+
+			if (!draggedOver25Percent) {
+				isMaximized = true;
+				playerElement.style.animationDelay = `-${animationDuration - animationDelay}s`;
+				
+				for (const element of allElementsInPlayer) {
+					element.style.animationDelay = `-${animationDuration - animationDelay}s`;
+				}
+
+				renderHTML();
+			}
+		}
 	}
 
 	function handlePlayerElementClick() {
@@ -149,16 +195,16 @@ export default function player() {
 		renderHTML();
 	}
 
+	function handleRepeatButtonClick() {
+		isRepeat = !isRepeat;
+		renderHTML();
+	}
+
 	function handleVolumeSliderInput() {
 		const input = volumeSlider.value;
 		currentVolume = input;
 		currentVolume > 0 ? isMute = false : isMute = true;
 		renderAudio();
-		renderHTML();
-	}
-
-	function handleRepeatButtonClick() {
-		isRepeat = !isRepeat;
 		renderHTML();
 	}
 
@@ -197,62 +243,6 @@ export default function player() {
 			renderHTML();
 		} else {
 			renderHTML('timeline');
-		}
-	}
-
-	function handlePlayerElementTouchstart(event) {
-		if (isMaximized) {
-			touchStart = event.touches[0].clientY;
-		}
-	}
-
-	function handlePlayerElementTouchmove(event) {		
-		if (isMaximized) {
-			event.preventDefault();
-			const touchY = event.touches[0].clientY;
-		 	const playerHeight = playerElement.offsetHeight;
-		 	const dragDistances = touchY - touchStart;
-		 	const touchPercentage = (dragDistances / playerHeight) * 100;
-			
-			animationDelay = (touchPercentage / 100) * animationDuration;
-
-			if (touchPercentage >= 0 && touchPercentage < 99) {
-            over50Percent = touchPercentage >= 25 ? true : false
-
-            playerElement.style.animationTimingFunction = 'linear';
-            playerElement.style.animationPlayState = 'paused';
-            playerElement.style.animationDelay = `-${animationDelay}s`;
-            
-            for (const element of allElementsInPlayer) {
-               element.style.animationTimingFunction = 'linear';
-               element.style.animationPlayState = 'paused';
-               element.style.animationDelay = `-${animationDelay}s`;
-            }           
-
-            playerElement.classList.remove('player--maximized');
-            playerElement.classList.add('player--minimized');
-         }
-		}
-	}
-
-	function handlePlayerElementTouchend() {
-		if (isMaximized) {
-			playerElement.style.animationPlayState = 'running';
-			
-			for (const element of allElementsInPlayer) {
-				element.style.animationPlayState = 'running';
-			}
-
-			if (!over50Percent) {
-				isMaximized = true;
-				playerElement.style.animationDelay = `-${animationDuration - animationDelay}s`;
-				
-				for (const element of allElementsInPlayer) {
-					element.style.animationDelay = `-${animationDuration - animationDelay}s`;
-				}
-
-				renderHTML();
-			}
 		}
 	}
 
@@ -350,7 +340,7 @@ export default function player() {
 			
 			if (isPlaying) {
 				playerElement.classList.add('player--open');
-				mainWindow.classList.add('main-window--player-open');
+				mainWindowElement.classList.add('main-window--player-open');
 				renderInfo();
 			}
 
@@ -381,33 +371,33 @@ export default function player() {
 		}
 
 		function renderAccessability() {
-				if (isMobile) {
-					playerElement.setAttribute('role', 'button');
-					playerElement.setAttribute('tabindex', '0');
-	
-					if (isMaximized) {
-						timelineSlider.removeAttribute('tabindex');
-						playerElement.setAttribute('aria-expanded', 'true');
-					} else {
-						timelineSlider.setAttribute('tabindex', '-1');
-						playerElement.setAttribute('aria-expanded', 'false');
-					}
-				} else {
-					playerElement.removeAttribute('role');
-					playerElement.removeAttribute('tabindex');
-					timelineSlider.removeAttribute('tabindex');
-					playerElement.removeAttribute('aria-expanded');
-				}
+			if (isMobile) {
+				playerElement.setAttribute('role', 'button');
+				playerElement.setAttribute('tabindex', '0');
 
-				if (isPlaying) {
-					accessabilitySkipToPlayerElement.innerHTML = '';
-					const link = document.createElement('a');
-					link.innerText = 'Go to controllers';
-					link.className = 'accessibility__skip';
-					link.href = '#player';
-					accessabilitySkipToPlayerElement.append(link);
+				if (isMaximized) {
+					timelineSlider.removeAttribute('tabindex');
+					playerElement.setAttribute('aria-expanded', 'true');
+				} else {
+					timelineSlider.setAttribute('tabindex', '-1');
+					playerElement.setAttribute('aria-expanded', 'false');
 				}
+			} else {
+				playerElement.removeAttribute('role');
+				playerElement.removeAttribute('tabindex');
+				timelineSlider.removeAttribute('tabindex');
+				playerElement.removeAttribute('aria-expanded');
 			}
+
+			if (isPlaying) {
+				accessabilitySkipToPlayerElement.innerHTML = '';
+				const link = document.createElement('a');
+				link.innerText = 'Go to controllers';
+				link.className = 'accessibility__skip';
+				link.href = '#player';
+				accessabilitySkipToPlayerElement.append(link);
+			}
+		}
 		
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
