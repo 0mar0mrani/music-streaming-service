@@ -177,7 +177,6 @@ export default async function mainWindow() {
 		
 		await changePlaylistTitle(playlistID, newTitle);
 		header.setIsMessageVisible(true);
-		renderHTML();
 	}
 
 	function handlePlaylistTitleInputKeydown(event) {
