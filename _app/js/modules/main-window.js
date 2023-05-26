@@ -131,7 +131,7 @@ export default async function mainWindow() {
 			release.currentPage += 1;
 			isLoading = true;
 			renderHTML();
-			const moreReleases = await fetchAllReleases();
+			const moreReleases = await fetchReleases();
 			release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
 			player.setReleases(releases);
@@ -308,7 +308,7 @@ export default async function mainWindow() {
 		}
 	}
 
-	async function fetchAllReleases() {
+	async function fetchReleases() {
 		const sliceStart = release.currentPage * release.pageSize;
 		const sliceEnd = release.currentPage * release.pageSize + release.pageSize;
 
@@ -455,7 +455,7 @@ export default async function mainWindow() {
 	async function onLoad() {
 		isLoading = true;
 		renderHTML();
-		[ releases, playlists ] = await Promise.all([ fetchAllReleases(), fetchPlaylists() ])
+		[ releases, playlists ] = await Promise.all([ fetchReleases(), fetchPlaylists() ])
 		header.setIsMessageVisible(true); 
 		header.setCurrentSection(current.section);
 		player.setCurrentSection(current.section);
