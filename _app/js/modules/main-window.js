@@ -238,10 +238,17 @@ export default async function mainWindow() {
 			}
 
 			contextMenu.setLastFocused(lastFocusedElement);
+
+			let buttonToFocus = null;
 	
-			const firstButtonInMenu = document.querySelector('.context-menu .context-menu__button--visible');		
-			firstButtonInMenu.focus();
-		}
+			if (current.section === 'release') {
+				buttonToFocus = document.querySelector('.context-menu .context-menu__button--visible');		
+			} else {
+				buttonToFocus = document.querySelector('.context-menu__button--remove-song');
+			}
+
+			buttonToFocus.focus();	
+		} 
 	}
 
 	function handlePlaylistHeaderElementContextmenu(event) {
