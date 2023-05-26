@@ -2,9 +2,13 @@ import shuffle from '../util/shuffle.js';
 import formatTimeToSeconds2 from '../util/format-time-to-seconds-2.js';
 
 export default function player() {
+	// global states
 	let currentSection = null;
 	let releases = null;
 	let playlists = null;
+
+	// player states
+	const audio = new Audio();
 	let que = [];
 	let queIndex = null;
 	let currentSong = null; 
@@ -13,18 +17,17 @@ export default function player() {
 	let isShuffle = false;
 	let isRepeat = false;
 	let isMute = false;
-	let isAnimation = false; // making sure the player only animate at right times
-	let isMaximized = false;
-	const audio = new Audio();
 	let currentVolume = 1;
 
+	// mobile player state 
 	let isMobile = true;
 	const mobileBreakpoint = 900;
-
-	let touchStart = null; // for drag player to close
-	let over50Percent = false;
-	let animationDelay = null;
-	const animationDuration = 0.7;
+	let isMaximized = false;
+	let isAnimation = false; // animation wont happen if set to false
+	let touchStart = null; // used to calculate percentage drag
+	let draggedOver25Percent = false; 
+	let animationPosition = null; // decides where in the animation (keyframe) on drag down
+	const animationDuration = 0.7; // this has to be the same duration as animation duration
 
 	const playerElement = document.querySelector('.player');
 	const allElementsInPlayer = playerElement.querySelectorAll('*');
