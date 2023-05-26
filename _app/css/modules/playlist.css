@@ -57,7 +57,7 @@
 }
 
 .playlist__menu-button {
-	display: none;
+	opacity: 0;
 	width: 3rem;
 	height: 3rem;
 }
@@ -65,7 +65,7 @@
 .playlist__header:hover .playlist__menu-button,
 .playlist__header:focus .playlist__menu-button,
 .playlist__header:focus-within .playlist__menu-button {
-	display: block;
+	opacity: 1;
 }
 
 .playlist__menu-button img {
@@ -153,11 +153,7 @@
 
 @media only screen and (max-width: 900px) {
 	.playlist__menu-button {
-		display: block;
-	}
-
-	.playlist__song-menu {
-		display: block;
+		opacity: 1;
 	}
 }
 
