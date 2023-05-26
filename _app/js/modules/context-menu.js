@@ -37,6 +37,10 @@ export default function contextMenu() {
 		} else if (event.key === 'Escape') {
 			focusOnLastFocusedElement(event);
 			renderHTML();
+
+		} else if (event.key === 'Enter') {
+			focusOnLastFocusedElement(event);
+			renderHTML();
 		}
 	}
 
