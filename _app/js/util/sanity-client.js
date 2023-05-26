@@ -1,10 +1,13 @@
 /**
- * @param {object} config Client configuration for all requests
- * @param {string} config.id Project ID
- * @param {string} config.dataset Dataset name – e.g. "production"
- * @param {string} config.version API version – e.g. "2023-03-01"
- * @param {string} config.token Token key to use for authenticated requests
- * @param {boolean} config.cdn Use CDN host
+ * @author Alejandro Rojas
+ * @see handleResponse I have created those functions, to communicate error more understandable for the user. By looking at the status code (if status is !ok) and throw a new error with a description
+ * This function is taking care of GET/POST to Sanity. 
+ * @param {object} config - Client configuration for all requests
+ * @param {string} config.id - Project ID
+ * @param {string} config.dataset - Dataset name – e.g. "production"
+ * @param {string} config.version - API version – e.g. "2023-03-01"
+ * @param {string} config.token - Token key to use for authenticated requests
+ * @param {boolean} config.cdn - Use CDN host
  */
 export function SanityClient(config) {
 	const { id, dataset, version, cdn, token } = config;
@@ -13,6 +16,10 @@ export function SanityClient(config) {
 		throw new Error('Sanity: project id, dataset, and API version must be defined');
 	}
 
+	/**
+	 * @param {array} mutations - The new data to be posted to Sanity
+	 * @param {object} params - Parameters object
+	 */
 	async function mutate(mutations = [], params = {}) {
 		if (!token) {
 			throw new Error('Sanity: all mutation requests have to be authenticated');
