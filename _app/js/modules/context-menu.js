@@ -39,6 +39,8 @@ export default function contextMenu() {
 			renderHTML();
 
 		} else if (event.key === 'Enter') {
+			const button = event.target;
+			button.click();
 			focusOnLastFocusedElement(event);
 			renderHTML();
 		}
