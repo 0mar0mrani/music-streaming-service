@@ -372,11 +372,11 @@ export default async function mainWindow() {
 			}
 		}];  
 
-		const query = await sanity.mutate(mutations);
-		const isError = typeof query === 'string';
+		const update = await sanity.mutate(mutations);
+		const isError = typeof update === 'string';
 		
 		if (isError) {
-			header.setMessage(query);
+			header.setMessage(update);
 		} else {
 			header.setMessage('Song added');
 		}
