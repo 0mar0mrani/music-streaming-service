@@ -119,10 +119,10 @@ export default function player() {
 
 			if (!draggedOver25Percent) {
 				isMaximized = true;
-				playerElement.style.animationDelay = `-${animationDuration - animationDelay}s`;
+				playerElement.style.animationDelay = `-${animationDuration - animationPosition}s`;
 				
 				for (const element of allElementsInPlayer) {
-					element.style.animationDelay = `-${animationDuration - animationDelay}s`;
+					element.style.animationDelay = `-${animationDuration - animationPosition}s`;
 				}
 
 				renderHTML();
