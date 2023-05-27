@@ -89,20 +89,11 @@ export default function player() {
 
 	function handlePlayerElementTouchend() {
 		if (isMaximized) {
-			playerElement.style.animationPlayState = 'running';
-			
-			for (const element of allElementsInPlayer) {
-				element.style.animationPlayState = 'running';
-			}
+			setAnimationToRunning();
 
 			if (!draggedOver25Percent) {
 				isMaximized = true;
-				playerElement.style.animationDelay = `-${animationDuration - animationPosition}s`;
-				
-				for (const element of allElementsInPlayer) {
-					element.style.animationDelay = `-${animationDuration - animationPosition}s`;
-				}
-
+				setAnimationPositionForMaximized();
 				renderHTML();
 			}
 		}
@@ -341,6 +332,28 @@ export default function player() {
 			}
 			
 			draggedOver25Percent = dragPercentage >= 25 ? true : false;
+		}
+	}
+
+	/**
+	 * Sets the animation play state of the player element and all elements in the player to 'running'.
+	 */	
+	function setAnimationToRunning() {
+		playerElement.style.animationPlayState = 'running';
+	
+		for (const element of allElementsInPlayer) {
+			element.style.animationPlayState = 'running';
+		}
+	}
+
+	/**
+	 * Sets start position of maximized animation for playerElement and all elements in the player, by how long the player is dragged down. This is done by subtracting animationDuration with animationPosition. That way maximized animation wont start from the bottom (default animation).
+	 */
+	function setAnimationPositionForMaximized() {
+		playerElement.style.animationDelay = `-${animationDuration - animationPosition}s`;
+		
+		for (const element of allElementsInPlayer) {
+			element.style.animationDelay = `-${animationDuration - animationPosition}s`;
 		}
 	}
 
