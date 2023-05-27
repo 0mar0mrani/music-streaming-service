@@ -1,10 +1,9 @@
 export default function contextMenu() {
 	let currentSection = null;
 	let playlists = null;
-
 	let isOpen = false;
-	let clickedElement = null; // Used to decide content of context menu
-	
+	let clickedElement = null; // Used to decide content of context menu	
+
 	let coordinates = { // Used to place context menu on screen
 		x: 0,
 		y: 0,
@@ -35,7 +34,7 @@ export default function contextMenu() {
 				isOpen = false;
 				renderHTML();
 			}
-
+			
 		} else if (event.key === 'Escape') {
 			focusOnLastFocusedElement(event);
 			isOpen = false;
@@ -137,12 +136,11 @@ export default function contextMenu() {
 		return lastFocusedElement;
 	}
 
-
+	/**
+	 * This main function consist of subfunctions that renders the HTML based on the state of context menu. With a conditional rendering based on currentSection.  
+	 */
 	function renderHTML() {
-		releaseSectionElement.classList.remove('context-menu__release-section--visible');
-		playlistSectionElement.classList.remove('context-menu__playlist-section--visible');
-		deletePlaylistButton.classList.remove('context-menu__button--visible');
-		deleteSongButton.classList.remove('context-menu__button--visible');
+		hideContent()
 
 		if (currentSection === 'release') {
 			renderPlaylists();
@@ -153,6 +151,13 @@ export default function contextMenu() {
 		renderPlacement();
 		renderVisibility();
 
+		function hideContent() {
+			releaseSectionElement.classList.remove('context-menu__release-section--visible');
+			playlistSectionElement.classList.remove('context-menu__playlist-section--visible');
+			deletePlaylistButton.classList.remove('context-menu__button--visible');
+			deleteSongButton.classList.remove('context-menu__button--visible');
+		}
+
 		function renderVisibility() {
 			if (isOpen) {
 				contextMenuElement.classList.add('context-menu--open');
@@ -161,6 +166,10 @@ export default function contextMenu() {
 			}
 		} 
 
+		/**
+	 	 * Renders the placement of context menu by taking the coordinates of click in window. 
+		 * If click is close to right or bottom edge it will place context menu on the opposite side of click, so context menu will never go outside of viewport. 
+	 	 */
 		function renderPlacement() {
 			contextMenuElement.style.top = `${coordinates.y}px`;
 			contextMenuElement.style.left = `${coordinates.x}px`;
@@ -174,6 +183,9 @@ export default function contextMenu() {
 			contextMenuElement.style.transform = `translate(${contextMenuOutsideWindowRight ? '-100%' : '0'}, ${contextMenuOutsideWindowBottom ? '-100%' : '0'})`;
 		}
 
+		/**
+	 	 * Renders playlists buttons in context menu. 
+	 	 */
 		function renderPlaylists() {
 			releaseSectionElement.classList.add('context-menu__release-section--visible');
 
@@ -193,6 +205,9 @@ export default function contextMenu() {
 			})
 		}
 
+		/**
+	 	 * Renders delete song and delete playlist button. 
+	 	 */
 		function renderDeleteSongAndPlaylist() {
 			playlistSectionElement.classList.add('context-menu__playlist-section--visible');
 
