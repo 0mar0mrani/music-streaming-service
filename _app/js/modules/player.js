@@ -258,6 +258,10 @@ export default function player() {
 		audio.src = currentSong.trackURL;
 	}
 
+	/**
+	 * Function sets the sate isPlaying, to the boolean it receives as parameter. If it does not receive a boolean, it sets it to the opposite. 
+	 * @param {boolean} boolean - The value to set isPlaying to.
+	 */
 	function toggleIsPlaying(boolean) {
 		if (!boolean) {
 			isPlaying = !isPlaying;
