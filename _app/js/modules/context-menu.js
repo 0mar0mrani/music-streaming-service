@@ -47,14 +47,30 @@ export default function contextMenu() {
 		}
 	}
 
+	/**
+	 * Sets isOpen, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {boolean} boolean - The value to set is open to
+	 */
 	function setIsOpen(boolean) {
 		isOpen = boolean;
 	}
 
+	/**
+	 * Sets isOpen, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {string} string - The name of clicked element. Either 'playlist' or 'song'
+	 */
 	function setClickedElement(string) {
 		clickedElement = string;
 	}
 
+	/**
+	 * Sets isOpen, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {number} xCoordinates - The x coordinate of click/button
+	 * @param {number} yCoordinates - The y coordinate of click/button
+	 */
 	function setCoordinates(xCoordinates, yCoordinates) {
 		coordinates = {
 			x: xCoordinates,
@@ -62,14 +78,30 @@ export default function contextMenu() {
 		}
 	}
 
+	/**
+	 * Sets currentSection, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {string} string - The string to set as the current section
+	 */
 	function setCurrentSection(string) {
 		currentSection = string;
 	}
 
-	function setPlaylists(string) {
-		playlists = string;
+	/**
+	 * Sets playlists, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 *	@param {array} array - An array of playlists
+	 */
+	function setPlaylists(array) {
+		playlists = array;
 	}
 
+
+	/**
+	 * Sets playlists, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 *	@param {object} object - An object containing the index of last focused song and songGroup
+	 */
 	function setLastFocused(object) {
 		lastFocused = object;
 	}
