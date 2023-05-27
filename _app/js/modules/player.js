@@ -270,6 +270,9 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Increases the currentQueIndex by 1, if it's at the end of que it sets it to 0. 
+	 */
 	function nextSong() {
 		if (currentQueIndex < que.length - 1) {
 			currentQueIndex += 1;
@@ -278,6 +281,9 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Decrements the currentQueIndex by 1, unless it is already 0, in which case it sets the currentQueIndex to 0.
+	 */
 	function previousSong() {
 		if (currentQueIndex > 0) {
 			currentQueIndex -= 1;
