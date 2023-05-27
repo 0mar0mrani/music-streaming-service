@@ -76,7 +76,7 @@ export default function player() {
 
 	function handlePlayerElementTouchstart(event) {
 		if (isMaximized) {
-			touchStart = event.touches[0].clientY;
+			setTouchStart(event);
 		}
 	}
 
@@ -303,10 +303,19 @@ export default function player() {
    }
 
 	/**
+	 * This sets the variable touchStart, so animateDragDown can calculate dragDistance.
+	 * @see animateDragDown()
+	 * @param {object} event - The event object that is passed in when the function is called.
+	 */
+	function setTouchStart(event) {
+		touchStart = event.touches[0].clientY;
+	}
+
+	/**
 	 * This function animates on drag down of the player element.
 	 * This is made possible by starting minimize-keyframes @see animation.css and set 'animationPlayState = paused' and decide where in the animation is by using the variable animationPosition and manipulating animationDelay. If the dragPercentage is over 25%, it will set 'draggedOver25Percent = true'.
 	 * @param {object} event - The event object that is passed in when the function is called.
-	*/
+	 */
 	function animateDragDown(event) {
 		const touchYCoordinates = event.touches[0].clientY;
 		const playerHeight = playerElement.offsetHeight;
