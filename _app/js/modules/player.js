@@ -10,7 +10,7 @@ export default function player() {
 	// player states
 	const audio = new Audio();
 	let que = [];
-	let queIndex = null;
+	let currentQueIndex = null;
 	let currentSong = null; 
 	let currentSongGroup = null;
 	let isPlaying = false;
@@ -152,7 +152,7 @@ export default function player() {
 	function handleShuffleButtonClick() {
 		isShuffle = !isShuffle;
 		setShuffle();
-		setQueIndex();
+		setCurrentQueIndex();
 		renderHTML();
 	}
 
@@ -205,10 +205,6 @@ export default function player() {
 		}
 	}
 
-	function setCurrentSong(clickedSongNumber) {
-		queIndex = Number(clickedSongNumber);
-	}
-
 	function setCurrentSongGroup(clickedSongGroupNumber) {
 		currentSongGroup = Number(clickedSongGroupNumber);
 	}
@@ -222,12 +218,17 @@ export default function player() {
 	}
 
 	/**
-	 * Sets queIndex to the index of the current song in the que.
+	 * Sets currentQueIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
+	 * @param {number} clickedSongNumber - The number of the song related to its song group.
 	 */
-	function setQueIndex() {
-		const currentSongID = currentSong._id;
-		const currentSongIndex = que.findIndex(song => song._id === currentSongID)
-		queIndex = currentSongIndex;
+	function setCurrentQueIndex(clickedSongNumber) {
+		if (clickedSongNumber) {
+			currentQueIndex = clickedSongNumber;
+		} else {
+			const currentSongID = currentSong._id;
+			const currentSongIndex = que.findIndex(song => song._id === currentSongID)
+			currentQueIndex = currentSongIndex;
+		}
 	}
 
 	/**
@@ -242,7 +243,7 @@ export default function player() {
 	}
 
 	function loadSongFromQue() {
-		currentSong = que[queIndex];
+		currentSong = que[currentQueIndex];
 		audio.src = currentSong.trackURL;
 	}
 
@@ -255,18 +256,18 @@ export default function player() {
 	}
 
 	function nextSong() {
-		if (queIndex < que.length - 1) {
-			queIndex += 1;
+		if (currentQueIndex < que.length - 1) {
+			currentQueIndex += 1;
 		} else {
-			queIndex = 0;
+			currentQueIndex = 0;
 		}
 	}
 
 	function previousSong() {
-		if (queIndex > 0) {
-			queIndex -= 1;
+		if (currentQueIndex > 0) {
+			currentQueIndex -= 1;
 		} else {
-			queIndex = 0;
+			currentQueIndex = 0;
 		}
 	}
 
@@ -525,7 +526,7 @@ export default function player() {
 		setCurrentSection,
 		setReleases,
 		setPlaylist,
-		setCurrentSong,
+		setCurrentQueIndex,
 		setCurrentSongGroup,
 		setQue,
 		loadSongFromQue,
