@@ -83,29 +83,7 @@ export default function player() {
 	function handlePlayerElementTouchmove(event) {		
 		if (isMaximized) {
 			event.preventDefault();
-			const touchY = event.touches[0].clientY;
-		 	const playerHeight = playerElement.offsetHeight;
-		 	const dragDistances = touchY - touchStart;
-		 	const touchPercentage = (dragDistances / playerHeight) * 100;
-			
-			animationPosition = (touchPercentage / 100) * animationDuration;
-
-			if (touchPercentage >= 0 && touchPercentage < 99) {
-            draggedOver25Percent = touchPercentage >= 25 ? true : false
-
-            playerElement.style.animationTimingFunction = 'linear';
-            playerElement.style.animationPlayState = 'paused';
-            playerElement.style.animationDelay = `-${animationPosition}s`;
-            
-            for (const element of allElementsInPlayer) {
-               element.style.animationTimingFunction = 'linear';
-               element.style.animationPlayState = 'paused';
-               element.style.animationDelay = `-${animationPosition}s`;
-            }           
-
-            playerElement.classList.remove('player--maximized');
-            playerElement.classList.add('player--minimized');
-         }
+			animateDragDown(event);
 		}
 	}
 
@@ -323,6 +301,39 @@ export default function player() {
 		isPlaying ? audio.play() : audio.pause();
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
    }
+
+	/**
+	 * This function animates on drag down of the player element.
+	 * This is made possible by starting minimize-keyframes @see animation.css and set 'animationPlayState = paused' and decide where in the animation is by using the variable animationPosition and manipulating animationDelay. If the dragPercentage is over 25%, it will set 'draggedOver25Percent = true'.
+	 * @param {object} event - The event object that is passed in when the function is called.
+	*/
+	function animateDragDown(event) {
+		const touchYCoordinates = event.touches[0].clientY;
+		const playerHeight = playerElement.offsetHeight;
+		const dragDistances = touchYCoordinates - touchStart;
+		const dragPercentage = (dragDistances / playerHeight) * 100;
+		const isNotNegativeDrag = dragPercentage >= 0;
+		const dragPercentageUnder99 = dragPercentage < 99;
+	  
+	  	animationPosition = (dragPercentage / 100) * animationDuration;
+
+		if (isNotNegativeDrag && dragPercentageUnder99) {
+			playerElement.classList.add('player--minimized');
+			playerElement.classList.remove('player--maximized');
+
+			playerElement.style.animationTimingFunction = 'linear';
+			playerElement.style.animationPlayState = 'paused';
+			playerElement.style.animationDelay = `-${animationPosition}s`;
+		
+			for (const element of allElementsInPlayer) {
+				element.style.animationTimingFunction = 'linear';
+				element.style.animationPlayState = 'paused';
+				element.style.animationDelay = `-${animationPosition}s`;
+			}
+			
+			draggedOver25Percent = dragPercentage >= 25 ? true : false;
+		}
+	}
 
 	function removeInlineStyling() {
 		playerElement.removeAttribute('style');
