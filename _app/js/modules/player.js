@@ -319,6 +319,12 @@ export default function player() {
 		playlists = array;
 	}
 
+	/**
+	 * This traps the focus of the mobile player element. This is done to make keyboard navigation more pleasurable.
+	 * @author Hidde de Vries 
+	 * @see {@link https://hidde.blog/using-javascript-to-trap-focus-in-an-element/}
+	 * @param {object} event - The event object that is passed to the function.
+	 */
 	function playerFocusTrap(event) {
 		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
 		const firstElement = focusableElements[0];
