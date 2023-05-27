@@ -440,36 +440,54 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * This main function consist of subfunctions that renders the HTML based on the state player. There is a if statement to only render timeline as this will be called multiple times per seconds and dont want to render everything. This was done to improve performance. 
+	 */
 	function renderHTML(string) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
-			renderAccessability();
-			
 			if (isPlaying) {
-				playerElement.classList.add('player--open');
-				mainWindowElement.classList.add('main-window--player-open');
+				renderVisibility();
 				renderInfo();
 			}
 
 			if (isAnimation) {
 				if (isMaximized) {
-					playerElement.classList.add('player--maximized');
-					playerElement.classList.remove('player--minimized');
+					renderMinimized();
 				} else {
-					playerElement.classList.remove('player--maximized');
-					playerElement.classList.add('player--minimized');
+					renderMaximized();
 				}
 			} else {
-				playerElement.classList.remove('player--minimized');
-				playerElement.classList.remove('player--maximized');
+				removeMaximizedAndMinimized();
 			}
 	
+			renderAccessability();
 			renderPlayButton();
 			renderShuffleButton();
 			renderRepeatButton();
 			renderMuteButton();
 			renderVolumeSlider();
+		}
+
+		function renderMaximized() {
+			playerElement.classList.remove('player--maximized');
+			playerElement.classList.add('player--minimized');
+		}
+
+		function renderMinimized() {
+			playerElement.classList.add('player--maximized');
+			playerElement.classList.remove('player--minimized');
+		}
+
+		function removeMaximizedAndMinimized() {
+			playerElement.classList.remove('player--minimized');
+			playerElement.classList.remove('player--maximized');
+		}
+
+		function renderVisibility() {
+			playerElement.classList.add('player--open');
+			mainWindowElement.classList.add('main-window--player-open'); // this compensate for the player's position absolute in mobile version, so elements won't go behind player. 
 		}
 
 		function renderInfo() {
@@ -478,6 +496,9 @@ export default function player() {
 			artworkElement.src = currentSong.artworkURL;
 		}
 
+		/**
+		 * Sets accessibility attributes on the player element and timeline slider based on isMobile.
+		 */
 		function renderAccessability() {
 			if (isMobile) {
 				playerElement.setAttribute('role', 'button');
@@ -498,12 +519,19 @@ export default function player() {
 			}
 
 			if (isPlaying) {
-				accessabilitySkipToPlayerElement.innerHTML = '';
-				const link = document.createElement('a');
-				link.innerText = 'Go to controllers';
-				link.className = 'accessibility__skip';
-				link.href = '#player';
-				accessabilitySkipToPlayerElement.append(link);
+				renderGoToControllersLink(); 
+
+				/**
+		 		 * Renders accessability link to jump straight to controllers.
+		 		 */
+				function renderGoToControllersLink() {
+					accessabilitySkipToPlayerElement.innerHTML = '';
+					const link = document.createElement('a');
+					link.innerText = 'Go to controllers';
+					link.className = 'accessibility__skip';
+					link.href = '#player';
+					accessabilitySkipToPlayerElement.append(link);
+				}
 			}
 		}
 		
@@ -542,6 +570,9 @@ export default function player() {
 			}
 		}
 
+		/**
+		 * Renders volumeSlider based on isMute and background of slider.
+		 */
 		function renderVolumeSlider() {
 			if (isMute) {
 				volumeSlider.value = 0;
@@ -552,6 +583,9 @@ export default function player() {
 			volumeSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - audio.volume * 100}% 50% / 200%`;	
 		}
 
+		/**
+		 * Renders the timeline slider by calculating percentage, updates the current time and duration as long as its a !isNaN. 
+		 */
 		function renderTimeline() {
 			const duration = audio.duration;
 			const currentTime = audio.currentTime;
