@@ -1,15 +1,16 @@
 export default function contextMenu() {
 	let currentSection = null;
 	let playlists = null;
+
 	let isOpen = false;
-	let clickedElement = null;
+	let clickedElement = null; // Used to decide content of context menu
 	
-	let coordinates = {
+	let coordinates = { // Used to place context menu on screen
 		x: 0,
 		y: 0,
 	}
 
-	let lastFocused = {
+	let lastFocused = { // Used to focus back on elements after opening context menu
 		song: null,
 		songGroup: null,
 	};
