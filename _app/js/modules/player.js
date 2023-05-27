@@ -313,7 +313,7 @@ export default function player() {
 
 	/**
 	 * This function animates on drag down of the player element.
-	 * This is made possible by starting minimize-keyframes @see animation.css and set 'animationPlayState = paused' and decide where in the animation is by using the variable animationPosition and manipulating animationDelay. If the dragPercentage is over 25%, it will set 'draggedOver25Percent = true'.
+	 * This is made possible by starting minimize-keyframes @see animation.css and set 'animationPlayState = paused' and decide where in the animation is by using the variable animationPosition and manipulating animationDelay. If the dragPercentage is over 25%, it will set 'draggedOver25Percent = true'. AnimationPlayState is set to linear so it will follows the finger on drag down, the animation is default set to ease-in-out. 
 	 * @param {object} event - The event object that is passed in when the function is called.
 	 */
 	function animateDragDown(event) {
