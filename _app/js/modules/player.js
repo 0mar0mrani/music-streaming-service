@@ -229,7 +229,7 @@ export default function player() {
 	 * @param {number} clickedSongIndex - The index of the song related to its song group
 	 */
 	function setCurrentQueIndex(clickedSongIndex) {
-		if (clickedSongIndex) {
+		if (clickedSongIndex => 0) {
 			currentQueIndex = clickedSongIndex;
 		} else {
 			const currentSongID = currentSong._id;
