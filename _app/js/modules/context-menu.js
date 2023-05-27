@@ -15,9 +15,9 @@ export default function contextMenu() {
 	};
 
 	const contextMenuElement = document.querySelector('.context-menu');
-	const contextMenuPlaylists = document.querySelector('.context-menu__playlists');
-	const contextMenuReleaseSection = document.querySelector('.context-menu__release-section');
-	const contextMenuPlaylistSection = document.querySelector('.context-menu__playlist-section');
+	const playlistButtons = document.querySelector('.context-menu__playlists');
+	const releaseSectionElement = document.querySelector('.context-menu__release-section');
+	const playlistSectionElement = document.querySelector('.context-menu__playlist-section');
 	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist'); 
 	const deleteSongButton = document.querySelector('.context-menu__button--remove-song'); 
 
@@ -94,8 +94,8 @@ export default function contextMenu() {
 	}
 
 	function renderHTML() {
-		contextMenuReleaseSection.classList.remove('context-menu__release-section--visible');
-		contextMenuPlaylistSection.classList.remove('context-menu__playlist-section--visible');
+		releaseSectionElement.classList.remove('context-menu__release-section--visible');
+		playlistSectionElement.classList.remove('context-menu__playlist-section--visible');
 		deletePlaylistButton.classList.remove('context-menu__button--visible');
 		deleteSongButton.classList.remove('context-menu__button--visible');
 
@@ -130,9 +130,9 @@ export default function contextMenu() {
 		}
 
 		function renderPlaylists() {
-			contextMenuReleaseSection.classList.add('context-menu__release-section--visible');
+			releaseSectionElement.classList.add('context-menu__release-section--visible');
 
-			contextMenuPlaylists.innerHTML = '';
+			playlistButtons.innerHTML = '';
 	
 			playlists.forEach((playlist, index) => {
 				const playlistElement = document.createElement('li');
@@ -144,12 +144,12 @@ export default function contextMenu() {
 				playlistButton.dataset.id = index;
 	
 				playlistElement.append(playlistButton);
-				contextMenuPlaylists.append(playlistElement)
+				playlistButtons.append(playlistElement)
 			})
 		}
 
 		function renderDeleteSongAndPlaylist() {
-			contextMenuPlaylistSection.classList.add('context-menu__playlist-section--visible');
+			playlistSectionElement.classList.add('context-menu__playlist-section--visible');
 
 			if (clickedElement === 'playlist') {
 				deletePlaylistButton.classList.add('context-menu__button--visible');
