@@ -162,9 +162,8 @@ export default function player() {
 	}
 
 	function handleVolumeSliderInput() {
-		const input = volumeSlider.value;
-		currentVolume = input;
-		currentVolume > 0 ? isMute = false : isMute = true;
+		setVolume();
+		isMute = currentVolume === 0 ? true : false;
 		renderAudio();
 		renderHTML();
 	}
@@ -298,6 +297,14 @@ export default function player() {
 			event.preventDefault();
 			firstElement.focus();
 		}
+	}
+
+	/**
+	 * Takes value from volumeSlider and sets currentVolume.
+	 */
+	function setVolume() {
+		const input = volumeSlider.value;
+		currentVolume = input;
 	}
 
 	function renderAudio() {
