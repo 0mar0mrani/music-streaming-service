@@ -213,6 +213,9 @@ export default function player() {
 		currentSongGroup = clickedSongGroupIndex;
 	}
 
+	/**
+	 * Sets the que based on currentSection
+	 */
 	function setQue() {
 		if (currentSection === 'release') {
 			que = [...releases[currentSongGroup].tracks];
