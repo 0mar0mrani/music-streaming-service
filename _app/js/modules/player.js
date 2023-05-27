@@ -102,7 +102,7 @@ export default function player() {
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
-		removeInlineStyling();
+		removePlayerInlineStyling();
 		renderHTML();
 	}
 
@@ -182,7 +182,7 @@ export default function player() {
 
 	function handleCloseButtonClick(event) {
 		event.stopPropagation();
-		removeInlineStyling();
+		removePlayerInlineStyling();
 		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
@@ -429,7 +429,10 @@ export default function player() {
 		}
 	}
 
-	function removeInlineStyling() {
+	/**
+	 * Removes all inline styling from the player element and all elements within it.
+	 */
+	function removePlayerInlineStyling() {
 		playerElement.removeAttribute('style');
 		
 		for (const element of allElementsInPlayer) {
