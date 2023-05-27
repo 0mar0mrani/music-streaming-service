@@ -175,8 +175,7 @@ export default function player() {
 	}
 
 	function handleTimelineSliderInput() {
-		const input = timelineSlider.value;
-		audio.currentTime = input;
+		setTimeline();
 		isPlaying = true;
 		renderHTML();
 	}
@@ -305,6 +304,14 @@ export default function player() {
 	function setVolume() {
 		const input = volumeSlider.value;
 		currentVolume = input;
+	}
+
+	/**
+	 * Takes value from timelineSlider and sets currentTime.
+	 */
+	function setTimeline() {
+		const input = timelineSlider.value;
+		audio.currentTime = input;
 	}
 
 	function renderAudio() {
