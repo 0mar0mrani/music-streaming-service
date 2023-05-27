@@ -151,16 +151,8 @@ export default function player() {
 
 	function handleShuffleButtonClick() {
 		isShuffle = !isShuffle;
-		const currentTrackID = currentSong._id;
-		
-		if (isShuffle) {
-			que = shuffle(que, 2);
-		} else {
-			setQue();
-		}
-
-		const currentTrackNewIndex = que.findIndex(index => index._id === currentTrackID)
-		queIndex = currentTrackNewIndex;
+		setShuffle();
+		setQueIndex();
 		renderHTML();
 	}
 
@@ -228,6 +220,26 @@ export default function player() {
 			que = [...releases[currentSongGroup].tracks];
 		} else if (currentSection === 'playlist') {
 			que = [...playlists[currentSongGroup].songs];
+		}
+	}
+
+	/**
+	 * Sets queIndex to the index of the current song in the que.
+	 */
+	function setQueIndex() {
+		const currentSongID = currentSong._id;
+		const currentSongIndex = que.findIndex(song => song._id === currentSongID)
+		queIndex = currentSongIndex;
+	}
+
+	/**
+	 * Shuffles the que if 'isShuffle = true', if not it sets the que from songGroup which is not shuffled.
+	 */
+	function setShuffle() {
+		if (isShuffle) {
+			que = shuffle(que, 2);
+		} else {
+			setQue();
 		}
 	}
 
