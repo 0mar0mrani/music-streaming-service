@@ -357,6 +357,9 @@ export default function player() {
 		audio.currentTime = input;
 	}
 
+	/**
+	 * This function renders the audio object. It will play or pause based on the state isPlaying, and set the volume to either 0 (mute) or the current volume based on isMute.
+	 */
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
 		isMute ? audio.volume = 0 : audio.volume = currentVolume;
