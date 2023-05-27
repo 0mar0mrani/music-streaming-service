@@ -226,7 +226,7 @@ export default function player() {
 
 	/**
 	 * Sets currentQueIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
-	 * @param {number} clickedSongIndex - The index of the song related to its song group.
+	 * @param {number} clickedSongIndex - The index of the song related to its song group
 	 */
 	function setCurrentQueIndex(clickedSongIndex) {
 		if (clickedSongIndex) {
@@ -249,6 +249,10 @@ export default function player() {
 		}
 	}
 
+
+	/**
+	 * This loads currentSong into audio from que, decided by currentQueIndex.
+	 */
 	function loadSongFromQue() {
 		currentSong = que[currentQueIndex];
 		audio.src = currentSong.trackURL;
