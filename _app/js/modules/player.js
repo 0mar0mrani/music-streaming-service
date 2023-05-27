@@ -205,8 +205,12 @@ export default function player() {
 		}
 	}
 
-	function setCurrentSongGroup(clickedSongGroupNumber) {
-		currentSongGroup = Number(clickedSongGroupNumber);
+	/**
+	 * Sets currentSongGroup based on the index of the clicked song group.
+	 * @param {number} clickedSongGroupIndex - The index of the song group in relation to all song groups.
+	 */
+	function setCurrentSongGroup(clickedSongGroupIndex) {
+		currentSongGroup = clickedSongGroupIndex;
 	}
 
 	function setQue() {
@@ -219,11 +223,11 @@ export default function player() {
 
 	/**
 	 * Sets currentQueIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
-	 * @param {number} clickedSongNumber - The number of the song related to its song group.
+	 * @param {number} clickedSongIndex - The index of the song related to its song group.
 	 */
-	function setCurrentQueIndex(clickedSongNumber) {
-		if (clickedSongNumber) {
-			currentQueIndex = clickedSongNumber;
+	function setCurrentQueIndex(clickedSongIndex) {
+		if (clickedSongIndex) {
+			currentQueIndex = clickedSongIndex;
 		} else {
 			const currentSongID = currentSong._id;
 			const currentSongIndex = que.findIndex(song => song._id === currentSongID)

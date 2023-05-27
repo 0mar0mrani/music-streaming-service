@@ -89,7 +89,7 @@ export default async function mainWindow() {
 
 		addOneToPlays(song.trackID, song.plays + 1);
 		player.setCurrentQueIndex(Number(clickedSong));
-		player.setCurrentSongGroup(clickedSongGroup);
+		player.setCurrentSongGroup(Number(clickedSongGroup));
 		player.setQue();
 		player.loadSongFromQue();
 		player.toggleIsPlaying(true);
