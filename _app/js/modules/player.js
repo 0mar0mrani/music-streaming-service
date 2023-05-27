@@ -292,14 +292,29 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Sets currentSection, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {string} string - The name of the section to set
+	 */
 	function setCurrentSection(string) {
 		currentSection = string;
 	}
 
+	/**
+	 * Sets releases, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {array} array - An array of releases
+	 */
 	function setReleases(array) {
 		releases = array;
 	}
 
+	/**
+	 * Sets playlists, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {array} array - An array of playlists
+	 */
 	function setPlaylist(array) {
 		playlists = array;
 	}
