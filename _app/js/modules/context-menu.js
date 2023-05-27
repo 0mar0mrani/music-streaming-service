@@ -32,17 +32,20 @@ export default function contextMenu() {
 			
 			if (activeElement === lastFocusableElement) {
 				focusOnLastFocusedElement(event);
+				isOpen = false;
 				renderHTML();
 			}
 
 		} else if (event.key === 'Escape') {
 			focusOnLastFocusedElement(event);
+			isOpen = false;
 			renderHTML();
 
 		} else if (event.key === 'Enter') {
 			const button = event.target;
 			button.click();
 			focusOnLastFocusedElement(event);
+			isOpen = false;
 			renderHTML();
 		}
 	}
@@ -106,25 +109,34 @@ export default function contextMenu() {
 		lastFocused = object;
 	}
 
-	function findLastFocusedElement() {
-		if (clickedElement === 'playlist') {
-			const menuButtons = document.querySelectorAll('.context-menu-button');
-			const lastFocusedMenuButton = menuButtons[lastFocused.songGroup];
-			return lastFocusedMenuButton;
-		} else {
-			const songGroups = document.querySelectorAll('.song-group');
-			const songs = songGroups[lastFocused.songGroup].querySelectorAll('.song');
-			const lastFocusedSong = songs[lastFocused.song];
-			return lastFocusedSong;
-		}
-	}
-
+	/**
+	 * Focuses on lastFocusedElement
+	 */
 	function focusOnLastFocusedElement(event) {
 		event.preventDefault();
-		isOpen = false;
 		const lastFocusedElement = findLastFocusedElement();
 		lastFocusedElement.focus();
 	}
+
+	/**
+	 * finds the last focused element. If 'clickedElement === `playlist`' it will find the last focused contextMenuButton, if not it will find last focused song.
+	 * @returns {object} lastFocusedElement - The last focused element
+	 */
+	function findLastFocusedElement() {
+		let lastFocusedElement = null;
+
+		if (clickedElement === 'playlist') {
+			const contextMenuButtons = document.querySelectorAll('.context-menu-button');
+			lastFocusedElement = contextMenuButtons[lastFocused.songGroup];
+		} else {
+			const songGroups = document.querySelectorAll('.song-group');
+			const songs = songGroups[lastFocused.songGroup].querySelectorAll('.song');
+			lastFocusedElement = songs[lastFocused.song];
+		}
+
+		return lastFocusedElement;
+	}
+
 
 	function renderHTML() {
 		releaseSectionElement.classList.remove('context-menu__release-section--visible');
