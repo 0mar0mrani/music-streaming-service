@@ -441,7 +441,7 @@ export default function player() {
 	}
 
 	/**
-	 * This main function consist of subfunctions that renders the HTML based on the state player. There is a if statement to only render timeline as this will be called multiple times per seconds and dont want to render everything. This was done to improve performance. 
+	 * This main function consist of subfunctions that renders the HTML based on the state of player. There is a if statement to only render timeline as this will be called multiple times per seconds and dont want to render everything. This was done to improve performance. 
 	 */
 	function renderHTML(string) {
 		if (string === 'timeline') {
