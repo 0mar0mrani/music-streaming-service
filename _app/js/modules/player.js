@@ -362,7 +362,7 @@ export default function player() {
 	 */
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
-		isMute ? audio.volume = 0 : audio.volume = currentVolume;
+		audio.volume = isMute ? 0 : currentVolume;
    }
 
 	/**
