@@ -177,9 +177,7 @@ export default async function mainWindow() {
 	} 
 
 	async function handleContextMenuDeleteSongButtonClick() {
-		const clickedSongGroup = current.songGroup.index
-		const rightPlaylist = playlists[clickedSongGroup];
-		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
+		const playlistWithRemovedSong = removeSongFromPlaylist();
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
 		const playlistID = playlists[clickedSongGroup]._id;
 		isLoading = true;
@@ -514,6 +512,17 @@ export default async function mainWindow() {
 		}
 
 		buttonToFocus.focus();	
+	}
+
+	/**
+	 * Removes song from a playlist
+	 * @returns {array} playlist of songs with one song removed
+	 */
+	function removeSongFromPlaylist() {
+		const clickedSongGroup = current.songGroup.index
+		const rightPlaylist = playlists[clickedSongGroup];
+		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
+		return playlistWithRemovedSong;
 	}
 
 	async function onLoad() {
