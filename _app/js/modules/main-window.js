@@ -141,32 +141,16 @@ export default async function mainWindow() {
 
 	async function handleContextMenuButtonKeydown(event) {
 		if (event.key === 'Enter') {
-			const pressedButton = event.currentTarget;
-			const isPlaylistMenuPressed = pressedButton.classList.contains('playlist__menu-button');
-
 			event.preventDefault();
+			const pressedButton = event.currentTarget;
 			pressedButton.click();
-			
-			const lastFocusedElement = {
+
+			contextMenu.setLastFocused({
 				song: pressedButton.closest('.song')?.dataset.id,
 				songGroup: pressedButton.closest('.song-group').dataset.id, 
-			}
-
-			contextMenu.setLastFocused(lastFocusedElement);
-
-			let buttonToFocus = null;
-	
-			if (current.section === 'release') {
-				buttonToFocus = document.querySelector('.context-menu .context-menu__button--visible');		
-			} else {
-				if (isPlaylistMenuPressed) {
-					buttonToFocus = document.querySelector('.context-menu__button--delete-playlist');
-				} else {
-					buttonToFocus = document.querySelector('.context-menu__button--remove-song');
-				}
-			}
-
-			buttonToFocus.focus();	
+			});
+			
+			focusOnFirstButtonInContextMenu(pressedButton);
 		} 
 	}
 
@@ -508,6 +492,28 @@ export default async function mainWindow() {
 		} else {
 			contextMenu.setClickedElement('song');
 		}
+	}
+
+	/**
+	 * Focuses on the first visible button in the context menu.
+	 * @param {object} pressedButton - The button that was pressed to open the context menu.
+	 */
+	function focusOnFirstButtonInContextMenu(pressedButton) {
+		console.log(typeof pressedButton);
+		const isPlaylistMenuPressed = pressedButton.classList.contains('playlist__menu-button');
+		let buttonToFocus = null;
+
+		if (current.section === 'release') {
+			buttonToFocus = document.querySelector('.context-menu .context-menu__button--visible');		
+		} else if (current.section === 'playlist') {
+			if (isPlaylistMenuPressed) {
+				buttonToFocus = document.querySelector('.context-menu__button--delete-playlist');
+			} else {
+				buttonToFocus = document.querySelector('.context-menu__button--remove-song');
+			}
+		}
+
+		buttonToFocus.focus();	
 	}
 
 	async function onLoad() {
