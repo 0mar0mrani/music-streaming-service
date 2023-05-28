@@ -158,7 +158,6 @@
 }
 
 @media only screen and (max-width: 700px) {
-	.header__add-playlist-button-title,
 	.playlist__album,
 	.playlist__album-header {
 		display: none;

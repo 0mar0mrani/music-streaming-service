@@ -1,43 +1,44 @@
 .header {
-	width: 100%;
 	grid-column-start: 2;
+	align-self: self-start;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	width: 100%;
 	background-color: var(--color-secondary-default);
 	padding: var(--gap-medium) var(--gap-large);
-	align-self: self-start;
 }
 
-.header__add-playlist-button {
+/* Create playlist */
+.header__create-playlist-button {
 	display: none;
-	align-items: center;
 	gap: var(--gap-small);
 }
 
-.header__add-playlist-button--visible {
+.header__create-playlist-button--visible {
 	display: flex;
 }
 
-.header__add-playlist-icon {
+.header__create-playlist-icon {
 	width: 2.8rem;
 	height: 2.8rem;
 }
 
-.header__add-playlist-icon img {
+.header__create-playlist-icon img {
 	filter: var(--filter-primary-default);
 }
 
-.header__add-playlist-button:hover,
-.header__add-playlist-button:active {
+.header__create-playlist-button:hover,
+.header__create-playlist-button:active {
 	color: var(--color-primary-darkest);
 }
 
-.header__add-playlist-button:hover .header__add-playlist-icon img,
-.header__add-playlist-button:active .header__add-playlist-icon img {
+.header__create-playlist-button:hover .header__create-playlist-icon img,
+.header__create-playlist-button:active .header__create-playlist-icon img {
 	filter: var(--filter-primary-darkest);
 }
 
+/* Header message */
 .header__message-container {
 	position: relative;
 }
@@ -53,4 +54,10 @@
 	transform: translateY(0);
 	opacity: 1;
 	pointer-events: unset;
+}
+
+@media only screen and (max-width: 700px) {
+	.header__create-playlist-button-title {
+		display: none;
+	}
 }
