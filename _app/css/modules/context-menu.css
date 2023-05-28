@@ -8,6 +8,7 @@
 	pointer-events: none;
 }
 
+/* Not using 'display: none' as it not able to calculate width/height width js */
 .context-menu--open {
 	opacity: 1;
 	visibility: unset;
@@ -27,7 +28,6 @@
 .context-menu__button--delete-playlist-visible,
 .context-menu__button--remove-song-visible {
 	display: block;
-	flex-direction: column;
 }
 
 .context-menu__title {
