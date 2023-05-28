@@ -26,7 +26,7 @@
 	background-color: var(--color-secondary-lighter);
 }
 
-/* Message: bottom scroll */
+/* Message: reached bottom */
 .main-window__reached-bottom {
 	text-align: center;
 	padding: var(--gap-large) var(--gap-extra-large);
