@@ -10,12 +10,12 @@
 /* Buttons */
 .navigation__button {
 	display: flex;
+	align-items: center;
 	border: none;
 	text-align: center;
 	width: 100%;
 	text-transform: uppercase;
 	aspect-ratio: 1 / 1;
-	align-items: center;
 }
 
 .navigation__button--active {
@@ -37,7 +37,6 @@
 		grid-column: 1 / -1;
 		order: 1;
 		flex-direction: row;
-		justify-content: end;
 		height: 100%;
 		width: 100%;
 		flex-shrink: 0;
