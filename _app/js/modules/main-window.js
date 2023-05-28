@@ -60,6 +60,7 @@ export default async function mainWindow() {
 	contextMenuDeletePlaylistButton.addEventListener('click', handleContextMenuDeletePlaylistButtonClick);
 	contextMenuDeleteSongButton.addEventListener('click', handleContextMenuDeleteSongButtonClick);
 
+	onLoad();
 	
 	function handleWindowContextmenu(event) {
 		event.preventDefault();
@@ -559,6 +560,9 @@ export default async function mainWindow() {
 		return playlistWithRemovedSong;
 	}
 
+	/**
+	 * All functions to run when page loads.
+	 */
 	async function onLoad() {
 		isLoading = true;
 		renderHTML();
@@ -959,6 +963,4 @@ export default async function mainWindow() {
 			}
 		}
 	}
-
-	onLoad();
 }
