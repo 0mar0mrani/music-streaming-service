@@ -191,15 +191,10 @@ export default async function mainWindow() {
 
 	function handleSongButtonClick(event) {
 		event.stopPropagation();
-
 		const clickedSong = event.currentTarget.dataset.id;
 		const clickedSongGroup = event.currentTarget.closest('.song-group').dataset.id;
 
-		const song = current.section === 'release' 
-			? releases[clickedSongGroup].tracks[clickedSong] 
-			: playlists[clickedSongGroup].songs[clickedSong];
-
-		addOneToPlays(song.trackID, song.plays + 1);
+		addOneToPlays(Number(clickedSong), Number(clickedSongGroup));
 		player.setCurrentQueIndex(Number(clickedSong));
 		player.setCurrentSongGroup(Number(clickedSongGroup));
 		player.setQue();
@@ -413,12 +408,21 @@ export default async function mainWindow() {
 		}
 	}
 
-	async function addOneToPlays(trackID, newPlays) {
+	/**
+	 * increases the plays count of a song and posts it Sanity.
+	 * @param {number} clickedSong - The index of the song in the clickedSongGroup
+	 * @param {number} clickedSongGroup - The group of songs the clickedSong belongs to
+	 */
+	async function addOneToPlays(clickedSong, clickedSongGroup) {
+		const song = current.section === 'release' 
+			? releases[clickedSongGroup].tracks[clickedSong] 
+			: playlists[clickedSongGroup].songs[clickedSong];
+		
 		const mutations = [{
 			patch: {
-				id: trackID,
+				id: song.trackID,
 				set: {
-					plays: newPlays,
+					plays: song.plays + 1,
 				},
 			}
 		}];  
