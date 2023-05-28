@@ -182,7 +182,7 @@ export default async function mainWindow() {
 		const playlistID = playlists[clickedSongGroup]._id;
 		isLoading = true;
 		renderHTML();
-		await setPlaylist(playlistID, playlistForSanity);
+		await updatePlaylist(playlistID, playlistForSanity);
 		playlists = await fetchPlaylists();
 		isLoading = false;
 		header.setIsMessageVisible(true);
@@ -249,6 +249,11 @@ export default async function mainWindow() {
 		}
 	}
 
+	/**
+	 * Fetches playlists with a GROQ query to Sanity.
+	 * Also communicates error to user if sanity.fetch() returns a string.
+	 * @returns {array} Array of playlist || empty array if 'isError === true'
+	 */
 	async function fetchPlaylists() {
       const query = `*[_type == 'playlist'] | order(_createdAt asc) {  
 			_id,
@@ -278,7 +283,13 @@ export default async function mainWindow() {
 		}
 	}
 
+	/**
+	 * Fetches releases with a GROQ query to Sanity.
+	 * Also communicates error to user if sanity.fetch() returns a string.
+	 * @returns {array} Array of playlist || empty array if 'isError === true'
+	 */
 	async function fetchReleases() {
+		// Calculate the start and end for a slice of releases
 		const sliceStart = release.currentPage * release.pageSize;
 		const sliceEnd = release.currentPage * release.pageSize + release.pageSize;
 
@@ -312,6 +323,10 @@ export default async function mainWindow() {
 		}
    }
 
+	/**
+	 * Adds song to playlist in Sanity. It inserts the song at the end of songs array in playlist with key created by Data.now().
+	 * Also communicates if successful or not, if sanity.fetch() returns a string it's an error.
+	 */
 	async function addSongToPlaylist(playlistID) {
 		const mutations = [{
 			patch: {
@@ -345,6 +360,10 @@ export default async function mainWindow() {
 		}
 	}
 
+	/**
+	 * Creates a new playlist in Sanity.
+	 * Also communicates if successful or not, if sanity.fetch() returns a string it's an error.
+	 */
 	async function createNewPlaylist() {
 		const mutations = [{
 			createOrReplace: {
@@ -364,6 +383,10 @@ export default async function mainWindow() {
 		}
 	}
 
+	/**
+	 * Deletes playlist in Sanity.
+	 * Also communicates if successful or not, if sanity.fetch() returns a string it's an error.
+	 */
 	async function deletePlaylist(id) {
 		const mutations = [{
 			delete: {
@@ -379,7 +402,11 @@ export default async function mainWindow() {
 		}
 	}
 
-	async function setPlaylist(playlistID, newPlaylist) {
+	/**
+	 * Updates playlist with new songs, this is used to delete a song.
+	 * Also communicates error to user if sanity.fetch() returns a string.
+	 */
+	async function updatePlaylist(playlistID, newPlaylist) {
 		const mutations = [{
 			patch: {
 				id: playlistID,
@@ -398,7 +425,7 @@ export default async function mainWindow() {
 	}
 
 	/**
-	 * increases the plays count of a song and posts it Sanity.
+	 * Increases the plays count of a song in Sanity.
 	 * @param {number} clickedSong - The index of the song in the clickedSongGroup
 	 * @param {number} clickedSongGroup - The group of songs the clickedSong belongs to
 	 */
@@ -419,6 +446,10 @@ export default async function mainWindow() {
 		await sanity.mutate(mutations);
 	}
 
+	/**
+	 * Changes title of playlist in Sanity.
+	 * Also communicates error to user if sanity.fetch() returns a string.
+	 */
 	async function changePlaylistTitle(playlistID, newTitle) {
 		const mutations = [{
 			patch: {
