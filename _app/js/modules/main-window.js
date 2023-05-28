@@ -468,6 +468,9 @@ export default async function mainWindow() {
 		}
 	}
 
+	/**
+	 * Prepares playlist for Sanity with references, creating an object Sanity understands.  
+	 */
 	function preparePlaylistForSanity(playlist) {
 		return playlist.map((song, index) => {
 			return {
