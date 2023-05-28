@@ -487,6 +487,10 @@ export default async function mainWindow() {
 		});
 	}
 
+	/**
+	 * Checks if scrolled to bottom, meaning no more releases. If length is shorter than pageSize, means theres no more to fetch. 
+	 * @param {array} moreReleases - An array of releases
+	 */
 	function checkIfScrolledToBottom(moreReleases) {
 		release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 	}
