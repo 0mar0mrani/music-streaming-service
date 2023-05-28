@@ -50,7 +50,9 @@
 			</header>
 
 			<main class="main-window-container">
-				<ul class="main-window" id="main-window"></ul>
+				<ul class="main-window" id="main-window">
+					<!-- releases and playlists will be rendered here by main-window.js -->
+				</ul>
 			</main>
 
 			<div class="loading">
@@ -61,7 +63,9 @@
 				<div class="context-menu__release-section">
 					<div class="context-menu__title">Add to playlist</div>
 	
-					<ul class="context-menu__playlists"></ul>
+					<ul class="context-menu__playlists">
+						<!-- playlists (buttons) will be rendered here by context-menu.js  -->
+					</ul>
 				</div>
 
 				<div class="context-menu__playlist-section">
@@ -118,6 +122,7 @@
 							<input 
 								type="range" 
 								class="player__timeline" 
+								name="player__timeline"
 								value="0" 
 								step="0.01"
 							>
@@ -142,7 +147,6 @@
 					</div>
 				</div>
 			</section>
-			
 		</div>
 	</body>
 </html>
