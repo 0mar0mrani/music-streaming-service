@@ -132,7 +132,7 @@ export default async function mainWindow() {
 		const clickedSongIndex = Number(clickedButton.closest('.song')?.dataset.id);
 		const clickedSongGroupIndex = Number(clickedButton.closest('.song-group').dataset.id);
 		const clickedButtonCoordinates = clickedButton.getBoundingClientRect();
-		const isButtonInPlaylistHeader = clickedSongIndex === undefined;
+		const isButtonInPlaylistHeader = clickedButton.classList.contains('playlist__menu-button');
 
 		setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex);
 		setClickedElement(isButtonInPlaylistHeader);
@@ -216,10 +216,10 @@ export default async function mainWindow() {
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event.clientX, event.clientY);
-
+		
 		renderHTML();
 	}
-
+	
 	function handlePlaylistHeaderElementContextmenu(event) {
 		event.stopPropagation();
 		event.preventDefault();
