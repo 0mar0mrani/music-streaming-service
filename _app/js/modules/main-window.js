@@ -127,12 +127,12 @@ export default async function mainWindow() {
 		event.stopPropagation();
 
 		const clickedButton = event.currentTarget;
-		const clickedSongIndex = clickedButton.closest('.song')?.dataset.id;
-		const clickedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
+		const clickedSongIndex = Number(clickedButton.closest('.song')?.dataset.id);
+		const clickedSongGroupIndex = Number(clickedButton.closest('.song-group').dataset.id);
 		const clickedButtonCoordinates = clickedButton.getBoundingClientRect();
 		const isButtonInPlaylistHeader = clickedSongIndex === undefined;
 
-		setCurrentSongAndSongGroup(Number(clickedSongIndex), Number(clickedSongGroupIndex));
+		setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex);
 		setClickedElement(isButtonInPlaylistHeader);
 		contextMenu.setCoordinates(clickedButtonCoordinates.left, clickedButtonCoordinates.bottom);
 		contextMenu.setIsOpen(true);
@@ -207,20 +207,9 @@ export default async function mainWindow() {
 	function handleSongButtonContextmenu(event) {
 		event.preventDefault();
 		event.stopPropagation();
-		const clickedSong = event.currentTarget.dataset.id;
-		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
-		const releaseID = current.section === 'release' 
-			? releases[songGroup]._id
-			: playlists[songGroup]._id;
-
-		const trackID = current.section === 'release'
-			? releases[songGroup].tracks[clickedSong].trackID
-			: playlists[songGroup].songs[clickedSong].trackID;
-
-		current.song.id = trackID;
-		current.song.index = Number(clickedSong);
-		current.songGroup.id = releaseID;
-		current.songGroup.index = Number(songGroup);
+		const clickedSongIndex = Number(event.currentTarget.dataset.id);
+		const clickedSongGroupIndex = Number(event.currentTarget.closest('.song-group').dataset.id);
+		setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex);
 
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
@@ -474,14 +463,18 @@ export default async function mainWindow() {
 	 * @param {number} clickedSongGroupIndex - The index of the clicked song group.
 	 */
 	function setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex) {
-		if (current.section === 'release') {
-			current.songGroup.id = releases[clickedSongGroupIndex]._id;
-			current.song.id = releases[clickedSongGroupIndex].tracks[clickedSongIndex].trackID;
-		} else if (current.section === 'playlist') {
-			current.songGroup.id = playlists[clickedSongGroupIndex]._id;
-			current.songGroup.index = clickedSongGroupIndex;
-			current.song.index = clickedSongIndex;
-		}
+		const songID = current.section === 'release'
+			? releases[clickedSongGroupIndex].tracks[clickedSongIndex].trackID
+			: playlists[clickedSongGroupIndex].songs[clickedSongIndex]?.trackID;
+		
+		const songGroupID = current.section === 'release' 
+			? releases[clickedSongGroupIndex]._id
+			: playlists[clickedSongGroupIndex]._id;
+
+		current.song.id = songID;
+		current.song.index = clickedSongIndex;
+		current.songGroup.id = songGroupID;
+		current.songGroup.index = clickedSongGroupIndex;
 	}
 
 	/**
@@ -501,7 +494,6 @@ export default async function mainWindow() {
 	 * @param {object} pressedButton - The button that was pressed to open the context menu.
 	 */
 	function focusOnFirstButtonInContextMenu(pressedButton) {
-		console.log(typeof pressedButton);
 		const isPlaylistMenuPressed = pressedButton.classList.contains('playlist__menu-button');
 		let buttonToFocus = null;
 
