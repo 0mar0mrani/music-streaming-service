@@ -181,7 +181,7 @@ export default async function mainWindow() {
 	async function handleContextMenuDeleteSongButtonClick() {
 		const playlistWithRemovedSong = removeSongFromPlaylist();
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
-		const playlistID = playlists[clickedSongGroup]._id;
+		const playlistID = playlists[current.songGroup.index]._id;
 		isLoading = true;
 		renderHTML();
 		await updatePlaylist(playlistID, playlistForSanity);
