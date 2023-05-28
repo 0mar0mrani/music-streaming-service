@@ -42,7 +42,7 @@ export default async function mainWindow() {
 	const navigationButtonElements = document.querySelectorAll('.navigation__button');
 	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
 	const loadingElement = document.querySelector('.loading');
-	let contextMenuAddToPlaylistButtons = null;
+	let contextMenuButtons = null;
 	let contextMenuPlaylistButtons = null;
 	const contextMenuDeletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
 	const contextMenuDeleteSongButton = document.querySelector('.context-menu__button--remove-song');
@@ -122,39 +122,24 @@ export default async function mainWindow() {
 		header.setIsMessageVisible(true);
 		renderHTML();
 	}
-
-	function handleContextMenuAddToPlaylistButtonClick(event) {
+	
+	function handleContextMenuButtonClick(event) {
 		event.stopPropagation();
 
 		const clickedButton = event.currentTarget;
-		const pressedSongIndex = clickedButton.closest('.song')?.dataset.id;
-		const pressedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
-		const coordinates = clickedButton.getBoundingClientRect();
-		const clickedOnPlaylistHeader = pressedSongIndex === undefined;
-		
-		if (current.section === 'release') {
-			current.songGroup.id = releases[pressedSongGroupIndex]._id;
-			current.song.id = releases[pressedSongGroupIndex].tracks[pressedSongIndex].trackID;
-		} else if (current.section === 'playlist') {
-			current.songGroup.index = pressedSongGroupIndex;
-			current.song.index = pressedSongIndex
+		const clickedSongIndex = clickedButton.closest('.song')?.dataset.id;
+		const clickedSongGroupIndex = clickedButton.closest('.song-group').dataset.id;
+		const clickedButtonCoordinates = clickedButton.getBoundingClientRect();
+		const isButtonInPlaylistHeader = clickedSongIndex === undefined;
 
-			if (clickedOnPlaylistHeader) {
-				const playlistID = playlists[pressedSongGroupIndex]._id;
-				current.songGroup.id = playlistID;
-				contextMenu.setClickedElement('playlist');
-			} else {
-				contextMenu.setClickedElement('song');
-			}
-		}
-		
-		contextMenu.setCoordinates(coordinates.left, coordinates.bottom);
+		setCurrentSongAndSongGroup(Number(clickedSongIndex), Number(clickedSongGroupIndex));
+		setClickedElement(isButtonInPlaylistHeader);
+		contextMenu.setCoordinates(clickedButtonCoordinates.left, clickedButtonCoordinates.bottom);
 		contextMenu.setIsOpen(true);
-
 		renderHTML();
 	}
 
-	async function handleContextMenuAddToPlaylistButtonKeydown(event) {
+	async function handleContextMenuButtonKeydown(event) {
 		if (event.key === 'Enter') {
 			const pressedButton = event.currentTarget;
 			const isPlaylistMenuPressed = pressedButton.classList.contains('playlist__menu-button');
@@ -495,6 +480,34 @@ export default async function mainWindow() {
 
 	function checkIfScrolledToBottom(moreReleases) {
 		release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
+	}
+
+	/**
+	 * Sets current song and song group.
+	 * @param {number} clickedSongIndex - The index of the clicked song.
+	 * @param {number} clickedSongGroupIndex - The index of the clicked song group.
+	 */
+	function setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex) {
+		if (current.section === 'release') {
+			current.songGroup.id = releases[clickedSongGroupIndex]._id;
+			current.song.id = releases[clickedSongGroupIndex].tracks[clickedSongIndex].trackID;
+		} else if (current.section === 'playlist') {
+			current.songGroup.id = playlists[clickedSongGroupIndex]._id;
+			current.songGroup.index = clickedSongGroupIndex;
+			current.song.index = clickedSongIndex;
+		}
+	}
+
+	/**
+	 * Sets the clicked element based on the current section and whether the button is in the playlist header.
+	 * @param {boolean} isButtonInPlaylistHeader - Whether the button is in the playlist header
+	 */
+	function setClickedElement(isButtonInPlaylistHeader) {
+		if (current.section === 'playlist' && isButtonInPlaylistHeader) {
+			contextMenu.setClickedElement('playlist');
+		} else {
+			contextMenu.setClickedElement('song');
+		}
 	}
 
 	async function onLoad() {
@@ -865,7 +878,7 @@ export default async function mainWindow() {
 		function setQueryselectorAndEventlistener() {
 			songButtons = document.querySelectorAll('.song');
 			contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
-			contextMenuAddToPlaylistButtons = document.querySelectorAll('.context-menu-button');
+			contextMenuButtons = document.querySelectorAll('.context-menu-button');
 			
 			for (const songButton of songButtons) {
 				songButton.addEventListener('click', handleSongButtonClick);
@@ -876,9 +889,9 @@ export default async function mainWindow() {
 				contextMenuPlaylistButton.addEventListener('click', handleContextMenuPlaylistButtonClick);
 			}
 
-			for (const contextMenuAddToPlaylistButton of contextMenuAddToPlaylistButtons) {
-				contextMenuAddToPlaylistButton.addEventListener('click', handleContextMenuAddToPlaylistButtonClick);
-				contextMenuAddToPlaylistButton.addEventListener('keydown', handleContextMenuAddToPlaylistButtonKeydown);
+			for (const contextMenuButton of contextMenuButtons) {
+				contextMenuButton.addEventListener('click', handleContextMenuButtonClick);
+				contextMenuButton.addEventListener('keydown', handleContextMenuButtonKeydown);
 			}	
 		}
 
