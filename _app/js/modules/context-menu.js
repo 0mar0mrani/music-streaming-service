@@ -100,7 +100,7 @@ export default function contextMenu() {
 
 
 	/**
-	 * Sets playlists, this function was made to be used by main-window.js.
+	 * Sets last focused element, this function was made to be used by main-window.js.
 	 * @see main-window.js
 	 *	@param {object} object - An object containing the index of last focused song and songGroup
 	 */
