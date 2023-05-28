@@ -34,37 +34,32 @@ export default async function mainWindow() {
 	}
 
 	const player = playerModule();
-	let contextMenu = contextMenuModule();
+	const contextMenu = contextMenuModule();
 	const header = headerModule();
 
 	const mainWindowContainer = document.querySelector('.main-window-container');
 	const mainWindowElement = document.querySelector('.main-window');
-	const loadingElement = document.querySelector('.loading');
-
 	const navigationButtonElements = document.querySelectorAll('.navigation__button');
 	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
-
+	const loadingElement = document.querySelector('.loading');
 	let contextMenuAddToPlaylistButtons = null;
 	let contextMenuPlaylistButtons = null;
-	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
-	const deleteSongButton = document.querySelector('.context-menu__button--remove-song');
-	
+	const contextMenuDeletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
+	const contextMenuDeleteSongButton = document.querySelector('.context-menu__button--remove-song');
 	let songButtons = null;
-
-	let playlistElements = null;
 	let playlistHeaderElements = null;
 	let playlistTitleInputs = null;
 	
-	mainWindowContainer.addEventListener('scroll', handleMainWindowContainerScroll);
 	window.addEventListener('contextmenu', handleWindowContextmenu);
 	window.addEventListener('click', handleWindowClick);
-	createPlaylistButton.addEventListener('click', handleCreatePlaylistButtonClick);
-	deletePlaylistButton.addEventListener('click', handleDeletePlaylistButtonClick);
-	deleteSongButton.addEventListener('click', handleDeleteSongButtonClick);
-
+	mainWindowContainer.addEventListener('scroll', handleMainWindowContainerScroll);
 	for(const navigationButtonElement of navigationButtonElements) {
 		navigationButtonElement.addEventListener('click', handleNavigationButtonElementClick);
 	}
+	createPlaylistButton.addEventListener('click', handleCreatePlaylistButtonClick);
+	contextMenuDeletePlaylistButton.addEventListener('click', handleContextMenuDeletePlaylistButtonClick);
+	contextMenuDeleteSongButton.addEventListener('click', handleContextMenuDeleteSongButtonClick);
+
 	
 	function handleWindowContextmenu(event) {
 		event.preventDefault();
@@ -74,51 +69,6 @@ export default async function mainWindow() {
 
 	function handleWindowClick(event) {
 		contextMenu.setIsOpen(false);
-		renderHTML();
-	}
-
-	function handleSongButtonClick(event) {
-		event.stopPropagation();
-
-		const clickedSong = event.currentTarget.dataset.id;
-		const clickedSongGroup = event.currentTarget.closest('.song-group').dataset.id;
-
-		const song = current.section === 'release' 
-			? releases[clickedSongGroup].tracks[clickedSong] 
-			: playlists[clickedSongGroup].songs[clickedSong];
-
-		addOneToPlays(song.trackID, song.plays + 1);
-		player.setCurrentQueIndex(Number(clickedSong));
-		player.setCurrentSongGroup(Number(clickedSongGroup));
-		player.setQue();
-		player.loadSongFromQue();
-		player.toggleIsPlaying(true);
-		player.renderAudio();
-		renderHTML();
-	}
-
-	function handleSongButtonContextmenu(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		const clickedSong = event.currentTarget.dataset.id;
-		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
-		const releaseID = current.section === 'release' 
-			? releases[songGroup]._id
-			: playlists[songGroup]._id;
-
-		const trackID = current.section === 'release'
-			? releases[songGroup].tracks[clickedSong].trackID
-			: playlists[songGroup].songs[clickedSong].trackID;
-
-		current.song.id = trackID;
-		current.song.index = Number(clickedSong);
-		current.songGroup.id = releaseID;
-		current.songGroup.index = Number(songGroup);
-
-		contextMenu.setClickedElement('song');
-		contextMenu.setIsOpen(true);
-		contextMenu.setCoordinates(event.clientX, event.clientY);
-
 		renderHTML();
 	}
 
@@ -144,7 +94,7 @@ export default async function mainWindow() {
 		}
 	}
 
-	async function handleNavigationButtonElementClick(event) {
+	function handleNavigationButtonElementClick(event) {
 		const clickedButtonName = event.currentTarget.querySelector('span').innerText.toLowerCase();
 		current.section = clickedButtonName;
 		player.setCurrentSection(current.section);
@@ -163,37 +113,6 @@ export default async function mainWindow() {
 		playlists = await fetchPlaylists(); 
 		isLoading = false;
 		header.setIsMessageVisible(true);
-		renderHTML();
-	}
-
-	function handlePlaylistTitleInputClick(event) {
-		event.stopPropagation();
-	}
-
-	async function handlePlaylistTitleInputBlur(event) {
-		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
-		const playlistID = playlists[clickedPlaylist]._id;
-		const newTitle = event.currentTarget.value;
-		
-		await changePlaylistTitle(playlistID, newTitle);
-		header.setIsMessageVisible(true);
-	}
-
-	function handlePlaylistTitleInputKeydown(event) {
-		if (event.key === 'Enter') {
-			event.currentTarget.blur();
-		}
-	}
-
-	async function handleContextMenuPlaylistButtonClick(event) {
-		const clickedPlaylist = event.currentTarget.dataset.id;
-		const playlistID = playlists[clickedPlaylist]._id;
-		isLoading = true;
-		renderHTML();
-		await addSongToPlaylist(playlistID);
-		playlists = await fetchPlaylists();
-		header.setIsMessageVisible(true);
-		isLoading = false;
 		renderHTML();
 	}
 
@@ -259,19 +178,19 @@ export default async function mainWindow() {
 		} 
 	}
 
-	function handlePlaylistHeaderElementContextmenu(event) {
-		event.stopPropagation();
-		event.preventDefault();
-		contextMenu.setClickedElement('playlist');
-		contextMenu.setCoordinates(event.clientX, event.clientY);
-		contextMenu.setIsOpen(true);
-		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
+	async function handleContextMenuPlaylistButtonClick(event) {
+		const clickedPlaylist = event.currentTarget.dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
-		current.songGroup.id = playlistID;
+		isLoading = true;
+		renderHTML();
+		await addSongToPlaylist(playlistID);
+		playlists = await fetchPlaylists();
+		header.setIsMessageVisible(true);
+		isLoading = false;
 		renderHTML();
 	}
 
-	async function handleDeletePlaylistButtonClick() {
+	async function handleContextMenuDeletePlaylistButtonClick() {
 		isLoading = true;
 		renderHTML();
 		await deletePlaylist(current.songGroup.id);
@@ -281,7 +200,7 @@ export default async function mainWindow() {
 		renderHTML();
 	} 
 
-	async function handleDeleteSongButtonClick() {
+	async function handleContextMenuDeleteSongButtonClick() {
 		const clickedSongGroup = current.songGroup.index
 		const rightPlaylist = playlists[clickedSongGroup];
 		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
@@ -294,6 +213,82 @@ export default async function mainWindow() {
 		isLoading = false;
 		header.setIsMessageVisible(true);
 		renderHTML();
+	}
+
+	function handleSongButtonClick(event) {
+		event.stopPropagation();
+
+		const clickedSong = event.currentTarget.dataset.id;
+		const clickedSongGroup = event.currentTarget.closest('.song-group').dataset.id;
+
+		const song = current.section === 'release' 
+			? releases[clickedSongGroup].tracks[clickedSong] 
+			: playlists[clickedSongGroup].songs[clickedSong];
+
+		addOneToPlays(song.trackID, song.plays + 1);
+		player.setCurrentQueIndex(Number(clickedSong));
+		player.setCurrentSongGroup(Number(clickedSongGroup));
+		player.setQue();
+		player.loadSongFromQue();
+		player.toggleIsPlaying(true);
+		player.renderAudio();
+		renderHTML();
+	}
+
+	function handleSongButtonContextmenu(event) {
+		event.preventDefault();
+		event.stopPropagation();
+		const clickedSong = event.currentTarget.dataset.id;
+		const songGroup = event.currentTarget.closest('.song-group').dataset.id;
+		const releaseID = current.section === 'release' 
+			? releases[songGroup]._id
+			: playlists[songGroup]._id;
+
+		const trackID = current.section === 'release'
+			? releases[songGroup].tracks[clickedSong].trackID
+			: playlists[songGroup].songs[clickedSong].trackID;
+
+		current.song.id = trackID;
+		current.song.index = Number(clickedSong);
+		current.songGroup.id = releaseID;
+		current.songGroup.index = Number(songGroup);
+
+		contextMenu.setClickedElement('song');
+		contextMenu.setIsOpen(true);
+		contextMenu.setCoordinates(event.clientX, event.clientY);
+
+		renderHTML();
+	}
+
+	function handlePlaylistHeaderElementContextmenu(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		contextMenu.setClickedElement('playlist');
+		contextMenu.setCoordinates(event.clientX, event.clientY);
+		contextMenu.setIsOpen(true);
+		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
+		const playlistID = playlists[clickedPlaylist]._id;
+		current.songGroup.id = playlistID;
+		renderHTML();
+	}
+
+	function handlePlaylistTitleInputClick(event) {
+		event.stopPropagation();
+	}
+
+	async function handlePlaylistTitleInputBlur(event) {
+		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
+		const playlistID = playlists[clickedPlaylist]._id;
+		const newTitle = event.currentTarget.value;
+		
+		await changePlaylistTitle(playlistID, newTitle);
+		header.setIsMessageVisible(true);
+	}
+
+	function handlePlaylistTitleInputKeydown(event) {
+		if (event.key === 'Enter') {
+			event.currentTarget.blur();
+		}
 	}
 
 	async function fetchPlaylists() {
@@ -877,7 +872,6 @@ export default async function mainWindow() {
 		}
 
 		function setQueryselectorAndEventlistenerPlaylist() {
-			playlistElements = document.querySelectorAll('.playlist');
 			playlistHeaderElements = document.querySelectorAll('.playlist__header');
 			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
 
