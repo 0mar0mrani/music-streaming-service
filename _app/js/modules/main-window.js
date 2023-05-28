@@ -4,6 +4,7 @@ import formatDate from '../util/format-date.js';
 import formatPlays from '../util/format-plays.js';
 import formatSeconds from '../util/format-seconds-to-time.js';
 import formatTimeToSeconds from '../util/format-time-to-seconds.js';
+import formatTimeToSeconds2 from '../util/format-time-to-seconds-2.js';
 
 import playerModule from './player.js';
 import contextMenuModule from './context-menu.js';
@@ -578,6 +579,9 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
+	/**
+	 * This main function consist of subfunctions that renders the HTML based on the state of player. 
+	 */
 	function renderHTML() {
 		renderLoading();
 		renderNavigationButtons();
@@ -591,20 +595,11 @@ export default async function mainWindow() {
 			renderReleases();
 		} else if (current.section === 'playlist') {
 			renderPlaylists();
-			setQueryselectorAndEventlistenerPlaylist();
+			setQueryselectorAndEventlistenerPlaylists();
 		} 
 
-		setQueryselectorAndEventlistener();
 		renderReachedBottomMessage();
-
-		function renderReachedBottomMessage() {
-			if (current.section === 'release' && release.scrolledToBottom) {
-				const message = document.createElement('div');
-				message.innerText = `You've reached bottom`;
-				message.className = 'main-window__reached-bottom';
-				mainWindowElement.append(message);
-			}
-		}
+		setQueryselectorAndEventlistener();
 
 		function renderLoading() {
 			isLoading ? loadingElement.classList.add('loading--active') : loadingElement.classList.remove('loading--active');
@@ -622,154 +617,160 @@ export default async function mainWindow() {
 			}
 		}
 
+		/**
+		 * This function renders everything in releases section. 
+		 */
 		function renderReleases() {
 			releases.forEach((release, index) => {
 				const container = createContainerDOM(index);
-				const releaseHeader = createReleaseHeaderDOM();
+				const releaseHeader = createReleaseHeaderDOM(release);
 				const songsHeader = createSongsHeaderDOM();
-				const songs = createSongsDOM();
+				const songs = createSongsDOM(release);
 					
 				container.append(releaseHeader);
 				container.append(songsHeader);
 				container.append(songs);
 
-				function createContainerDOM(index) {
-					const container = document.createElement('li');
-					container.dataset.id = index;
-					container.className = 'release song-group';
-					return container;
-				}
-
-				function createReleaseHeaderDOM() {
-					const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
-	
-					const releaseContainer = document.createElement('div');
-					const artworkContainer = document.createElement('div');
-					const artwork = document.createElement('img');
-					const metaDataContainer = document.createElement('div');
-					const title = document.createElement('h2');
-					const artist = document.createElement('div');
-					const releaseType = document.createElement('div');
-					const moreMetaDataContainer = document.createElement('div');
-					const releaseDate = document.createElement('div');
-					const amountOfSongs = document.createElement('div');
-					const playTime = document.createElement('div');
-	
-					artwork.src = release.tracks[0].artworkURL;
-					artwork.alt = release.tracks[0].artworkAlt;
-	
-					title.innerText = release.title;
-					artist.innerText = release.artists.join(', ');
-					releaseType.innerText = release.type;
-					releaseDate.innerText = formatDate(release.releaseDate);
-					amountOfSongs.innerText = `${release.tracks.length} ${release.tracks.length === 1 ? 'song' : 'songs'}`;
-					playTime.innerText = formatSeconds(totalSecondsOfRelease);
-	
-					releaseContainer.className = 'release__release-container';
-					metaDataContainer.className = 'release__meta-data-container';
-					moreMetaDataContainer.className = 'release__more-meta-data-container';
-					artworkContainer.className = 'release__artwork'; 
-					title.className = 'release__title';
-					artist.className = 'release__artist';
-					releaseType.className = 'release__type';
-	
-					artworkContainer.append(artwork);
-					releaseContainer.append(artworkContainer);
-					moreMetaDataContainer.append(releaseDate);
-					moreMetaDataContainer.append(amountOfSongs);
-					moreMetaDataContainer.append(playTime);
-					metaDataContainer.append(title);
-					metaDataContainer.append(artist);
-					metaDataContainer.append(releaseType);
-					metaDataContainer.append(moreMetaDataContainer);
-					releaseContainer.append(metaDataContainer);
-	
-					return releaseContainer;
-				}
-	
-				function createSongsHeaderDOM() {
-					const songsHeaderContainer = document.createElement('div');
-					const number = document.createElement('div');
-					const title = document.createElement('div');
-					const plays = document.createElement('div');
-					const time = document.createElement('div');
-	
-					songsHeaderContainer.className = 'release__song-header';
-	
-					number.innerText = '#';
-					title.innerText = 'title';
-					plays.innerText = 'plays';
-					time.innerText = 'time';
-
-					number.className = 'release__header-number';
-					plays.className = 'release__header-plays';
-	
-					songsHeaderContainer.append(number);
-					songsHeaderContainer.append(title);
-					songsHeaderContainer.append(plays);
-					songsHeaderContainer.append(time);
-	
-					return songsHeaderContainer;
-				}
-	
-				function createSongsDOM() {
-					const songsContainer = document.createElement('ul');
-		
-					release.tracks.forEach((track, index) => {
-						const formattedPlaytime = `${track.playTime.minutes.toString().padStart(2, '0')}:${track.playTime.seconds.toString().padStart(2, '0')}`;
-						const formattedPlays = formatPlays(String(track.plays));
-
-						const songContainer = document.createElement('li');
-						const songButton = document.createElement('button');
-						const number = document.createElement('div');
-						const titleArtistContainer = document.createElement('div');
-						const title = document.createElement('h3');
-						const artist = document.createElement('div');
-						const plays = document.createElement('div');
-						const time = document.createElement('div');
-						const menu = document.createElement('button');
-						const menuIcon = document.createElement('img');
-	
-						songButton.dataset.id = index;
-	
-						number.innerText = index + 1;
-						title.innerText = track.title;
-						artist.innerText = track.artists.join(', ');
-						plays.innerText = formattedPlays;
-						time.innerText = formattedPlaytime;
-	
-						songsContainer.className = 'release__songs';
-						songButton.className = 'song release__song';
-						number.className = 'release__number';
-						title.className = 'release__track-title';
-						plays.className = 'release__plays';
-						menu.className = 'release__song-menu context-menu-button';
-
-						songButton.dataset.id = index;
-
-						menuIcon.src = '/_app/assets/svg/context.svg';
-						menuIcon.alt = 'Open context menu';
-
-						menu.append(menuIcon);
-						titleArtistContainer.append(title);
-						titleArtistContainer.append(artist);
-						songButton.append(number);
-						songButton.append(titleArtistContainer);
-						songButton.append(plays);
-						songButton.append(time);
-						songButton.append(menu);
-						songContainer.append(songButton);
-						
-						songsContainer.append(songContainer);
-					});
-	
-					return songsContainer;
-				}
-	
 				mainWindowElement.append(container);
 			});
+
+			function createContainerDOM(index) {
+				const container = document.createElement('li');
+				container.dataset.id = index;
+				container.className = 'release song-group';
+				return container;
+			}
+
+			function createReleaseHeaderDOM(release) {
+				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
+
+				const releaseContainer = document.createElement('div');
+				const artworkContainer = document.createElement('div');
+				const artwork = document.createElement('img');
+				const metaDataContainer = document.createElement('div');
+				const title = document.createElement('h2');
+				const artist = document.createElement('div');
+				const releaseType = document.createElement('div');
+				const moreMetaDataContainer = document.createElement('div');
+				const releaseDate = document.createElement('div');
+				const amountOfSongs = document.createElement('div');
+				const playTime = document.createElement('div');
+
+				artwork.src = release.tracks[0].artworkURL;
+				artwork.alt = release.tracks[0].artworkAlt;
+
+				title.innerText = release.title;
+				artist.innerText = release.artists.join(', ');
+				releaseType.innerText = release.type;
+				releaseDate.innerText = formatDate(release.releaseDate);
+				amountOfSongs.innerText = `${release.tracks.length} ${release.tracks.length === 1 ? 'song' : 'songs'}`;
+				playTime.innerText = formatSeconds(totalSecondsOfRelease);
+
+				releaseContainer.className = 'release__release-container';
+				metaDataContainer.className = 'release__meta-data-container';
+				moreMetaDataContainer.className = 'release__more-meta-data-container';
+				artworkContainer.className = 'release__artwork'; 
+				title.className = 'release__title';
+				artist.className = 'release__artist';
+				releaseType.className = 'release__type';
+
+				artworkContainer.append(artwork);
+				releaseContainer.append(artworkContainer);
+				moreMetaDataContainer.append(releaseDate);
+				moreMetaDataContainer.append(amountOfSongs);
+				moreMetaDataContainer.append(playTime);
+				metaDataContainer.append(title);
+				metaDataContainer.append(artist);
+				metaDataContainer.append(releaseType);
+				metaDataContainer.append(moreMetaDataContainer);
+				releaseContainer.append(metaDataContainer);
+
+				return releaseContainer;
+			}
+
+			function createSongsHeaderDOM() {
+				const songsHeaderContainer = document.createElement('div');
+				const number = document.createElement('div');
+				const title = document.createElement('div');
+				const plays = document.createElement('div');
+				const time = document.createElement('div');
+
+				songsHeaderContainer.className = 'release__song-header';
+
+				number.innerText = '#';
+				title.innerText = 'title';
+				plays.innerText = 'plays';
+				time.innerText = 'time';
+
+				number.className = 'release__header-number';
+				plays.className = 'release__header-plays';
+
+				songsHeaderContainer.append(number);
+				songsHeaderContainer.append(title);
+				songsHeaderContainer.append(plays);
+				songsHeaderContainer.append(time);
+
+				return songsHeaderContainer;
+			}
+
+			function createSongsDOM(release) {
+				const songsContainer = document.createElement('ul');
+	
+				release.tracks.forEach((track, index) => {
+					const formattedPlaytime = formatTimeToSeconds2(track.playTime.minutes * 60 + track.playTime.seconds);
+					const formattedPlays = formatPlays(String(track.plays));
+
+					const songContainer = document.createElement('li');
+					const songButton = document.createElement('button');
+					const number = document.createElement('div');
+					const titleArtistContainer = document.createElement('div');
+					const title = document.createElement('h3');
+					const artist = document.createElement('div');
+					const plays = document.createElement('div');
+					const time = document.createElement('div');
+					const menu = document.createElement('button');
+					const menuIcon = document.createElement('img');
+
+					songButton.dataset.id = index;
+
+					number.innerText = index + 1;
+					title.innerText = track.title;
+					artist.innerText = track.artists.join(', ');
+					plays.innerText = formattedPlays;
+					time.innerText = formattedPlaytime;
+
+					songsContainer.className = 'release__songs';
+					songButton.className = 'song release__song';
+					number.className = 'release__number';
+					title.className = 'release__track-title';
+					plays.className = 'release__plays';
+					menu.className = 'release__song-menu context-menu-button';
+
+					songButton.dataset.id = index;
+
+					menuIcon.src = '/_app/assets/svg/context.svg';
+					menuIcon.alt = 'Open context menu';
+
+					menu.append(menuIcon);
+					titleArtistContainer.append(title);
+					titleArtistContainer.append(artist);
+					songButton.append(number);
+					songButton.append(titleArtistContainer);
+					songButton.append(plays);
+					songButton.append(time);
+					songButton.append(menu);
+					songContainer.append(songButton);
+					
+					songsContainer.append(songContainer);
+				});
+
+				return songsContainer;
+			}
 		}
 
+		/**
+		 * This function renders everything in playlist section. 
+		 */
 		function renderPlaylists() {
 			playlists.forEach((playlist, index) => {
 				const isNoSongsInPlaylist = playlist.songs.length !== 0;
@@ -779,7 +780,7 @@ export default async function mainWindow() {
 
 				const header = createHeaderDOM(playlist);
 				const songs = createSongsDOM(playlist);
-				const noSongs = createNoSongs();
+				const noSongs = createNoSongsDOM();
 				
 				playlistContainer.append(header);
 				isNoSongsInPlaylist ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
@@ -828,7 +829,7 @@ export default async function mainWindow() {
 			
 			function createSongsDOM(playlist) {
 				const container = document.createElement('div');
-				const songsHeader = createSongsHeaderDOM(playlist);
+				const songsHeader = createSongsHeaderDOM();
 				const songsContainer = document.createElement('ul');
 
 				playlist.songs.forEach((song, index) => {
@@ -845,7 +846,7 @@ export default async function mainWindow() {
 				return container;
 			}
 
-			function createSongsHeaderDOM(playlist) {
+			function createSongsHeaderDOM() {
 				const songsHeader = document.createElement('div');
 				const number = document.createElement('div');
 				const empty = document.createElement('div');
@@ -920,7 +921,7 @@ export default async function mainWindow() {
 				return container;
 			}
 
-			function createNoSongs() {
+			function createNoSongsDOM() {
 				const noSongs = document.createElement('div')
 				noSongs.className = 'playlist__no-songs';
 				noSongs.innerText = 'No songs in playlist';
@@ -928,6 +929,19 @@ export default async function mainWindow() {
 			}
 		}
 
+		function renderReachedBottomMessage() {
+			if (current.section === 'release' && release.scrolledToBottom) {
+				const message = document.createElement('div');
+				message.innerText = `You've reached bottom`;
+				message.className = 'main-window__reached-bottom';
+				mainWindowElement.append(message);
+			}
+		}
+
+		
+		/**
+		 * Adds Query selectors and event listeners for both release and playlist section.
+		 */
 		function setQueryselectorAndEventlistener() {
 			songButtons = document.querySelectorAll('.song');
 			contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
@@ -948,7 +962,10 @@ export default async function mainWindow() {
 			}	
 		}
 
-		function setQueryselectorAndEventlistenerPlaylist() {
+		/**
+		 * Adds Query selectors and event listeners for playlist section.
+		 */
+		function setQueryselectorAndEventlistenerPlaylists() {
 			playlistHeaderElements = document.querySelectorAll('.playlist__header');
 			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
 
