@@ -90,7 +90,7 @@ export default async function mainWindow() {
 			release.currentPage += 1;
 			isLoading = true;
 			renderHTML();
-			const moreReleases = await fetchReleases();
+			const moreReleases = fetchReleases();
 			releases = [...releases, ...moreReleases];
 			player.setReleases(releases);
 			checkIfScrolledToBottom(moreReleases);
@@ -119,7 +119,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		await createNewPlaylist();
-		playlists = await fetchPlaylists(); 
+		playlists = fetchPlaylists(); 
 		isLoading = false;
 		header.setIsMessageVisible(true);
 		renderHTML();
@@ -162,7 +162,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		await addSongToPlaylist(playlistID);
-		playlists = await fetchPlaylists();
+		playlists = fetchPlaylists();
 		header.setIsMessageVisible(true);
 		isLoading = false;
 		renderHTML();
@@ -172,7 +172,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		await deletePlaylist(current.songGroup.id);
-		playlists = await fetchPlaylists();
+		playlists = fetchPlaylists();
 		isLoading = false;
 		header.setIsMessageVisible(true);
 		renderHTML();
@@ -185,7 +185,7 @@ export default async function mainWindow() {
 		isLoading = true;
 		renderHTML();
 		await updatePlaylist(playlistID, playlistForSanity);
-		playlists = await fetchPlaylists();
+		playlists = fetchPlaylists();
 		isLoading = false;
 		header.setIsMessageVisible(true);
 		renderHTML();
