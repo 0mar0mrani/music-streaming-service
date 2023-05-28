@@ -67,30 +67,37 @@ export default async function mainWindow() {
 		renderHTML();
 	}
 
-	function handleWindowClick(event) {
+	function handleWindowClick() {
 		contextMenu.setIsOpen(false);
 		renderHTML();
 	}
 
+	/**
+	 * This handles the scrolling of the main window container, it fetches more releases when one screen height left, 'canFetch === true' and 'scrolledToBottom === false'.
+	 * HTML is rendered two times to display loading to user.
+	 * setTimeout is used to disable fetching in 0.5s, so it won't fetch multiple times. 
+	 */
 	async function handleMainWindowContainerScroll() {
 		const scrollCoordinatesFromBottom = window.innerHeight + mainWindowContainer.scrollTop;
-		const mainWindowHeight = mainWindowContainer.scrollHeight;
+		const mainWindowContainerHeight = mainWindowContainer.scrollHeight;
+		const shouldFetchMoreReleases = release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowContainerHeight - window.innerHeight);
+		const fetchDisabledTime = 0.5 * 1000;
 
-		if (release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowHeight - window.innerHeight)) {
+		if (shouldFetchMoreReleases) {
 			release.canFetch = false;
 			release.currentPage += 1;
 			isLoading = true;
 			renderHTML();
 			const moreReleases = await fetchReleases();
-			release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 			releases = [...releases, ...moreReleases];
 			player.setReleases(releases);
+			checkIfScrolledToBottom(moreReleases);
 			isLoading = false;
 			renderHTML();
 
 			setTimeout(() => {
 				release.canFetch = true;
-			}, 500);
+			}, fetchDisabledTime);
 		}
 	}
 
@@ -484,6 +491,10 @@ export default async function mainWindow() {
 				},
 			}
 		});
+	}
+
+	function checkIfScrolledToBottom(moreReleases) {
+		release.scrolledToBottom = moreReleases.length === release.pageSize ? false : true;
 	}
 
 	async function onLoad() {
