@@ -6,7 +6,7 @@ export default function header() {
 
 	const headerTitleElement = document.querySelector('.header__title');
 	const messageElement = document.querySelector('.header__message');
-	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
+	const createPlaylistButton = document.querySelector('.header__create-playlist-button');
 
 	function setMessage(string) {
 		message = string;
@@ -42,10 +42,10 @@ export default function header() {
 		function renderTitleAndButton() {
 			if (currentSection === 'release') {
 				headerTitleElement.innerText = 'Releases';
-				createPlaylistButton.classList.remove('header__add-playlist-button--visible');
+				createPlaylistButton.classList.remove('header__create-playlist-button--visible');
 			} else if (currentSection === 'playlist') {
 				headerTitleElement.innerText = 'Playlists';
-				createPlaylistButton.classList.add('header__add-playlist-button--visible');
+				createPlaylistButton.classList.add('header__create-playlist-button--visible');
 			}
 		}
 	}

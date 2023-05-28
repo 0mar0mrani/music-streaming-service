@@ -41,7 +41,7 @@ export default async function mainWindow() {
 	const mainWindowContainer = document.querySelector('.main-window-container');
 	const mainWindowElement = document.querySelector('.main-window');
 	const navigationButtonElements = document.querySelectorAll('.navigation__button');
-	const createPlaylistButton = document.querySelector('.header__add-playlist-button');
+	const createPlaylistButton = document.querySelector('.header__create-playlist-button');
 	const loadingElement = document.querySelector('.loading');
 	let contextMenuButtons = null;
 	let contextMenuPlaylistButtons = null;

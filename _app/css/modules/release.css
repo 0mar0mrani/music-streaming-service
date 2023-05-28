@@ -3,20 +3,21 @@
 	padding: var(--gap-large) 0;
 }
 
+/* Top section */
 .release__release-container {
 	display: flex;
 	gap: var(--gap-large);
 	margin-bottom: var(--gap-large);
 }
 
-.release__meta-data-container {
-	display: flex;
-	flex-direction: column;
-}
-
 .release__artwork {
 	width: 20rem;
 	height: 20rem;
+}
+
+.release__meta-data-container {
+	display: flex;
+	flex-direction: column;
 }
 
 .release__title {
@@ -57,19 +58,20 @@
 	border-radius: 50%;
 }
 
-/* Song Header */
+/* Bottom section */
+/* Songs Header */
 .release__song-header {
 	display: grid;
 	grid-template-columns: var(--columns-song); 
 	font: var(--font-small-text);
 	text-transform: uppercase;
 	padding-bottom: var(--gap-extra-small);
-	border-bottom: solid 0.1rem var(--color-secondary-lighter);
 	padding: 0 var(--gap-large) var(--gap-small) var(--gap-large);
 	margin-bottom: var(--gap-large);
+	border-bottom: solid 0.1rem var(--color-secondary-lighter);
 }
 
-/* Songs */
+/* Song */
 .release__songs {
 	display: flex;
 	flex-direction: column;

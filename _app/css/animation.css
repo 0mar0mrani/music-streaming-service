@@ -8,7 +8,7 @@
 	}
 }
 
-/* Player maximized */
+/* All keyframes for player on maximized */
 @keyframes controllers-maximized {
 	0% {
 		opacity: 0;
@@ -239,7 +239,7 @@
 }
 
 
-@keyframes play-icon {
+@keyframes play-icon-maximized {
 	0% {
 		filter: var(--filter-primary-default);
 	}
@@ -254,7 +254,7 @@
 }
 
 
-/* Player minimized */
+/* All keyframes for player on minimized */
 @keyframes player-minimized {
 	0% {
 		top: 0;
