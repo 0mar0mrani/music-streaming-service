@@ -239,7 +239,7 @@
 }
 
 
-@keyframes play-icon {
+@keyframes play-icon-maximized {
 	0% {
 		filter: var(--filter-primary-default);
 	}

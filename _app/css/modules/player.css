@@ -342,7 +342,7 @@
 	}
 
 	.player--maximized .player__play img {
-		animation: play-icon var(--duration) ease-in-out forwards;
+		animation: play-icon-maximized var(--duration) ease-in-out forwards;
 	}
 
 	.player--maximized .player__timeline::-webkit-slider-thumb {
