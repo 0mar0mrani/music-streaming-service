@@ -2,61 +2,58 @@ import shuffle from '../util/shuffle.js';
 import formatTimeToSeconds2 from '../util/format-time-to-seconds-2.js';
 
 export default function player() {
+	// global states
 	let currentSection = null;
 	let releases = null;
 	let playlists = null;
+
+	// player states
+	const audio = new Audio();
 	let que = [];
-	let queIndex = null;
+	let currentQueIndex = null;
 	let currentSong = null; 
 	let currentSongGroup = null;
 	let isPlaying = false;
 	let isShuffle = false;
 	let isRepeat = false;
 	let isMute = false;
-	let isAnimation = false; // making sure the player only animate at right times
-	let isMaximized = false;
-	const audio = new Audio();
 	let currentVolume = 1;
-
+	
+	// mobile player state 
 	let isMobile = true;
 	const mobileBreakpoint = 900;
-
-	let touchStart = null; // for drag player to close
-	let over50Percent = false;
-	let animationDelay = null;
-	const animationDuration = 0.7;
-
+	let isMaximized = false;
+	let isAnimation = false; // animation wont happen if set to false
+	let touchStart = null; // used to calculate percentage drag
+	let draggedOver25Percent = false; 
+	let animationPosition = null; // decides where in the animation (keyframe) on drag down
+	const animationDuration = 0.7; // this has to be the same duration as animation duration
+	
 	const playerElement = document.querySelector('.player');
 	const allElementsInPlayer = playerElement.querySelectorAll('*');
-
-	const mainWindow = document.querySelector('.main-window');
-
+	const mainWindowElement = document.querySelector('.main-window');
 	const titleElement = document.querySelector('.player__title');
 	const artistElement = document.querySelector('.player__artist');
 	const artworkElement = document.querySelector('.player__artwork img');
-
 	const playButton = document.querySelector('.player__play');
 	const playButtonIcon = document.querySelector('.player__play img');
-
 	const previousButton = document.querySelector('.player__previous');
 	const nextButton = document.querySelector('.player__next');
-
 	const shuffleButton = document.querySelector('.player__shuffle');
-
 	const repeatButton = document.querySelector('.player__repeat');
-
 	const volumeSlider = document.querySelector('.player__volume');
 	const muteButton = document.querySelector('.player__mute');
 	const muteButtonIcon = document.querySelector('.player__mute img');
-
 	const timelineSlider = document.querySelector('.player__timeline');
 	const timelineCurrentElement = document.querySelector('.player__current');
 	const timelineDurationElement = document.querySelector('.player__duration');
-
 	const closeButton = document.querySelector('.player__close');
 	const accessabilitySkipToPlayerElement = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
+	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false }); // passive: false tells browser to expect preventDefault(), this was done to remove warning in console
+	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
+	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
 	playerElement.addEventListener('click', handlePlayerElementClick);
 	playerElement.addEventListener('keydown', handlePlayerElementKeydown)
 	playButton.addEventListener('click', handlePlayButtonClick);
@@ -71,28 +68,49 @@ export default function player() {
 	audio.addEventListener('loadedmetadata', handleAudioLoadedmetadata);
 	audio.addEventListener('timeupdate', handleAudioTimeupdate);
 
-	playerElement.addEventListener('touchstart', handlePlayerElementTouchstart, { passive: false });
-	playerElement.addEventListener('touchmove', handlePlayerElementTouchmove, { passive: false });
-	playerElement.addEventListener('touchend', handlePlayerElementTouchend);
-
 	function handleWindowResize() {
 		isMobile = window.innerWidth <= mobileBreakpoint ? true : false;
 		isAnimation = false;
 		renderHTML();
 	}
 
+	function handlePlayerElementTouchstart(event) {
+		if (isMaximized) {
+			setTouchStart(event);
+		}
+	}
+
+	function handlePlayerElementTouchmove(event) {		
+		if (isMaximized) {
+			event.preventDefault();
+			animateDragDown(event);
+		}
+	}
+
+	function handlePlayerElementTouchend() {
+		if (isMaximized) {
+			setAnimationToRunning();
+
+			if (!draggedOver25Percent) {
+				isMaximized = true;
+				setAnimationPositionForMaximized();
+				renderHTML();
+			}
+		}
+	}
+
 	function handlePlayerElementClick() {
 		isAnimation = true;
 		isMaximized = true;
-		removeInlineStyling();
+		removePlayerInlineStyling();
 		renderHTML();
 	}
 
 	function handlePlayerElementKeydown(event) {
 		const key = event.key;
-		const pressedKeyOnPlayerElement = event.target.classList.contains('player');
+		const pressedOnPlayerElement = event.target.classList.contains('player');
 
-		if (pressedKeyOnPlayerElement && key === 'Enter') {
+		if (pressedOnPlayerElement && key === 'Enter') {
 			isAnimation = true;
 			isMaximized = true;
 		}
@@ -133,29 +151,20 @@ export default function player() {
 
 	function handleShuffleButtonClick() {
 		isShuffle = !isShuffle;
-		const currentTrackID = currentSong._id;
-		
-		if (isShuffle) {
-			que = shuffle(que, 2);
-		} else {
-			setQue();
-		}
-
-		const currentTrackNewIndex = que.findIndex(index => index._id === currentTrackID)
-		queIndex = currentTrackNewIndex;
-		renderHTML();
-	}
-
-	function handleVolumeSliderInput() {
-		const input = volumeSlider.value;
-		currentVolume = input;
-		currentVolume > 0 ? isMute = false : isMute = true;
-		renderAudio();
+		setShuffle();
+		setCurrentQueIndex();
 		renderHTML();
 	}
 
 	function handleRepeatButtonClick() {
 		isRepeat = !isRepeat;
+		renderHTML();
+	}
+
+	function handleVolumeSliderInput() {
+		setVolume();
+		isMute = currentVolume === 0 ? true : false;
+		renderAudio();
 		renderHTML();
 	}
 
@@ -166,15 +175,14 @@ export default function player() {
 	}
 
 	function handleTimelineSliderInput() {
-		const input = timelineSlider.value;
-		audio.currentTime = input;
+		setTimeline();
 		isPlaying = true;
 		renderHTML();
 	}
 
 	function handleCloseButtonClick(event) {
 		event.stopPropagation();
-		removeInlineStyling();
+		removePlayerInlineStyling();
 		isAnimation = true;
 		isMaximized = false;
 		renderHTML();
@@ -197,70 +205,17 @@ export default function player() {
 		}
 	}
 
-	function handlePlayerElementTouchstart(event) {
-		if (isMaximized) {
-			touchStart = event.touches[0].clientY;
-		}
+	/**
+	 * Sets currentSongGroup based on the index of the clicked song group.
+	 * @param {number} clickedSongGroupIndex - The index of the song group in relation to all song groups.
+	 */
+	function setCurrentSongGroup(clickedSongGroupIndex) {
+		currentSongGroup = clickedSongGroupIndex;
 	}
 
-	function handlePlayerElementTouchmove(event) {		
-		if (isMaximized) {
-			event.preventDefault();
-			const touchY = event.touches[0].clientY;
-		 	const playerHeight = playerElement.offsetHeight;
-		 	const dragDistances = touchY - touchStart;
-		 	const touchPercentage = (dragDistances / playerHeight) * 100;
-			
-			animationDelay = (touchPercentage / 100) * animationDuration;
-
-			if (touchPercentage >= 0 && touchPercentage < 99) {
-            over50Percent = touchPercentage >= 25 ? true : false
-
-            playerElement.style.animationTimingFunction = 'linear';
-            playerElement.style.animationPlayState = 'paused';
-            playerElement.style.animationDelay = `-${animationDelay}s`;
-            
-            for (const element of allElementsInPlayer) {
-               element.style.animationTimingFunction = 'linear';
-               element.style.animationPlayState = 'paused';
-               element.style.animationDelay = `-${animationDelay}s`;
-            }           
-
-            playerElement.classList.remove('player--maximized');
-            playerElement.classList.add('player--minimized');
-         }
-		}
-	}
-
-	function handlePlayerElementTouchend() {
-		if (isMaximized) {
-			playerElement.style.animationPlayState = 'running';
-			
-			for (const element of allElementsInPlayer) {
-				element.style.animationPlayState = 'running';
-			}
-
-			if (!over50Percent) {
-				isMaximized = true;
-				playerElement.style.animationDelay = `-${animationDuration - animationDelay}s`;
-				
-				for (const element of allElementsInPlayer) {
-					element.style.animationDelay = `-${animationDuration - animationDelay}s`;
-				}
-
-				renderHTML();
-			}
-		}
-	}
-
-	function setCurrentSong(clickedSongNumber) {
-		queIndex = Number(clickedSongNumber);
-	}
-
-	function setCurrentSongGroup(clickedSongGroupNumber) {
-		currentSongGroup = Number(clickedSongGroupNumber);
-	}
-
+	/**
+	 * Sets the que based on currentSection
+	 */
 	function setQue() {
 		if (currentSection === 'release') {
 			que = [...releases[currentSongGroup].tracks];
@@ -269,11 +224,44 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Sets currentQueIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
+	 * @param {number} clickedSongIndex - The index of the song related to its song group
+	 */
+	function setCurrentQueIndex(clickedSongIndex) {
+		if (clickedSongIndex => 0) {
+			currentQueIndex = clickedSongIndex;
+		} else {
+			const currentSongID = currentSong._id;
+			const currentSongIndex = que.findIndex(song => song._id === currentSongID)
+			currentQueIndex = currentSongIndex;
+		}
+	}
+
+	/**
+	 * Shuffles the que if 'isShuffle = true', if not it sets the que from songGroup which is not shuffled.
+	 */
+	function setShuffle() {
+		if (isShuffle) {
+			que = shuffle(que, 2);
+		} else {
+			setQue();
+		}
+	}
+
+
+	/**
+	 * This loads currentSong into audio from que, decided by currentQueIndex.
+	 */
 	function loadSongFromQue() {
-		currentSong = que[queIndex];
+		currentSong = que[currentQueIndex];
 		audio.src = currentSong.trackURL;
 	}
 
+	/**
+	 * Function sets the sate isPlaying, to the boolean it receives as parameter. If it does not receive a boolean, it sets it to the opposite. 
+	 * @param {boolean} boolean - The value to set isPlaying to.
+	 */
 	function toggleIsPlaying(boolean) {
 		if (!boolean) {
 			isPlaying = !isPlaying;
@@ -282,34 +270,61 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Increases the currentQueIndex by 1, if it's at the end of que it sets it to 0. 
+	 */
 	function nextSong() {
-		if (queIndex < que.length - 1) {
-			queIndex += 1;
+		if (currentQueIndex < que.length - 1) {
+			currentQueIndex += 1;
 		} else {
-			queIndex = 0;
+			currentQueIndex = 0;
 		}
 	}
 
+	/**
+	 * Decrements the currentQueIndex by 1, unless it is already 0, in which case it sets the currentQueIndex to 0.
+	 */
 	function previousSong() {
-		if (queIndex > 0) {
-			queIndex -= 1;
+		if (currentQueIndex > 0) {
+			currentQueIndex -= 1;
 		} else {
-			queIndex = 0;
+			currentQueIndex = 0;
 		}
 	}
 
+	/**
+	 * Sets currentSection, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {string} string - The name of the section to set
+	 */
 	function setCurrentSection(string) {
 		currentSection = string;
 	}
 
+	/**
+	 * Sets releases, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {array} array - An array of releases
+	 */
 	function setReleases(array) {
 		releases = array;
 	}
 
+	/**
+	 * Sets playlists, this function was made to be used by main-window.js.
+	 * @see main-window.js
+	 * @param {array} array - An array of playlists
+	 */
 	function setPlaylist(array) {
 		playlists = array;
 	}
 
+	/**
+	 * This traps the focus of the mobile player element. This is done to make keyboard navigation more pleasurable.
+	 * @author Hidde de Vries 
+	 * @see {@link https://hidde.blog/using-javascript-to-trap-focus-in-an-element/}
+	 * @param {object} event - The event object that is passed to the function.
+	 */
 	function playerFocusTrap(event) {
 		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
 		const firstElement = focusableElements[0];
@@ -326,12 +341,98 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * Takes value from volumeSlider and sets currentVolume.
+	 */
+	function setVolume() {
+		const input = volumeSlider.value;
+		currentVolume = input;
+	}
+
+	/**
+	 * Takes value from timelineSlider and sets currentTime.
+	 */
+	function setTimeline() {
+		const input = timelineSlider.value;
+		audio.currentTime = input;
+	}
+
+	/**
+	 * This function renders the audio object. It will play or pause based on the state isPlaying, and set the volume to either 0 (mute) or the current volume based on isMute.
+	 */
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
-		isMute ? audio.volume = 0 : audio.volume = currentVolume;
+		audio.volume = isMute ? 0 : currentVolume;
    }
 
-	function removeInlineStyling() {
+	/**
+	 * This sets the variable touchStart, so animateDragDown can calculate dragDistance.
+	 * @see animateDragDown()
+	 * @param {object} event - The event object that is passed in when the function is called.
+	 */
+	function setTouchStart(event) {
+		touchStart = event.touches[0].clientY;
+	}
+
+	/**
+	 * This function animates on drag down of the player element.
+	 * This is made possible by starting minimize-keyframes @see animation.css and set 'animationPlayState = paused' and decide where in the animation is by using the variable animationPosition and manipulating animationDelay. If the dragPercentage is over 25%, it will set 'draggedOver25Percent = true'. AnimationPlayState is set to linear so it will follows the finger on drag down, the animation is default set to ease-in-out. 
+	 * @param {object} event - The event object that is passed in when the function is called.
+	 */
+	function animateDragDown(event) {
+		const touchYCoordinates = event.touches[0].clientY;
+		const playerHeight = playerElement.offsetHeight;
+		const dragDistances = touchYCoordinates - touchStart;
+		const dragPercentage = (dragDistances / playerHeight) * 100;
+		const isNotNegativeDrag = dragPercentage >= 0;
+		const dragPercentageUnder99 = dragPercentage < 99;
+	  
+	  	animationPosition = (dragPercentage / 100) * animationDuration;
+
+		if (isNotNegativeDrag && dragPercentageUnder99) {
+			playerElement.classList.add('player--minimized');
+			playerElement.classList.remove('player--maximized');
+
+			playerElement.style.animationTimingFunction = 'linear';
+			playerElement.style.animationPlayState = 'paused';
+			playerElement.style.animationDelay = `-${animationPosition}s`;
+		
+			for (const element of allElementsInPlayer) {
+				element.style.animationTimingFunction = 'linear';
+				element.style.animationPlayState = 'paused';
+				element.style.animationDelay = `-${animationPosition}s`;
+			}
+			
+			draggedOver25Percent = dragPercentage >= 25 ? true : false;
+		}
+	}
+
+	/**
+	 * Sets the animation play state of the player element and all elements in the player to 'running'.
+	 */	
+	function setAnimationToRunning() {
+		playerElement.style.animationPlayState = 'running';
+	
+		for (const element of allElementsInPlayer) {
+			element.style.animationPlayState = 'running';
+		}
+	}
+
+	/**
+	 * Sets start position of maximized animation for playerElement and all elements in the player, by how long the player is dragged down. This is done by subtracting animationDuration with animationPosition. That way maximized animation wont start from the bottom (default animation).
+	 */
+	function setAnimationPositionForMaximized() {
+		playerElement.style.animationDelay = `-${animationDuration - animationPosition}s`;
+		
+		for (const element of allElementsInPlayer) {
+			element.style.animationDelay = `-${animationDuration - animationPosition}s`;
+		}
+	}
+
+	/**
+	 * Removes all inline styling from the player element and all elements within it.
+	 */
+	function removePlayerInlineStyling() {
 		playerElement.removeAttribute('style');
 		
 		for (const element of allElementsInPlayer) {
@@ -339,36 +440,54 @@ export default function player() {
 		}
 	}
 
+	/**
+	 * This main function consist of subfunctions that renders the HTML based on the state of player. There is a if statement to only render timeline as this will be called multiple times per seconds and dont want to render everything. This was done to improve performance. 
+	 */
 	function renderHTML(string) {
 		if (string === 'timeline') {
 			renderTimeline()
 		} else {
-			renderAccessability();
-			
 			if (isPlaying) {
-				playerElement.classList.add('player--open');
-				mainWindow.classList.add('main-window--player-open');
+				renderVisibility();
 				renderInfo();
 			}
 
 			if (isAnimation) {
 				if (isMaximized) {
-					playerElement.classList.add('player--maximized');
-					playerElement.classList.remove('player--minimized');
+					renderMinimized();
 				} else {
-					playerElement.classList.remove('player--maximized');
-					playerElement.classList.add('player--minimized');
+					renderMaximized();
 				}
 			} else {
-				playerElement.classList.remove('player--minimized');
-				playerElement.classList.remove('player--maximized');
+				removeMaximizedAndMinimized();
 			}
 	
+			renderAccessability();
 			renderPlayButton();
 			renderShuffleButton();
 			renderRepeatButton();
 			renderMuteButton();
 			renderVolumeSlider();
+		}
+
+		function renderMaximized() {
+			playerElement.classList.remove('player--maximized');
+			playerElement.classList.add('player--minimized');
+		}
+
+		function renderMinimized() {
+			playerElement.classList.add('player--maximized');
+			playerElement.classList.remove('player--minimized');
+		}
+
+		function removeMaximizedAndMinimized() {
+			playerElement.classList.remove('player--minimized');
+			playerElement.classList.remove('player--maximized');
+		}
+
+		function renderVisibility() {
+			playerElement.classList.add('player--open');
+			mainWindowElement.classList.add('main-window--player-open'); // this compensate for the player's position absolute in mobile version, so elements won't go behind player. 
 		}
 
 		function renderInfo() {
@@ -377,26 +496,35 @@ export default function player() {
 			artworkElement.src = currentSong.artworkURL;
 		}
 
+		/**
+		 * Sets accessibility attributes on the player element and timeline slider based on isMobile.
+		 */
 		function renderAccessability() {
-				if (isMobile) {
-					playerElement.setAttribute('role', 'button');
-					playerElement.setAttribute('tabindex', '0');
-	
-					if (isMaximized) {
-						timelineSlider.removeAttribute('tabindex');
-						playerElement.setAttribute('aria-expanded', 'true');
-					} else {
-						timelineSlider.setAttribute('tabindex', '-1');
-						playerElement.setAttribute('aria-expanded', 'false');
-					}
-				} else {
-					playerElement.removeAttribute('role');
-					playerElement.removeAttribute('tabindex');
-					timelineSlider.removeAttribute('tabindex');
-					playerElement.removeAttribute('aria-expanded');
-				}
+			if (isMobile) {
+				playerElement.setAttribute('role', 'button');
+				playerElement.setAttribute('tabindex', '0');
 
-				if (isPlaying) {
+				if (isMaximized) {
+					timelineSlider.removeAttribute('tabindex');
+					playerElement.setAttribute('aria-expanded', 'true');
+				} else {
+					timelineSlider.setAttribute('tabindex', '-1');
+					playerElement.setAttribute('aria-expanded', 'false');
+				}
+			} else {
+				playerElement.removeAttribute('role');
+				playerElement.removeAttribute('tabindex');
+				timelineSlider.removeAttribute('tabindex');
+				playerElement.removeAttribute('aria-expanded');
+			}
+
+			if (isPlaying) {
+				renderGoToControllersLink(); 
+
+				/**
+		 		 * Renders accessability link to jump straight to controllers.
+		 		 */
+				function renderGoToControllersLink() {
 					accessabilitySkipToPlayerElement.innerHTML = '';
 					const link = document.createElement('a');
 					link.innerText = 'Go to controllers';
@@ -405,6 +533,7 @@ export default function player() {
 					accessabilitySkipToPlayerElement.append(link);
 				}
 			}
+		}
 		
 		function renderPlayButton() {
 			const icon = isPlaying ? '_app/assets/svg/pause.svg' : '_app/assets/svg/play.svg';
@@ -441,6 +570,9 @@ export default function player() {
 			}
 		}
 
+		/**
+		 * Renders volumeSlider based on isMute and background of slider.
+		 */
 		function renderVolumeSlider() {
 			if (isMute) {
 				volumeSlider.value = 0;
@@ -451,6 +583,9 @@ export default function player() {
 			volumeSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - audio.volume * 100}% 50% / 200%`;	
 		}
 
+		/**
+		 * Renders the timeline slider by calculating percentage, updates the current time and duration as long as its a !isNaN. 
+		 */
 		function renderTimeline() {
 			const duration = audio.duration;
 			const currentTime = audio.currentTime;
@@ -473,7 +608,7 @@ export default function player() {
 		setCurrentSection,
 		setReleases,
 		setPlaylist,
-		setCurrentSong,
+		setCurrentQueIndex,
 		setCurrentSongGroup,
 		setQue,
 		loadSongFromQue,
