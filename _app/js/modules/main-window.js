@@ -132,7 +132,7 @@ export default async function mainWindow() {
 		const clickedSongIndex = Number(clickedButton.closest('.song')?.dataset.id);
 		const clickedSongGroupIndex = Number(clickedButton.closest('.song-group').dataset.id);
 		const clickedButtonCoordinates = clickedButton.getBoundingClientRect();
-		const isButtonInPlaylistHeader = clickedSongIndex === undefined;
+		const isButtonInPlaylistHeader = clickedButton.classList.contains('playlist__menu-button');
 
 		setCurrentSongAndSongGroup(clickedSongIndex, clickedSongGroupIndex);
 		setClickedElement(isButtonInPlaylistHeader);
@@ -181,7 +181,7 @@ export default async function mainWindow() {
 	async function handleContextMenuDeleteSongButtonClick() {
 		const playlistWithRemovedSong = removeSongFromPlaylist();
 		const playlistForSanity = preparePlaylistForSanity(playlistWithRemovedSong);
-		const playlistID = playlists[clickedSongGroup]._id;
+		const playlistID = playlists[current.songGroup.index]._id;
 		isLoading = true;
 		renderHTML();
 		await updatePlaylist(playlistID, playlistForSanity);
@@ -216,10 +216,10 @@ export default async function mainWindow() {
 		contextMenu.setClickedElement('song');
 		contextMenu.setIsOpen(true);
 		contextMenu.setCoordinates(event.clientX, event.clientY);
-
+		
 		renderHTML();
 	}
-
+	
 	function handlePlaylistHeaderElementContextmenu(event) {
 		event.stopPropagation();
 		event.preventDefault();
