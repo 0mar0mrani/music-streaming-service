@@ -411,3 +411,11 @@
 		animation: timeline-minimized var(--duration) ease-in-out forwards;
 	}
 }
+
+@media only screen and (max-height: 560px) {
+	/* This makes sure that on very small phones with a small height all the controllers still show, because artwork takes less space*/
+	.player--maximized .player__artwork {
+		/* Have to use important to overwrite animation */
+		width: 40vh !important; 
+	}
+}
