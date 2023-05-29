@@ -32,18 +32,16 @@
 .player__next:hover,
 .player__shuffle:hover,
 .player__repeat:hover,
-.player__mute:hover,
-.player__previous:active,
-.player__next:active,
-.player__shuffle:active,
-.player__repeat:active,
-.player__mute:active,
+.player__mute:hover {
+	filter: var(--filter-primary-darkest);
+}
+
 .player__previous:focus,
 .player__next:focus,
 .player__shuffle:focus,
 .player__repeat:focus,
 .player__mute:focus {
-	filter: var(--filter-primary-darker);
+	filter: var(--filter-primary-default);
 }
 
 /* Sliders */
@@ -117,7 +115,11 @@
 }
 
 .player__play:hover {
-	background-color: var(--color-secondary-lightest);
+	background-color: var(--color-primary-darkest);
+}
+
+.player__play:focus {
+	background-color: var(--color-primary-default);
 }
 
 .player__play img {
@@ -336,9 +338,12 @@
 		animation: timeline-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__play:hover,
-	.player--maximized .player__play:active {
+	.player--maximized .player__play:hover {
 		background-color: var(--color-primary-darkest) !important;
+	}
+
+	.player--maximized .player__play:focus {
+		background-color: var(--color-primary-default) !important;
 	}
 
 	.player--maximized .player__play img {
