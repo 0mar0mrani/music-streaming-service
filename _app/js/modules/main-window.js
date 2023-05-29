@@ -240,7 +240,8 @@ export default async function mainWindow() {
 		const clickedPlaylist = event.currentTarget.closest('.playlist').dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
 		const newTitle = event.currentTarget.value;
-		
+
+		playlists[clickedPlaylist].title = newTitle;		
 		await changePlaylistTitle(playlistID, newTitle);
 		header.setIsMessageVisible(true);
 	}
