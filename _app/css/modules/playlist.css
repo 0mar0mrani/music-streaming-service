@@ -122,7 +122,7 @@
 	margin-right: 2rem;
 }
 
-.playlist__number {
+.playlist__song-number {
 	font: var(--font-sub-header);
 }
 
@@ -155,11 +155,26 @@
 	.playlist__menu-button {
 		opacity: 1;
 	}
+
+	.playlist__song-menu {
+		display: block;
+	}
 }
 
 @media only screen and (max-width: 700px) {
 	.playlist__album,
 	.playlist__album-header {
+		display: none;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.playlist__empty,
+	.playlist__artwork,
+	.playlist__song-number,
+	.playlist__song-time,
+	.playlist__number-header,
+	.playlist__time-header {
 		display: none;
 	}
 }

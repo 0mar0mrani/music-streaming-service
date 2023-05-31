@@ -705,6 +705,7 @@ export default async function mainWindow() {
 
 				number.className = 'release__header-number';
 				plays.className = 'release__header-plays';
+				time.className = 'release__header-time';
 
 				songsHeaderContainer.append(number);
 				songsHeaderContainer.append(title);
@@ -744,6 +745,7 @@ export default async function mainWindow() {
 					songButton.className = 'song release__song';
 					number.className = 'release__number';
 					title.className = 'release__track-title';
+					time.className = 'release__track-time';
 					plays.className = 'release__plays';
 					menu.className = 'release__song-menu context-menu-button';
 
@@ -860,8 +862,11 @@ export default async function mainWindow() {
 				album.innerText = 'Album';
 				time.innerText = 'Time';
 
+				number.className = 'playlist__number-header';
 				songsHeader.className = 'playlist__song-header';
 				album.className = 'playlist__album-header';
+				time.className = 'playlist__time-header';
+				empty.className = 'playlist__empty';
 
 				songsHeader.append(number);
 				songsHeader.append(empty);
@@ -887,11 +892,12 @@ export default async function mainWindow() {
 				const menuIcon = document.createElement('img');
 				
 				songButton.className = 'song playlist__song';
-				number.className = 'playlist__number';
+				number.className = 'playlist__song-number';
 				artworkContainer.className = 'playlist__artwork';
 				title.className = 'playlist__song-title';
 				menu.className = 'playlist__song-menu context-menu-button';
 				album.className = 'playlist__album';
+				time.className = 'playlist__song-time';
 
 				songButton.dataset.id = index;
 

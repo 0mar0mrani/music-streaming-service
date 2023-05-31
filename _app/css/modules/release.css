@@ -68,7 +68,6 @@
 	font: var(--font-small-text);
 	color: var(--color-primary-darker);
 	text-transform: uppercase;
-	padding-bottom: var(--gap-extra-small);
 	padding: 0 var(--gap-large) var(--gap-small) var(--gap-large);
 	margin-bottom: var(--gap-large);
 	border-bottom: solid 0.1rem var(--color-secondary-lighter);
@@ -160,5 +159,12 @@
 @media only screen and (max-width: 900px) {
 	.release__song-menu {
 		display: block;
+	}
+}
+
+@media only screen and (max-width: 450px) {
+	.release__header-time,
+	.release__track-time {
+		display: none;
 	}
 }
