@@ -14,7 +14,8 @@
 }
 
 .playlist__header:hover,
-.playlist__header:hover + .playlist__songs-container {
+.playlist__header:hover + .playlist__songs-container,
+.playlist__header:hover + .playlist__no-songs {
 	background-color: var(--color-secondary-lighter);
 }
 
@@ -80,7 +81,7 @@
 
 .playlist__no-songs {
 	text-align: center;
-	margin-bottom: 2rem;
+	padding-bottom: 2rem;
 }
 
 /* Songs section */
@@ -116,9 +117,7 @@
 	text-align: start;
 }
 
-.playlist__song:hover,
-.playlist__song:active,
-.playlist__song:focus {
+.playlist__song:hover {
 	background-color: var(--color-secondary-lighter);
 }
 
