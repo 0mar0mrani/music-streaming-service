@@ -74,6 +74,10 @@
 	filter: var(--filter-primary-default);
 }
 
+.playlist__menu-button:hover img {
+	filter: var(--filter-primary-darkest);
+}
+
 .playlist__no-songs {
 	text-align: center;
 	margin-bottom: 2rem;
