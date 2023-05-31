@@ -64,7 +64,7 @@
 /* Songs Header */
 .release__song-header {
 	display: grid;
-	grid-template-columns: var(--columns-song); 
+	grid-template-columns: var(--columns-release); 
 	font: var(--font-small-text);
 	color: var(--color-primary-darker);
 	text-transform: uppercase;
@@ -83,7 +83,7 @@
 .release__song {
 	display: grid;
 	align-items: center;
-	grid-template-columns: var(--columns-song); 
+	grid-template-columns: var(--columns-release); 
 	width: 100%;
 	padding: var(--gap-small) var(--gap-large);
 	border: none;
