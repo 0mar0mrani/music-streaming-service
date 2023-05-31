@@ -80,26 +80,28 @@ export default async function mainWindow() {
 	 * setTimeout is used to disable fetching in 0.5s, so it won't fetch multiple times. 
 	 */
 	async function handleMainWindowContainerScroll() {
-		const scrollCoordinatesFromBottom = window.innerHeight + mainWindowContainer.scrollTop;
-		const mainWindowContainerHeight = mainWindowContainer.scrollHeight;
-		const shouldFetchMoreReleases = release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowContainerHeight - window.innerHeight);
-		const fetchDisabledTime = 0.5 * 1000;
-
-		if (shouldFetchMoreReleases) {
-			release.canFetch = false;
-			release.currentPage += 1;
-			isLoading = true;
-			renderHTML();
-			const moreReleases = await fetchReleases();
-			releases = [...releases, ...moreReleases];
-			player.setReleases(releases);
-			checkIfScrolledToBottom(moreReleases);
-			isLoading = false;
-			renderHTML();
-
-			setTimeout(() => {
-				release.canFetch = true;
-			}, fetchDisabledTime);
+		if (current.section === 'release') {
+			const scrollCoordinatesFromBottom = window.innerHeight + mainWindowContainer.scrollTop;
+			const mainWindowContainerHeight = mainWindowContainer.scrollHeight;
+			const shouldFetchMoreReleases = release.canFetch && !release.scrolledToBottom && (scrollCoordinatesFromBottom >= mainWindowContainerHeight - window.innerHeight);
+			const fetchDisabledTime = 0.5 * 1000;
+	
+			if (shouldFetchMoreReleases) {
+				release.canFetch = false;
+				release.currentPage += 1;
+				isLoading = true;
+				renderHTML();
+				const moreReleases = await fetchReleases();
+				releases = [...releases, ...moreReleases];
+				player.setReleases(releases);
+				checkIfScrolledToBottom(moreReleases);
+				isLoading = false;
+				renderHTML();
+	
+				setTimeout(() => {
+					release.canFetch = true;
+				}, fetchDisabledTime);
+			}
 		}
 	}
 
