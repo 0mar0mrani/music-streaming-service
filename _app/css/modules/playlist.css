@@ -116,9 +116,7 @@
 	text-align: start;
 }
 
-.playlist__song:hover,
-.playlist__song:active,
-.playlist__song:focus {
+.playlist__song:hover {
 	background-color: var(--color-secondary-lighter);
 }
 
