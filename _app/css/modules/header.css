@@ -9,6 +9,10 @@
 	padding: var(--gap-medium) var(--gap-large);
 }
 
+.header__title {
+	text-transform: uppercase;
+}
+
 /* Create playlist */
 .header__create-playlist-button {
 	display: none;

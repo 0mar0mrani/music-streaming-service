@@ -3,7 +3,12 @@
 @import './typography.css';
 @import './base.css';
 @import './layout.css';
+
 @import './animation.css';
+@import './modules/context-menu.css';
+@import './modules/error.css';
+@import './modules/loading.css';
+@import './modules/accessibility.css';
 
 @import './modules/header.css';
 @import './modules/navigation.css';
@@ -11,8 +16,3 @@
 @import './modules/release.css';
 @import './modules/player.css';
 @import './modules/playlist.css';
-@import './modules/context-menu.css';
-
-@import './modules/error.css';
-@import './modules/loading.css';
-@import './modules/accessibility.css';
