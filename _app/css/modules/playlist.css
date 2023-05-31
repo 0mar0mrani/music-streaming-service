@@ -36,6 +36,7 @@
 	display: flex;
 	gap: var(--gap-extra-large);
 	font: var(--font-small-text);
+	color: var(--color-primary-darker);
 	margin-top: var(--gap-small);
 }
 
@@ -53,7 +54,7 @@
 	content: '';
 	width: 0.6rem;
 	height: 0.6rem;
-	background-color: var(--color-primary-default);
+	background-color: var(--color-primary-darker);
 	border-radius: 50%;
 }
 
@@ -83,6 +84,7 @@
 	display: grid;
 	grid-template-columns: var(--columns-playlist); 
 	font: var(--font-small-text);
+	color: var(--color-primary-darker);
 	text-transform: uppercase;
 	padding: var(--gap-small) 0;
 	margin: 0 var(--gap-large) var(--gap-small) var(--gap-medium);
