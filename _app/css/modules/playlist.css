@@ -172,7 +172,7 @@
 	}
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 450px) {
 	.playlist__empty,
 	.playlist__artwork,
 	.playlist__song-number,
