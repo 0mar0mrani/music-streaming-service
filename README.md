@@ -53,7 +53,7 @@ See live demo [here](https://music-streaming-service.netlify.app).
 The approach regarding schemas was to have two schemas for a release: 'Track' and 'Release'. This decision was made because a song can be included in multiple releases, such as a single release followed by inclusion in a greatest hits album, while still remaining the same song. This approach ensures better data organization and management.
 
 ### Disclaimers
-### API key
+#### API key
 I have implemented a token-based authentication method to post to Sanity. Although the token is stored in a separate file named env.js, which is not uploaded to GitHub, it should be noted that this method is not secure as the token will be exposed in source code when user access the application. In the real word is this very bad practice, but is done to make the application full worthy with possibility to have playlists, edit and store them in Sanity. This was the most feasible solution to achieve the desired functionality, with the guidelines and restriction I had for this project.
 
 #### Royalty free music
