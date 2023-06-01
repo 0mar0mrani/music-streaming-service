@@ -25,9 +25,9 @@ export default function contextMenu() {
 
 	function handleContextMenuElementKeydown(event) {
 		if (event.key === 'Tab') {
-			const focusableElements = document.querySelectorAll('.context-menu__button--visible')
+			const focusableElements = document.querySelectorAll('.context-menu__button--visible');
 			const activeElement = document.activeElement;
-			const lastFocusableElement = focusableElements[focusableElements.length - 1]
+			const lastFocusableElement = focusableElements[focusableElements.length - 1];
 			
 			if (activeElement === lastFocusableElement) {
 				focusOnLastFocusedElement(event);
@@ -140,7 +140,7 @@ export default function contextMenu() {
 	 * This main function consist of subfunctions that renders the HTML based on the state of context menu. With a conditional rendering based on currentSection.  
 	 */
 	function renderHTML() {
-		hideContent()
+		hideContent();
 
 		if (currentSection === 'release') {
 			renderPlaylists();

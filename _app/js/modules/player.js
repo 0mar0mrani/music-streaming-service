@@ -234,7 +234,7 @@ export default function player() {
 			currentQueIndex = clickedSongIndex;
 		} else {
 			const currentSongID = currentSong._id;
-			const currentSongIndex = que.findIndex(song => song._id === currentSongID)
+			const currentSongIndex = que.findIndex(song => song._id === currentSongID);
 			currentQueIndex = currentSongIndex;
 		}
 	}
@@ -446,7 +446,7 @@ export default function player() {
 	 */
 	function renderHTML(string) {
 		if (string === 'timeline') {
-			renderTimeline()
+			renderTimeline();
 		} else {
 			if (isPlaying) {
 				renderVisibility();

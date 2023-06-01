@@ -2,6 +2,7 @@ export default function header() {
 	let currentSection = '';
 	let message = '';
 	let isMessageVisible = false;
+
 	const messageDuration = 2 * 1000;
 
 	const headerTitleElement = document.querySelector('.header__title');
@@ -33,7 +34,7 @@ export default function header() {
 					isMessageVisible = false;
 					message = '';
 					renderHTML(); 
-				}, messageDuration)
+				}, messageDuration);
 			} else {
 				messageElement.classList.remove('header__message--open');
 			}

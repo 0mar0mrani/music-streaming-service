@@ -384,7 +384,7 @@ export default async function mainWindow() {
 		if (isError) {
 			header.setMessage(update);
 		} else {
-			header.setMessage('Playlist created')
+			header.setMessage('Playlist created');
 		}
 	}
 
@@ -558,7 +558,7 @@ export default async function mainWindow() {
 	 * @returns {array} playlist of songs with one song removed
 	 */
 	function removeSongFromPlaylist() {
-		const clickedSongGroup = current.songGroup.index
+		const clickedSongGroup = current.songGroup.index;
 		const rightPlaylist = playlists[clickedSongGroup];
 		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
 		return playlistWithRemovedSong;
@@ -645,7 +645,7 @@ export default async function mainWindow() {
 			}
 
 			function createReleaseHeaderDOM(release) {
-				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
+				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks);
 
 				const releaseContainer = document.createElement('div');
 				const artworkContainer = document.createElement('div');
@@ -802,7 +802,7 @@ export default async function mainWindow() {
 				const menuIcon = document.createElement('img');
 				const title = document.createElement('h2');
 				const titleInput = document.createElement('input');
-				const additionalInfo = document.createElement('div')
+				const additionalInfo = document.createElement('div');
 				const songsAmount = document.createElement('div');
 				const playTime = document.createElement('div');
 
@@ -924,7 +924,7 @@ export default async function mainWindow() {
 				songButton.append(titleArtistContainer);
 				songButton.append(album);
 				songButton.append(time);
-				songButton.append(menu)
+				songButton.append(menu);
 				container.append(songButton);
 
 				return container;
@@ -979,7 +979,7 @@ export default async function mainWindow() {
 			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
 
 			for (const playlistHeaderElement of playlistHeaderElements) {
-				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu)
+				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu);
 			}
 			
 			for (const playlistTitleInput of playlistTitleInputs) {
