@@ -117,10 +117,6 @@
 	background-color: var(--color-primary-darkest);
 }
 
-.player__play-button:focus {
-	background-color: var(--color-primary-default);
-}
-
 .player__play-button img {
 	width: 2.4rem;
 	height: 2.4rem;
