@@ -494,9 +494,10 @@ export default function player() {
 		}
 
 		function renderInfo() {
-			titleElement.innerText = current.songIndex.title;
-			artistElement.innerText = current.songIndex.artists.join(', ');
-			artworkElement.src = current.songIndex.artworkURL;
+			titleElement.innerText = currentSong.title;
+			artistElement.innerText = currentSong.artists.join(', ');
+			artworkElement.src = currentSong.artworkURL;
+			artworkElement.alt = currentSong.artworkAlt;
 		}
 
 		/**

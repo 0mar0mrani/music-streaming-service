@@ -35,7 +35,9 @@
 				</h1>
 
 				<div class="header__message-container">
-					<div class="header__message"></div>
+					<div class="header__message">
+						<!-- header.js will render here based on message -->
+					</div>
 				</div>
 
 				<button class="header__create-playlist-button">
@@ -55,26 +57,6 @@
 				</ul>
 			</main>
 
-			<div class="loading">
-				<div class="loading__animation"></div>
-			</div>
-
-			<div class="context-menu">
-				<div class="context-menu__release-section">
-					<div class="context-menu__title">Add to playlist</div>
-	
-					<ul class="context-menu__playlists">
-						<!-- playlists (buttons) will be rendered here by context-menu.js  -->
-					</ul>
-				</div>
-
-				<div class="context-menu__playlist-section">
-					<button class="context-menu__button context-menu__button--delete-playlist" >Delete playlist</button>
-
-					<button class="context-menu__button context-menu__button--remove-song">Remove song</button>
-				</div>
-			</div>
-
 			<section class="player-container">
 				<div class="player" id="player" aria-label="controllers">
 					<button class="player__close-button">
@@ -83,7 +65,8 @@
 	
 					<div class="player__section-1">
 						<div class="player__artwork">
-							<img src="" alt="">
+							<!-- player.js will set src and alt -->
+							<img src="" alt=""> 
 						</div>
 	
 						<div class="player__names">
@@ -117,7 +100,9 @@
 						</div>
 	
 						<div class="player__bottom">
-							<div class="player__current">00:00</div>
+							<div class="player__current">
+								<!-- player.js will render current time -->
+							</div>
 		
 							<input 
 								type="range" 
@@ -127,7 +112,9 @@
 								step="0.01"
 							>
 		
-							<div class="player__duration">00:00</div>
+							<div class="player__duration">
+								<!-- player.js will render duration -->
+							</div>
 						</div>
 					</div>
 	
@@ -147,6 +134,26 @@
 					</div>
 				</div>
 			</section>
+
+			<div class="loading">
+				<div class="loading__animation"></div>
+			</div>
+
+			<div class="context-menu">
+				<div class="context-menu__release-section">
+					<div class="context-menu__title">Add to playlist</div>
+	
+					<ul class="context-menu__playlists">
+						<!-- playlists (buttons) will be rendered here by context-menu.js  -->
+					</ul>
+				</div>
+
+				<div class="context-menu__playlist-section">
+					<button class="context-menu__button context-menu__button--delete-playlist" >Delete playlist</button>
+
+					<button class="context-menu__button context-menu__button--remove-song">Remove song</button>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
