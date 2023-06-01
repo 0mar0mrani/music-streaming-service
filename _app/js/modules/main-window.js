@@ -780,18 +780,26 @@ export default async function mainWindow() {
 		function renderPlaylists() {
 			playlists.forEach((playlist, index) => {
 				const isNoSongsInPlaylist = playlist.songs.length !== 0;
-				const playlistContainer = document.createElement('li');
-				playlistContainer.className = 'playlist song-group';
-				playlistContainer.dataset.id = index;
 
+				const container = createContainerDOM(index);
 				const header = createHeaderDOM(playlist);
 				const songs = createSongsDOM(playlist);
 				const noSongs = createNoSongsDOM();
 				
-				playlistContainer.append(header);
-				isNoSongsInPlaylist ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
-				mainWindowElement.append(playlistContainer);
+				container.append(header);
+				isNoSongsInPlaylist ? container.append(songs) : container.append(noSongs);
+				mainWindowElement.append(container);
 			}) 
+
+			/**
+			 * Creates playlist container. 
+			 */
+			function createContainerDOM(index) {
+				const container = document.createElement('li');
+				container.className = 'playlist song-group';
+				container.dataset.id = index;
+				return container;
+			}
 
 			function createHeaderDOM(playlist) {
 				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs);
