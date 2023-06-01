@@ -15,13 +15,6 @@ export default async function mainWindow() {
 	let playlists = [];
 	let isLoading = false;
 
-	const release = {
-		currentPage: 0,
-		pageSize: 5,
-		canFetch: true,
-		scrolledToBottom: false,
-	}
-
 	const current = {
 		section: 'release',
 		song: {
@@ -32,6 +25,14 @@ export default async function mainWindow() {
 			id: null,
 			index: null,
 		},
+	}
+
+	// state for release section
+	const release = {
+		currentPage: 0,
+		pageSize: 5,
+		canFetch: true,
+		scrolledToBottom: false,
 	}
 
 	const player = playerModule();
@@ -384,7 +385,7 @@ export default async function mainWindow() {
 		if (isError) {
 			header.setMessage(update);
 		} else {
-			header.setMessage('Playlist created')
+			header.setMessage('Playlist created');
 		}
 	}
 
@@ -558,7 +559,7 @@ export default async function mainWindow() {
 	 * @returns {array} playlist of songs with one song removed
 	 */
 	function removeSongFromPlaylist() {
-		const clickedSongGroup = current.songGroup.index
+		const clickedSongGroup = current.songGroup.index;
 		const rightPlaylist = playlists[clickedSongGroup];
 		const playlistWithRemovedSong = rightPlaylist.songs.filter((song, index) => Number(current.song.index) !== index);
 		return playlistWithRemovedSong;
@@ -637,6 +638,9 @@ export default async function mainWindow() {
 				mainWindowElement.append(container);
 			});
 
+			/**
+			 * Creates release container. 
+			 */
 			function createContainerDOM(index) {
 				const container = document.createElement('li');
 				container.dataset.id = index;
@@ -644,8 +648,11 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates release header. 
+			 */
 			function createReleaseHeaderDOM(release) {
-				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks)
+				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks);
 
 				const releaseContainer = document.createElement('div');
 				const artworkContainer = document.createElement('div');
@@ -691,6 +698,9 @@ export default async function mainWindow() {
 				return releaseContainer;
 			}
 
+			/**
+			 * Creates release songs header. 
+			 */
 			function createSongsHeaderDOM() {
 				const songsHeaderContainer = document.createElement('div');
 				const number = document.createElement('div');
@@ -717,6 +727,9 @@ export default async function mainWindow() {
 				return songsHeaderContainer;
 			}
 
+			/**
+			 * Creates release songs. 
+			 */
 			function createSongsDOM(release) {
 				const songsContainer = document.createElement('ul');
 	
@@ -779,19 +792,30 @@ export default async function mainWindow() {
 		function renderPlaylists() {
 			playlists.forEach((playlist, index) => {
 				const isNoSongsInPlaylist = playlist.songs.length !== 0;
-				const playlistContainer = document.createElement('li');
-				playlistContainer.className = 'playlist song-group';
-				playlistContainer.dataset.id = index;
 
+				const container = createContainerDOM(index);
 				const header = createHeaderDOM(playlist);
 				const songs = createSongsDOM(playlist);
 				const noSongs = createNoSongsDOM();
 				
-				playlistContainer.append(header);
-				isNoSongsInPlaylist ? playlistContainer.append(songs) : playlistContainer.append(noSongs);
-				mainWindowElement.append(playlistContainer);
+				container.append(header);
+				isNoSongsInPlaylist ? container.append(songs) : container.append(noSongs);
+				mainWindowElement.append(container);
 			}) 
 
+			/**
+			 * Creates playlist container. 
+			 */
+			function createContainerDOM(index) {
+				const container = document.createElement('li');
+				container.className = 'playlist song-group';
+				container.dataset.id = index;
+				return container;
+			}
+
+			/**
+			 * Creates playlist header. 
+			 */
 			function createHeaderDOM(playlist) {
 				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs);
 				const isSongsInPlaylist = playlist.songs.length !== 0;
@@ -802,7 +826,7 @@ export default async function mainWindow() {
 				const menuIcon = document.createElement('img');
 				const title = document.createElement('h2');
 				const titleInput = document.createElement('input');
-				const additionalInfo = document.createElement('div')
+				const additionalInfo = document.createElement('div');
 				const songsAmount = document.createElement('div');
 				const playTime = document.createElement('div');
 
@@ -832,6 +856,9 @@ export default async function mainWindow() {
 				return container;
 			}
 			
+			/**
+			 * Creates playlist songs header and songs. 
+			 */
 			function createSongsDOM(playlist) {
 				const container = document.createElement('div');
 				const songsHeader = createSongsHeaderDOM();
@@ -851,6 +878,9 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates playlist songs header. 
+			 */
 			function createSongsHeaderDOM() {
 				const songsHeader = document.createElement('div');
 				const number = document.createElement('div');
@@ -879,6 +909,9 @@ export default async function mainWindow() {
 				return songsHeader;
 			}
 
+			/**
+			 * Creates playlist songs. 
+			 */
 			function createSongDOM(song, index) {
 				const container = document.createElement('li');
 				const songButton = document.createElement('button');
@@ -924,12 +957,15 @@ export default async function mainWindow() {
 				songButton.append(titleArtistContainer);
 				songButton.append(album);
 				songButton.append(time);
-				songButton.append(menu)
+				songButton.append(menu);
 				container.append(songButton);
 
 				return container;
 			}
 
+			/**
+			 * Creates playlist no song message. 
+			 */
 			function createNoSongsDOM() {
 				const noSongs = document.createElement('div')
 				noSongs.className = 'playlist__no-songs';
@@ -938,6 +974,9 @@ export default async function mainWindow() {
 			}
 		}
 
+		/**
+		 * Renders reached bottom message. 
+		 */
 		function renderReachedBottomMessage() {
 			if (current.section === 'release' && release.scrolledToBottom) {
 				const message = document.createElement('div');
@@ -979,7 +1018,7 @@ export default async function mainWindow() {
 			playlistTitleInputs = document.querySelectorAll('.playlist__title-input');
 
 			for (const playlistHeaderElement of playlistHeaderElements) {
-				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu)
+				playlistHeaderElement.addEventListener('contextmenu', handlePlaylistHeaderElementContextmenu);
 			}
 			
 			for (const playlistTitleInput of playlistTitleInputs) {

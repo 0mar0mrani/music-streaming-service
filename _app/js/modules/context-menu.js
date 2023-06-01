@@ -9,13 +9,13 @@ export default function contextMenu() {
 		y: 0,
 	}
 
-	let lastFocused = { // Used to focus back on elements after opening context menu
+	let lastFocused = { // Used to focus back on elements after closing context menu
 		song: null,
 		songGroup: null,
 	};
 
 	const contextMenuElement = document.querySelector('.context-menu');
-	const playlistButtons = document.querySelector('.context-menu__playlists');
+	const playlistsElement = document.querySelector('.context-menu__playlists');
 	const releaseSectionElement = document.querySelector('.context-menu__release-section');
 	const playlistSectionElement = document.querySelector('.context-menu__playlist-section');
 	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist'); 
@@ -23,11 +23,16 @@ export default function contextMenu() {
 
 	contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
 
+	/**
+	 * This handles all key input on context menu.
+	 * To make this I took inspiration from playerFocusTrap(). 
+	 * @see playerFocusTrap in player.js
+	 */
 	function handleContextMenuElementKeydown(event) {
 		if (event.key === 'Tab') {
-			const focusableElements = document.querySelectorAll('.context-menu__button--visible')
+			const focusableElements = document.querySelectorAll('.context-menu__button--visible');
 			const activeElement = document.activeElement;
-			const lastFocusableElement = focusableElements[focusableElements.length - 1]
+			const lastFocusableElement = focusableElements[focusableElements.length - 1];
 			
 			if (activeElement === lastFocusableElement) {
 				focusOnLastFocusedElement(event);
@@ -140,7 +145,7 @@ export default function contextMenu() {
 	 * This main function consist of subfunctions that renders the HTML based on the state of context menu. With a conditional rendering based on currentSection.  
 	 */
 	function renderHTML() {
-		hideContent()
+		renderHideContent();
 
 		if (currentSection === 'release') {
 			renderPlaylists();
@@ -151,7 +156,7 @@ export default function contextMenu() {
 		renderPlacement();
 		renderVisibility();
 
-		function hideContent() {
+		function renderHideContent() {
 			releaseSectionElement.classList.remove('context-menu__release-section--visible');
 			playlistSectionElement.classList.remove('context-menu__playlist-section--visible');
 			deletePlaylistButton.classList.remove('context-menu__button--visible');
@@ -189,7 +194,7 @@ export default function contextMenu() {
 		function renderPlaylists() {
 			releaseSectionElement.classList.add('context-menu__release-section--visible');
 
-			playlistButtons.innerHTML = '';
+			playlistsElement.innerHTML = '';
 	
 			playlists.forEach((playlist, index) => {
 				const playlistElement = document.createElement('li');
@@ -201,7 +206,7 @@ export default function contextMenu() {
 				playlistButton.dataset.id = index;
 	
 				playlistElement.append(playlistButton);
-				playlistButtons.append(playlistElement)
+				playlistsElement.append(playlistElement)
 			})
 		}
 
