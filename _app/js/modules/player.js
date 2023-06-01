@@ -180,6 +180,7 @@ export default function player() {
 	function handleTimelineSliderInput() {
 		setTimeline();
 		isPlaying = true;
+		renderAudio();
 		renderHTML();
 	}
 
