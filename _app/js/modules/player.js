@@ -29,7 +29,7 @@ export default function player() {
 	let touchStart = null; // used to calculate percentage drag
 	let draggedOver25Percent = false; 
 	let animationPosition = null; // decides where in the animation (keyframe) on drag down
-	const animationDuration = 0.7; // this has to be the same duration as animation duration
+	const animationDuration = 0.7; // this has to be the same duration as --duration in variables.css 
 	
 	const playerElement = document.querySelector('.player');
 	const allElementsInPlayer = playerElement.querySelectorAll('*');
@@ -262,8 +262,8 @@ export default function player() {
 	}
 
 	/**
-	 * Function sets the sate isPlaying, to the boolean it receives as parameter. If it does not receive a boolean, it sets it to the opposite. 
-	 * @param {boolean} boolean - The value to set isPlaying to.
+	 * Function sets the sate of isPlaying, to the boolean it receives as parameter. If it does not receive a boolean, it sets it to the opposite. 
+	 * @param {boolean} boolean - The value to set isPlaying to
 	 */
 	function toggleIsPlaying(boolean) {
 		if (!boolean) {
