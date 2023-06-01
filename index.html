@@ -77,7 +77,7 @@
 
 			<section class="player-container">
 				<div class="player" id="player" aria-label="controllers">
-					<button class="player__close">
+					<button class="player__close-button">
 						<img src="/_app/assets/svg/close.svg" alt="close player">
 					</button>
 	
@@ -95,23 +95,23 @@
 	
 					<div class="player__section-2">
 						<div class="player__top">
-							<button class="player__shuffle">
+							<button class="player__shuffle-button">
 								<img src="/_app/assets/svg/shuffle.svg" alt="shuffle">
 							</button>
 	
-							<button class="player__previous">
+							<button class="player__previous-button">
 								<img src="/_app/assets/svg/previous.svg" alt="previous">
 							</button>
 	
-							<button class="player__play">
+							<button class="player__play-button">
 								<img src="/_app/assets/svg/play.svg" alt="play">
 							</button>
 							
-							<button class="player__next">
+							<button class="player__next-button">
 								<img src="/_app/assets/svg/next.svg" alt="next">
 							</button>
 	
-							<button class="player__repeat">
+							<button class="player__repeat-button">
 								<img src="/_app/assets/svg/repeat.svg" alt="repeat">
 							</button>
 						</div>
@@ -121,8 +121,8 @@
 		
 							<input 
 								type="range" 
-								class="player__timeline" 
-								name="player__timeline"
+								class="player__timeline-slider" 
+								name="player__timeline-slider"
 								value="0" 
 								step="0.01"
 							>
@@ -132,13 +132,13 @@
 					</div>
 	
 					<div class="player__section-3">
-						<button class="player__mute">
+						<button class="player__mute-button">
 							<img src="/_app/assets/svg/volume-3.svg" alt="mute">
 						</button>
 	
 						<input 
 							type="range" 
-							class="player__volume" 
+							class="player__volume-slider" 
 							min="0" 
 							max="1" 
 							step="0.01" 

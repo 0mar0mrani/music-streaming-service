@@ -698,7 +698,7 @@ export default async function mainWindow() {
 				const plays = document.createElement('div');
 				const time = document.createElement('div');
 
-				songsHeaderContainer.className = 'release__song-header';
+				songsHeaderContainer.className = 'release__songs-header';
 
 				number.innerText = '#';
 				title.innerText = 'title';
@@ -745,10 +745,10 @@ export default async function mainWindow() {
 
 					songsContainer.className = 'release__songs';
 					songButton.className = 'song release__song';
-					number.className = 'release__number';
-					title.className = 'release__track-title';
-					time.className = 'release__track-time';
-					plays.className = 'release__plays';
+					number.className = 'release__song-number';
+					title.className = 'release__song-title';
+					time.className = 'release__song-time';
+					plays.className = 'release__song-plays';
 					menu.className = 'release__song-menu context-menu-button';
 
 					songButton.dataset.id = index;
@@ -864,10 +864,10 @@ export default async function mainWindow() {
 				album.innerText = 'Album';
 				time.innerText = 'Time';
 
-				number.className = 'playlist__number-header';
-				songsHeader.className = 'playlist__song-header';
-				album.className = 'playlist__album-header';
-				time.className = 'playlist__time-header';
+				songsHeader.className = 'playlist__songs-header';
+				number.className = 'playlist__number';
+				album.className = 'playlist__album';
+				time.className = 'playlist__time';
 				empty.className = 'playlist__empty';
 
 				songsHeader.append(number);
@@ -895,10 +895,10 @@ export default async function mainWindow() {
 				
 				songButton.className = 'song playlist__song';
 				number.className = 'playlist__song-number';
-				artworkContainer.className = 'playlist__artwork';
+				artworkContainer.className = 'playlist__song-artwork';
 				title.className = 'playlist__song-title';
 				menu.className = 'playlist__song-menu context-menu-button';
-				album.className = 'playlist__album';
+				album.className = 'playlist__song-album';
 				time.className = 'playlist__song-time';
 
 				songButton.dataset.id = index;

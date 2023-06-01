@@ -1,5 +1,4 @@
-/* Not using 'display: none' as it not able to use in keyframes */
-
+/* Not using 'display: none' on some elements as it is not able to use in keyframes*/
 .player-container {
 	grid-column: 1 / 3;
 }
@@ -20,41 +19,41 @@
 }
 
 /* Buttons (not play) */
-.player__previous,
-.player__next,
-.player__shuffle,
-.player__repeat,
-.player__mute {
+.player__previous-button,
+.player__next-button,
+.player__shuffle-button,
+.player__repeat-button,
+.player__mute-button {
 	filter: var(--filter-primary-default);
 }
 
-.player__previous:hover,
-.player__next:hover,
-.player__shuffle:hover,
-.player__repeat:hover,
-.player__mute:hover {
+.player__previous-button:hover,
+.player__next-button:hover,
+.player__shuffle-button:hover,
+.player__repeat-button:hover,
+.player__mute-button:hover {
 	filter: var(--filter-primary-darkest);
 }
 
-.player__previous:focus,
-.player__next:focus,
-.player__shuffle:focus,
-.player__repeat:focus,
-.player__mute:focus {
+.player__previous-button:focus,
+.player__next-button:focus,
+.player__shuffle-button:focus,
+.player__repeat-button:focus,
+.player__mute-button:focus {
 	filter: var(--filter-primary-default);
 }
 
 /* Sliders */
-.player__timeline,
-.player__volume {
+.player__timeline-slider,
+.player__volume-slider {
 	width: 100%;
 	appearance: none;
 	height: 0.3rem;
 	background-color: var(--color-primary-darkest);
 }
 
-.player__timeline::-webkit-slider-thumb,
-.player__volume::-webkit-slider-thumb {
+.player__timeline-slider::-webkit-slider-thumb,
+.player__volume-slider::-webkit-slider-thumb {
 	appearance: none;
 	-webkit-appearance: none;
 	width: 1.4rem;
@@ -104,7 +103,7 @@
 	gap: 2rem;
 }
 
-.player__play {
+.player__play-button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -114,22 +113,22 @@
 	background-color: var(--color-primary-default);
 }
 
-.player__play:hover {
+.player__play-button:hover {
 	background-color: var(--color-primary-darkest);
 }
 
-.player__play:focus {
+.player__play-button:focus {
 	background-color: var(--color-primary-default);
 }
 
-.player__play img {
+.player__play-button img {
 	width: 2.4rem;
 	height: 2.4rem;
 	filter: var(--filter-secondary-default);
 }
 
-.player__repeat--active,
-.player__shuffle--active {
+.player__repeat-button--active,
+.player__shuffle-button--active {
 	filter: var(--filter-highlight-default) !important;
 }
 
@@ -158,21 +157,21 @@
 	gap: 1rem;
 }
 
-.player__volume {
+.player__volume-slider {
 	width: 10rem;
 }
 
-.player__mute {
+.player__mute-button {
 	width: 2rem;
 	height: 2rem;
 }
 
-.player__mute img {
+.player__mute-button img {
 	height: 100%;
 	width: auto;
 }
 
-.player__close {
+.player__close-button {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -182,12 +181,12 @@
 	pointer-events: none;
 }
 
-.player__close img {
+.player__close-button img {
 	filter: var(--filter-primary-default);
 }
 
-.player__close:hover img,
-.player__close:active img {
+.player__close-button:hover img,
+.player__close-button:active img {
 	filter: var(--filter-primary-darkest);
 }
 
@@ -206,7 +205,6 @@
 		display: flex;
 	}
 
-
 	.player__section-2 {
 		height: auto;
 	}
@@ -219,11 +217,11 @@
 		gap: unset;
 	}
 
-	.player__shuffle, 
-	.player__next, 
-	.player__previous,
-	.player__next,
-	.player__repeat,
+	.player__shuffle-button, 
+	.player__next-button, 
+	.player__previous-button,
+	.player__next-button,
+	.player__repeat-button,
 	.player__current,
 	.player__duration {
 		opacity: 0;
@@ -234,11 +232,11 @@
 		left: 0;
 	}
 
-	.player__shuffle, 
-	.player__next, 
-	.player__previous,
-	.player__next,
-	.player__repeat {
+	.player__shuffle-button, 
+	.player__next-button, 
+	.player__previous-button,
+	.player__next-button,
+	.player__repeat-button {
 		width: 2.8rem;
 		height: 2.8rem;
 	}
@@ -247,44 +245,44 @@
 		display: flex;
 	}
 
-	.player__play {
+	.player__play-button {
 		margin-right: 1rem;
 	}
 
-	.player__play img {
+	.player__play-button img {
 		width: 3.2rem;
 		height: 3.2rem;
 	}
 
-	.player__play,
-	.player__play:hover,
-	.player__play:active,
-	.player__play:focus {
+	.player__play-button,
+	.player__play-button:hover,
+	.player__play-button:active,
+	.player__play-button:focus {
 		background: none;
 	}
 
-	.player__play img {
+	.player__play-button img {
 		filter: var(--filter-primary-default);
 	}
 
-	.player__play:hover img,
-	.player__play:active img {
+	.player__play-button:hover img,
+	.player__play-button:active img {
 		filter: var(--filter-primary-darkest);
 	}
 	
-	.player__timeline {
+	.player__timeline-slider {
 		position: absolute;
 		left: 0;
 		bottom: 0;
 		width: 100%;
 	}
 
-	.player__timeline {
+	.player__timeline-slider {
 		user-select: none;
 		pointer-events: none;
 	} 
 
-	.player__timeline::-webkit-slider-thumb {
+	.player__timeline-slider::-webkit-slider-thumb {
 		opacity: 0;
 		transition: opacity 0.0001s 0.2s;
 	}
@@ -295,17 +293,17 @@
 		animation: player-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__shuffle, 
-	.player--maximized .player__next, 
-	.player--maximized .player__previous,
-	.player--maximized .player__next,
-	.player--maximized .player__repeat,
+	.player--maximized .player__shuffle-button, 
+	.player--maximized .player__next-button, 
+	.player--maximized .player__previous-button,
+	.player--maximized .player__next-button,
+	.player--maximized .player__repeat-button,
 	.player--maximized .player__current,
 	.player--maximized .player__duration {
 		animation: controllers-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__close {
+	.player--maximized .player__close-button {
 		animation: controllers-maximized var(--duration) ease-in-out forwards;
 	}
 
@@ -326,7 +324,7 @@
 		animation: section-2-top-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__play {
+	.player--maximized .player__play-button {
 		animation: play-maximized var(--duration) ease-in-out forwards;
 	}
 
@@ -334,27 +332,27 @@
 		animation: artwork-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__timeline {
+	.player--maximized .player__timeline-slider {
 		animation: timeline-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__play:hover {
+	.player--maximized .player__play-button:hover {
 		background-color: var(--color-primary-darkest) !important;
 	}
 
-	.player--maximized .player__play:focus {
+	.player--maximized .player__play-button:focus {
 		background-color: var(--color-primary-default) !important;
 	}
 
-	.player--maximized .player__play img {
+	.player--maximized .player__play-button img {
 		animation: play-icon-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__timeline::-webkit-slider-thumb {
+	.player--maximized .player__timeline-slider::-webkit-slider-thumb {
 		opacity: 1;
 	}
 
-	.player--maximized .player__timeline {
+	.player--maximized .player__timeline-slider {
 		user-select: unset;
 		pointer-events: unset;
 	} 
@@ -364,17 +362,16 @@
 		animation: player-minimized var(--duration) ease-in-out forwards;
 	}
 
-	.player--minimized .player__shuffle, 
-	.player--minimized .player__next, 
-	.player--minimized .player__previous,
-	.player--minimized .player__next,
-	.player--minimized .player__repeat,
+	.player--minimized .player__shuffle-button, 
+	.player--minimized .player__next-button, 
+	.player--minimized .player__previous-button,
+	.player--minimized .player__repeat-button,
 	.player--minimized .player__current,
 	.player--minimized .player__duration {
 		animation: disappear var(--duration) ease-in-out forwards;
 	}
 
-	.player--minimized .player__close {
+	.player--minimized .player__close-button {
 		animation: disappear var(--duration) ease-in-out forwards;
 	}
 
@@ -395,11 +392,11 @@
 		animation: section-2-top-minimized var(--duration) ease-in-out forwards;
 	}
 
-	.player--minimized .player__play {
+	.player--minimized .player__play-button {
 		animation: play-to-minimized var(--duration) ease-in-out forwards;
 	}
 
-	.player--minimized .player__play img {
+	.player--minimized .player__play-button img {
 		animation: play-icon-minimized var(--duration) ease-in-out forwards;
 	}
 
@@ -407,7 +404,7 @@
 		animation: artwork-to-minimized var(--duration) ease-in-out forwards;
 	}
 
-	.player--minimized .player__timeline {
+	.player--minimized .player__timeline-slider {
 		animation: timeline-minimized var(--duration) ease-in-out forwards;
 	}
 }

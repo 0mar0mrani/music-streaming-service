@@ -85,7 +85,7 @@
 }
 
 /* Songs section */
-.playlist__song-header {
+.playlist__songs-header {
 	display: grid;
 	grid-template-columns: var(--columns-playlist); 
 	font: var(--font-small-text);
@@ -121,7 +121,7 @@
 	background-color: var(--color-secondary-lighter);
 }
 
-.playlist__artwork {
+.playlist__song-artwork {
 	margin-right: 2rem;
 }
 
@@ -166,18 +166,18 @@
 
 @media only screen and (max-width: 700px) {
 	.playlist__album,
-	.playlist__album-header {
+	.playlist__song-album {
 		display: none;
 	}
 }
 
 @media only screen and (max-width: 450px) {
 	.playlist__empty,
-	.playlist__artwork,
+	.playlist__number,
+	.playlist__time,
+	.playlist__song-artwork,
 	.playlist__song-number,
-	.playlist__song-time,
-	.playlist__number-header,
-	.playlist__time-header {
+	.playlist__song-time {
 		display: none;
 	}
 }
