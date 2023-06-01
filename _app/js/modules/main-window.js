@@ -203,6 +203,7 @@ export default async function mainWindow() {
 		player.setCurrentQueIndex(Number(clickedSong));
 		player.setCurrentSongGroup(Number(clickedSongGroup));
 		player.setQue();
+		player.setShuffle();
 		player.loadSongFromQue();
 		player.toggleIsPlaying(true);
 		player.renderAudio();

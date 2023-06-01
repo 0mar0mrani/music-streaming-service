@@ -616,6 +616,7 @@ export default function player() {
 		setCurrentQueIndex,
 		setCurrentSongGroup,
 		setQue,
+		setShuffle,
 		loadSongFromQue,
 		toggleIsPlaying,
 		renderAudio,
