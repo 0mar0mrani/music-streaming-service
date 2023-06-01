@@ -15,7 +15,7 @@ export default function contextMenu() {
 	};
 
 	const contextMenuElement = document.querySelector('.context-menu');
-	const playlistButtons = document.querySelector('.context-menu__playlists');
+	const playlistsElement = document.querySelector('.context-menu__playlists');
 	const releaseSectionElement = document.querySelector('.context-menu__release-section');
 	const playlistSectionElement = document.querySelector('.context-menu__playlist-section');
 	const deletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist'); 
@@ -189,7 +189,7 @@ export default function contextMenu() {
 		function renderPlaylists() {
 			releaseSectionElement.classList.add('context-menu__release-section--visible');
 
-			playlistButtons.innerHTML = '';
+			playlistsElement.innerHTML = '';
 	
 			playlists.forEach((playlist, index) => {
 				const playlistElement = document.createElement('li');
@@ -201,7 +201,7 @@ export default function contextMenu() {
 				playlistButton.dataset.id = index;
 	
 				playlistElement.append(playlistButton);
-				playlistButtons.append(playlistElement)
+				playlistsElement.append(playlistElement)
 			})
 		}
 
