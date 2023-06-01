@@ -145,7 +145,7 @@ export default function contextMenu() {
 	 * This main function consist of subfunctions that renders the HTML based on the state of context menu. With a conditional rendering based on currentSection.  
 	 */
 	function renderHTML() {
-		hideContent();
+		renderHideContent();
 
 		if (currentSection === 'release') {
 			renderPlaylists();
@@ -156,7 +156,7 @@ export default function contextMenu() {
 		renderPlacement();
 		renderVisibility();
 
-		function hideContent() {
+		function renderHideContent() {
 			releaseSectionElement.classList.remove('context-menu__release-section--visible');
 			playlistSectionElement.classList.remove('context-menu__playlist-section--visible');
 			deletePlaylistButton.classList.remove('context-menu__button--visible');
