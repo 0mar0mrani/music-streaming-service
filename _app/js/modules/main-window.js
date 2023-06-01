@@ -15,13 +15,6 @@ export default async function mainWindow() {
 	let playlists = [];
 	let isLoading = false;
 
-	const release = {
-		currentPage: 0,
-		pageSize: 5,
-		canFetch: true,
-		scrolledToBottom: false,
-	}
-
 	const current = {
 		section: 'release',
 		song: {
@@ -32,6 +25,14 @@ export default async function mainWindow() {
 			id: null,
 			index: null,
 		},
+	}
+
+	// state for release section
+	const release = {
+		currentPage: 0,
+		pageSize: 5,
+		canFetch: true,
+		scrolledToBottom: false,
 	}
 
 	const player = playerModule();
