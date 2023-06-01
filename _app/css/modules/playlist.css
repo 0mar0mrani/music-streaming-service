@@ -4,6 +4,7 @@
 	border-bottom: solid 0.1rem var(--color-secondary-lightest);
 }
 
+/* Bottom section */
 /* Playlist header */
 .playlist__header {
 	display: flex;
