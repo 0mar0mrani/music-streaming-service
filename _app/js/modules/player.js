@@ -10,14 +10,16 @@ export default function player() {
 	// player states
 	const audio = new Audio();
 	let que = [];
-	let currentQueIndex = null;
-	let currentSong = null; 
-	let currentSongGroup = null;
+	const current = {
+		queIndex: null,
+		songIndex: null,
+		songGroupIndex: null,
+		volume: 1,
+	}
 	let isPlaying = false;
 	let isShuffle = false;
 	let isRepeat = false;
 	let isMute = false;
-	let currentVolume = 1;
 	
 	// mobile player state 
 	let isMobile = true;
@@ -164,7 +166,7 @@ export default function player() {
 
 	function handleVolumeSliderInput() {
 		setVolume();
-		isMute = currentVolume === 0 ? true : false;
+		isMute = current.volume === 0 ? true : false;
 		renderAudio();
 		renderHTML();
 	}
@@ -207,11 +209,11 @@ export default function player() {
 	}
 
 	/**
-	 * Sets currentSongGroup based on the index of the clicked song group.
+	 * Sets current.songGroupIndex based on the index of the clicked song group.
 	 * @param {number} clickedSongGroupIndex - The index of the song group in relation to all song groups.
 	 */
 	function setCurrentSongGroup(clickedSongGroupIndex) {
-		currentSongGroup = clickedSongGroupIndex;
+		current.songGroupIndex = clickedSongGroupIndex;
 	}
 
 	/**
@@ -219,23 +221,23 @@ export default function player() {
 	 */
 	function setQue() {
 		if (currentSection === 'release') {
-			que = [...releases[currentSongGroup].tracks];
+			que = [...releases[current.songGroupIndex].tracks];
 		} else if (currentSection === 'playlist') {
-			que = [...playlists[currentSongGroup].songs];
+			que = [...playlists[current.songGroupIndex].songs];
 		}
 	}
 
 	/**
-	 * Sets currentQueIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
+	 * Sets current.queIndex to the the clicked song, if you haven't clicked a song and this function runs it will look for itself in the que.
 	 * @param {number} clickedSongIndex - The index of the song related to its song group
 	 */
 	function setCurrentQueIndex(clickedSongIndex) {
 		if (clickedSongIndex => 0) {
-			currentQueIndex = clickedSongIndex;
+			current.queIndex = clickedSongIndex;
 		} else {
-			const currentSongID = currentSong._id;
+			const currentSongID = current.songIndex._id;
 			const currentSongIndex = que.findIndex(song => song._id === currentSongID);
-			currentQueIndex = currentSongIndex;
+			current.queIndex = currentSongIndex;
 		}
 	}
 
@@ -252,11 +254,11 @@ export default function player() {
 
 
 	/**
-	 * This loads currentSong into audio from que, decided by currentQueIndex.
+	 * This loads current.songIndex into audio from que, decided by current.queIndex.
 	 */
 	function loadSongFromQue() {
-		currentSong = que[currentQueIndex];
-		audio.src = currentSong.trackURL;
+		current.songIndex = que[current.queIndex];
+		audio.src = current.songIndex.trackURL;
 	}
 
 	/**
@@ -272,24 +274,24 @@ export default function player() {
 	}
 
 	/**
-	 * Increases the currentQueIndex by 1, if it's at the end of que it sets it to 0. 
+	 * Increases the current.queIndex by 1, if it's at the end of que it sets it to 0. 
 	 */
 	function nextSong() {
-		if (currentQueIndex < que.length - 1) {
-			currentQueIndex += 1;
+		if (current.queIndex < que.length - 1) {
+			current.queIndex += 1;
 		} else {
-			currentQueIndex = 0;
+			current.queIndex = 0;
 		}
 	}
 
 	/**
-	 * Decrements the currentQueIndex by 1, unless it is already 0, in which case it sets the currentQueIndex to 0.
+	 * Decrements the current.queIndex by 1, unless it is already 0, in which case it sets the current.queIndex to 0.
 	 */
 	function previousSong() {
-		if (currentQueIndex > 0) {
-			currentQueIndex -= 1;
+		if (current.queIndex > 0) {
+			current.queIndex -= 1;
 		} else {
-			currentQueIndex = 0;
+			current.queIndex = 0;
 		}
 	}
 
@@ -343,11 +345,11 @@ export default function player() {
 	}
 
 	/**
-	 * Takes value from volumeSlider and sets currentVolume.
+	 * Takes value from volumeSlider and sets current.volume.
 	 */
 	function setVolume() {
 		const input = volumeSlider.value;
-		currentVolume = input;
+		current.volume = input;
 	}
 
 	/**
@@ -363,7 +365,7 @@ export default function player() {
 	 */
 	function renderAudio() {
 		isPlaying ? audio.play() : audio.pause();
-		audio.volume = isMute ? 0 : currentVolume;
+		audio.volume = isMute ? 0 : current.volume;
    }
 
 	/**
@@ -492,9 +494,9 @@ export default function player() {
 		}
 
 		function renderInfo() {
-			titleElement.innerText = currentSong.title;
-			artistElement.innerText = currentSong.artists.join(', ');
-			artworkElement.src = currentSong.artworkURL;
+			titleElement.innerText = current.songIndex.title;
+			artistElement.innerText = current.songIndex.artists.join(', ');
+			artworkElement.src = current.songIndex.artworkURL;
 		}
 
 		/**
@@ -578,7 +580,7 @@ export default function player() {
 			if (isMute) {
 				volumeSlider.value = 0;
 			} else {
-				volumeSlider.value = currentVolume;
+				volumeSlider.value = current.volume;
 			}
 
 			volumeSlider.style.background = `linear-gradient(to right, var(--color-primary-default) 50%, var(--color-primary-darkest) 50%) ${100 - audio.volume * 100}% 50% / 200%`;	
