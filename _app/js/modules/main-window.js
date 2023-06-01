@@ -638,6 +638,9 @@ export default async function mainWindow() {
 				mainWindowElement.append(container);
 			});
 
+			/**
+			 * Creates release container. 
+			 */
 			function createContainerDOM(index) {
 				const container = document.createElement('li');
 				container.dataset.id = index;
@@ -645,6 +648,9 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates release header. 
+			 */
 			function createReleaseHeaderDOM(release) {
 				const totalSecondsOfRelease = formatTimeToSeconds(release.tracks);
 
@@ -692,6 +698,9 @@ export default async function mainWindow() {
 				return releaseContainer;
 			}
 
+			/**
+			 * Creates release songs header. 
+			 */
 			function createSongsHeaderDOM() {
 				const songsHeaderContainer = document.createElement('div');
 				const number = document.createElement('div');
@@ -718,6 +727,9 @@ export default async function mainWindow() {
 				return songsHeaderContainer;
 			}
 
+			/**
+			 * Creates release songs. 
+			 */
 			function createSongsDOM(release) {
 				const songsContainer = document.createElement('ul');
 	
@@ -801,6 +813,9 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates playlist header. 
+			 */
 			function createHeaderDOM(playlist) {
 				const totalSecondsOfPlaylist = formatTimeToSeconds(playlist.songs);
 				const isSongsInPlaylist = playlist.songs.length !== 0;
@@ -841,6 +856,9 @@ export default async function mainWindow() {
 				return container;
 			}
 			
+			/**
+			 * Creates playlist songs header and songs. 
+			 */
 			function createSongsDOM(playlist) {
 				const container = document.createElement('div');
 				const songsHeader = createSongsHeaderDOM();
@@ -860,6 +878,9 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates playlist songs header. 
+			 */
 			function createSongsHeaderDOM() {
 				const songsHeader = document.createElement('div');
 				const number = document.createElement('div');
@@ -888,6 +909,9 @@ export default async function mainWindow() {
 				return songsHeader;
 			}
 
+			/**
+			 * Creates playlist songs. 
+			 */
 			function createSongDOM(song, index) {
 				const container = document.createElement('li');
 				const songButton = document.createElement('button');
@@ -939,6 +963,9 @@ export default async function mainWindow() {
 				return container;
 			}
 
+			/**
+			 * Creates playlist no song message. 
+			 */
 			function createNoSongsDOM() {
 				const noSongs = document.createElement('div')
 				noSongs.className = 'playlist__no-songs';
@@ -947,6 +974,9 @@ export default async function mainWindow() {
 			}
 		}
 
+		/**
+		 * Renders reached bottom message. 
+		 */
 		function renderReachedBottomMessage() {
 			if (current.section === 'release' && release.scrolledToBottom) {
 				const message = document.createElement('div');
