@@ -13,17 +13,17 @@ See live demo [here](https://music-streaming-service.netlify.app).
 	- Play time/total playtime
 	- Plays (counts as a play when you listen to the song)
 - Add songs to playlists with right click or menu button.
-- Fetches more releases when scrolling down with. 
+- Fetches more releases when scrolling downwards. 
 
 ### Playlists
 - Brows through and listen to playlists. 
-- Create and name playlists.  
-- Delete songs and playlists with right click or context menu button.
+- Create and name playlists
+- Delete songs and playlists with right click or context menu button
 - Get info about the playlist such as: 
 	- Title/artist
 	- Amount of songs
 	- Play time/total playtime
-	- Which album the song is on
+	- Which album the song is from
 
 ### Player 
 - All the necessary functionality: 
@@ -34,7 +34,7 @@ See live demo [here](https://music-streaming-service.netlify.app).
 	- Volume: change volume 
 	- Timeline: scrubbing
 
-- Mobile layout features a simplified player with the option to access additional controls through an elaborate animation using keyframes. To close this you can use the close button as 	well as dragging down (only touch input). See animation [here](https://youtube.com/shorts/vfKXl8rL3xQ?feature=share).
+- Mobile layout features a simplified player with the option to access additional controls through an elaborate animation using keyframes. To close this you can use the close button as well as dragging down (only touch input). See animation [here](https://youtube.com/shorts/vfKXl8rL3xQ?feature=share).
 
 ### Responsivity 
 - The app is fully responsive and is possible to use with everything from a phone to a desktop. 
