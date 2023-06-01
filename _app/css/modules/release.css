@@ -62,7 +62,7 @@
 
 /* Bottom section */
 /* Songs Header */
-.release__song-header {
+.release__songs-header {
 	display: grid;
 	grid-template-columns: var(--columns-release); 
 	font: var(--font-small-text);
@@ -96,11 +96,11 @@
 	background-color: var(--color-secondary-lighter);
 }
 
-.release__number {
+.release__song-number {
 	font: var(--font-sub-header);
 }
 
-.release__track-title {
+.release__song-title {
 	font: var(--font-body);
 	margin-bottom: var(--gap-extra-small);
 }
@@ -134,11 +134,11 @@
 }
 
 @media only screen and (max-width: 700px) {
-	.release__number,
+	.release__song-number,
 	.release__header-number,
 	.release__header-plays,
 	.release__playtime,
-	.release__plays {
+	.release__song-plays {
 		display: none;
 	}
 
@@ -164,7 +164,7 @@
 
 @media only screen and (max-width: 450px) {
 	.release__header-time,
-	.release__track-time {
+	.release__song-time {
 		display: none;
 	}
 }

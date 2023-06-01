@@ -35,19 +35,19 @@ export default function player() {
 	const titleElement = document.querySelector('.player__title');
 	const artistElement = document.querySelector('.player__artist');
 	const artworkElement = document.querySelector('.player__artwork img');
-	const playButton = document.querySelector('.player__play');
-	const playButtonIcon = document.querySelector('.player__play img');
-	const previousButton = document.querySelector('.player__previous');
-	const nextButton = document.querySelector('.player__next');
-	const shuffleButton = document.querySelector('.player__shuffle');
-	const repeatButton = document.querySelector('.player__repeat');
-	const volumeSlider = document.querySelector('.player__volume');
-	const muteButton = document.querySelector('.player__mute');
-	const muteButtonIcon = document.querySelector('.player__mute img');
-	const timelineSlider = document.querySelector('.player__timeline');
+	const playButton = document.querySelector('.player__play-button');
+	const playButtonIcon = document.querySelector('.player__play-button img');
+	const previousButton = document.querySelector('.player__previous-button');
+	const nextButton = document.querySelector('.player__next-button');
+	const shuffleButton = document.querySelector('.player__shuffle-button');
+	const repeatButton = document.querySelector('.player__repeat-button');
+	const volumeSlider = document.querySelector('.player__volume-slider');
+	const muteButton = document.querySelector('.player__mute-button');
+	const muteButtonIcon = document.querySelector('.player__mute-button img');
+	const timelineSlider = document.querySelector('.player__timeline-slider');
 	const timelineCurrentElement = document.querySelector('.player__current');
 	const timelineDurationElement = document.querySelector('.player__duration');
-	const closeButton = document.querySelector('.player__close');
+	const closeButton = document.querySelector('.player__close-button');
 	const accessabilitySkipToPlayerElement = document.querySelector('.accessibility__player');
 
 	window.addEventListener('resize', handleWindowResize);
@@ -327,7 +327,7 @@ export default function player() {
 	 * @param {object} event - The event object that is passed to the function.
 	 */
 	function playerFocusTrap(event) {
-		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute), input.player__timeline');
+		const focusableElements = playerElement.querySelectorAll('button:not(.player__mute-button), input.player__timeline-slider');
 		const firstElement = focusableElements[0];
 		const lastElement = focusableElements[focusableElements.length - 1];
 		const activeElement = document.activeElement;
@@ -543,17 +543,17 @@ export default function player() {
 
 		function renderShuffleButton() {
 			if (isShuffle) {
-				shuffleButton.classList.add('player__shuffle--active');
+				shuffleButton.classList.add('player__shuffle-button--active');
 			} else {
-				shuffleButton.classList.remove('player__shuffle--active');
+				shuffleButton.classList.remove('player__shuffle-button--active');
 			}
 		}
 
 		function renderRepeatButton() {
 			if (isRepeat) {
-				repeatButton.classList.add('player__repeat--active');
+				repeatButton.classList.add('player__repeat-button--active');
 			} else {
-				repeatButton.classList.remove('player__repeat--active');
+				repeatButton.classList.remove('player__repeat-button--active');
 			}
 		}
 
