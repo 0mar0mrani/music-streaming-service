@@ -12,8 +12,8 @@ export default function player() {
 	let que = [];
 	const current = {
 		queIndex: null,
-		songIndex: null,
 		songGroupIndex: null,
+		song: null,
 		volume: 1,
 	}
 	let isPlaying = false;
@@ -180,6 +180,7 @@ export default function player() {
 	function handleTimelineSliderInput() {
 		setTimeline();
 		isPlaying = true;
+		renderAudio();
 		renderHTML();
 	}
 
@@ -257,8 +258,8 @@ export default function player() {
 	 * This loads current.songIndex into audio from que, decided by current.queIndex.
 	 */
 	function loadSongFromQue() {
-		current.songIndex = que[current.queIndex];
-		audio.src = current.songIndex.trackURL;
+		current.song = que[current.queIndex];
+		audio.src = current.song.trackURL;
 	}
 
 	/**
@@ -494,10 +495,10 @@ export default function player() {
 		}
 
 		function renderInfo() {
-			titleElement.innerText = currentSong.title;
-			artistElement.innerText = currentSong.artists.join(', ');
-			artworkElement.src = currentSong.artworkURL;
-			artworkElement.alt = currentSong.artworkAlt;
+			titleElement.innerText = current.song.title;
+			artistElement.innerText = current.song.artists.join(', ');
+			artworkElement.src = current.song.artworkURL;
+			artworkElement.alt = current.song.artworkAlt;
 		}
 
 		/**
@@ -615,6 +616,7 @@ export default function player() {
 		setCurrentQueIndex,
 		setCurrentSongGroup,
 		setQue,
+		setShuffle,
 		loadSongFromQue,
 		toggleIsPlaying,
 		renderAudio,
