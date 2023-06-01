@@ -9,7 +9,7 @@ export default function contextMenu() {
 		y: 0,
 	}
 
-	let lastFocused = { // Used to focus back on elements after opening context menu
+	let lastFocused = { // Used to focus back on elements after closing context menu
 		song: null,
 		songGroup: null,
 	};
