@@ -1,6 +1,6 @@
 /**
  * It takes a number as a parameter and returns a new number with commas added every third digit from right to left.
- * It iterates over number and each digit is added to formattedNumber, if the index is dividable by 3 and is not 0 it ads a comma as well indexIsDividableBy3andNot0.
+ * It iterates over number from last index and each digit is added to formattedNumber, if the index is dividable by 3 and is not 0 it ads a comma as well indexIsDividableBy3andNot0.
  * @param {string} number - The number to be formatted
  * @returns {string} The formatted number string
  * @example
