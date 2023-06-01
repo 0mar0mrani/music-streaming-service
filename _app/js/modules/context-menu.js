@@ -23,6 +23,11 @@ export default function contextMenu() {
 
 	contextMenuElement.addEventListener('keydown', handleContextMenuElementKeydown);
 
+	/**
+	 * This handles all key input on context menu.
+	 * To make this I took inspiration from playerFocusTrap(). 
+	 * @see playerFocusTrap in player.js
+	 */
 	function handleContextMenuElementKeydown(event) {
 		if (event.key === 'Tab') {
 			const focusableElements = document.querySelectorAll('.context-menu__button--visible');
