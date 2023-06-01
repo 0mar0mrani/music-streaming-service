@@ -19,6 +19,11 @@
 	gap: var(--gap-small);
 }
 
+.header__create-playlist-button:hover,
+.header__create-playlist-button:active {
+	color: var(--color-primary-darkest);
+}
+
 .header__create-playlist-button--visible {
 	display: flex;
 }
@@ -30,11 +35,6 @@
 
 .header__create-playlist-icon img {
 	filter: var(--filter-primary-default);
-}
-
-.header__create-playlist-button:hover,
-.header__create-playlist-button:active {
-	color: var(--color-primary-darkest);
 }
 
 .header__create-playlist-button:hover .header__create-playlist-icon img,
