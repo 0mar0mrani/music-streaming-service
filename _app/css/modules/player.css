@@ -35,14 +35,6 @@
 	filter: var(--filter-primary-darkest);
 }
 
-.player__previous-button:focus,
-.player__next-button:focus,
-.player__shuffle-button:focus,
-.player__repeat-button:focus,
-.player__mute-button:focus {
-	filter: var(--filter-primary-default);
-}
-
 /* Sliders */
 .player__timeline-slider,
 .player__volume-slider {
@@ -226,6 +218,14 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+
+	.player__previous-button:hover,
+	.player__next-button:hover,
+	.player__shuffle-button:hover,
+	.player__repeat-button:hover,
+	.player__mute-button:hover {
+		filter: var(--filter-primary-default);
 	}
 
 	.player__shuffle-button, 
