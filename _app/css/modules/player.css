@@ -205,7 +205,7 @@
 		gap: unset;
 	}
 
-	.player__play-button:hover {
+	.player__play-button:hover img {
 		background-color: var(--color-primary-default);
 	}
 
