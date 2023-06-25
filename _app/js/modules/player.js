@@ -92,10 +92,10 @@ export default function player() {
 	function handlePlayerElementTouchend() {
 		if (isMaximized) {
 			setAnimationToRunning();
-
-			if (draggedOver25Percent) {
-				isMaximized = false;
-			} else {
+			isMaximized = false;
+			
+			
+			if (!draggedOver25Percent) {
 				isMaximized = true;
 				setAnimationPositionForMaximized();
 			}
