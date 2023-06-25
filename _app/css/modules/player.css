@@ -205,6 +205,10 @@
 		gap: unset;
 	}
 
+	.player__play-button:hover {
+		background-color: var(--color-primary-default);
+	}
+
 	.player__shuffle-button, 
 	.player__next-button, 
 	.player__previous-button,
@@ -261,8 +265,7 @@
 		filter: var(--filter-primary-default);
 	}
 
-	.player__play-button:hover img,
-	.player__play-button:active img {
+	.player__play-button:hover img {
 		filter: var(--filter-primary-darkest);
 	}
 	
