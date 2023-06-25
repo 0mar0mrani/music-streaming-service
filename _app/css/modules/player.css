@@ -409,6 +409,14 @@
 	/* This makes sure that on very small phones with a small height all the controllers still show, because artwork takes less space*/
 	.player--maximized .player__artwork {
 		/* Have to use important to overwrite animation */
-		width: 40vh !important; 
+		width: 40vh; 
+	}
+
+	.player--maximized .player__artwork {
+		animation: artwork-maximized-small-screen var(--duration) ease-in-out forwards;
+	}
+
+	.player--minimized .player__artwork {
+		animation: artwork-to-minimized-small-screen var(--duration) ease-in-out forwards;
 	}
 }

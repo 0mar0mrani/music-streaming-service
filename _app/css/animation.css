@@ -210,6 +210,38 @@
 	}
 }
 
+@keyframes artwork-maximized-small-screen {
+	0% {
+		opacity: 1;
+		width: var(--artwork);
+		height: var(--artwork);
+	}
+
+	10% {
+		opacity: 0;
+		width: var(--artwork);
+		height: var(--artwork);
+	}
+
+	20% {
+		opacity: 0;
+		width: 40vh;
+		height: auto;
+	}
+
+	30% {
+		opacity: 0;
+		width: 40vh;
+		height: auto;
+	}
+
+	100% {
+		opacity: 1;
+		width: 40vh;
+		height: auto;
+	}
+}
+
 @keyframes timeline-maximized {
 	0% {
 		opacity: 1;
@@ -342,6 +374,32 @@
 	70% {
 		opacity: 0;
 		width: 100%;
+		height: auto;
+	}
+
+	70.00001% {
+		opacity: 0;
+		width: var(--artwork);
+		height: var(--artwork);
+	}
+
+	100% {
+		opacity: 1;
+		width: var(--artwork);
+		height: var(--artwork);
+	}
+}
+
+@keyframes artwork-to-minimized-small-screen {
+	0% {
+		opacity: 1;
+		width: 40vh;
+		height: auto;
+	}
+
+	70% {
+		opacity: 0;
+		width: 40vh;
 		height: auto;
 	}
 
