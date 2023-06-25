@@ -48,6 +48,7 @@ export default async function mainWindow() {
 	let contextMenuPlaylistButtons = null;
 	const contextMenuDeletePlaylistButton = document.querySelector('.context-menu__button--delete-playlist');
 	const contextMenuDeleteSongButton = document.querySelector('.context-menu__button--remove-song');
+	let genericElements = null; // Created to make context menu work correctly
 	let songButtons = null;
 	let playlistHeaderElements = null;
 	let playlistTitleInputs = null;
@@ -159,6 +160,11 @@ export default async function mainWindow() {
 		} 
 	}
 
+	function handleGenericElementClick() {
+		contextMenu.setIsOpen(false);
+		renderHTML();
+	}
+
 	async function handleContextMenuPlaylistButtonClick(event) {
 		const clickedPlaylist = event.currentTarget.dataset.id;
 		const playlistID = playlists[clickedPlaylist]._id;
@@ -196,6 +202,7 @@ export default async function mainWindow() {
 
 	function handleSongButtonClick(event) {
 		event.stopPropagation();
+		contextMenu.setIsOpen(false);
 		const clickedSong = event.currentTarget.dataset.id;
 		const clickedSongGroup = event.currentTarget.closest('.song-group').dataset.id;
 
@@ -678,7 +685,7 @@ export default async function mainWindow() {
 				playTime.innerText = formatSeconds(totalSecondsOfRelease);
 
 				releaseContainer.className = 'release__release-container';
-				metaDataContainer.className = 'release__meta-data-container';
+				metaDataContainer.className = 'release__meta-data-container generic-element';
 				moreMetaDataContainer.className = 'release__more-meta-data-container';
 				artworkContainer.className = 'release__artwork'; 
 				title.className = 'release__title';
@@ -709,7 +716,7 @@ export default async function mainWindow() {
 				const plays = document.createElement('div');
 				const time = document.createElement('div');
 
-				songsHeaderContainer.className = 'release__songs-header';
+				songsHeaderContainer.className = 'release__songs-header generic-element';
 
 				number.innerText = '#';
 				title.innerText = 'title';
@@ -831,7 +838,7 @@ export default async function mainWindow() {
 				const songsAmount = document.createElement('div');
 				const playTime = document.createElement('div');
 
-				container.className = 'playlist__header';
+				container.className = 'playlist__header generic-element';
 				info.className = 'playlist__info';
 				title.className = 'playlist__title';
 				titleInput.className = 'playlist__title-input';
@@ -895,7 +902,7 @@ export default async function mainWindow() {
 				album.innerText = 'Album';
 				time.innerText = 'Time';
 
-				songsHeader.className = 'playlist__songs-header';
+				songsHeader.className = 'playlist__songs-header generic-element';
 				number.className = 'playlist__number';
 				album.className = 'playlist__album';
 				time.className = 'playlist__time';
@@ -995,6 +1002,7 @@ export default async function mainWindow() {
 			songButtons = document.querySelectorAll('.song');
 			contextMenuPlaylistButtons = document.querySelectorAll('.context-menu__button--add-playlist');
 			contextMenuButtons = document.querySelectorAll('.context-menu-button');
+			genericElements = document.querySelectorAll('.generic-element');
 			
 			for (const songButton of songButtons) {
 				songButton.addEventListener('click', handleSongButtonClick);
@@ -1009,6 +1017,10 @@ export default async function mainWindow() {
 				contextMenuButton.addEventListener('click', handleContextMenuButtonClick);
 				contextMenuButton.addEventListener('keydown', handleContextMenuButtonKeydown);
 			}	
+
+			for (const genericElement of genericElements) {
+				genericElement.addEventListener('click', handleGenericElementClick);
+			}
 		}
 
 		/**
