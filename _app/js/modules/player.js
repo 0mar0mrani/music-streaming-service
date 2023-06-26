@@ -99,6 +99,8 @@ export default function player() {
 				setAnimationPositionForMaximized();
 				renderHTML();
 			}
+
+			draggedOver25Percent = false;
 		}
 	}
 	
