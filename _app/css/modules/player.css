@@ -251,13 +251,14 @@
 	}
 
 	.player__play-button,
+	.player__play-button:hover,
 	.player__play-button:active,
 	.player__play-button:focus {
-		background-color: none;
+		background: none;
 	}
 
 	.player__play-button:hover {
-		background-color: var(--color-primary-darkest);
+		background-color: var(--color-secondary-default);
 	}
 
 	.player__play-button img {
