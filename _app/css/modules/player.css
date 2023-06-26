@@ -263,7 +263,7 @@
 
 	.player__play-button:hover img,
 	.player__play-button:active img {
-		filter: var(--filter-primary-darkest);
+		filter: var(--filter-primary-default);
 	}
 	
 	.player__timeline-slider {
