@@ -258,7 +258,7 @@
 	}
 
 	.player__play-button:hover {
-		background-color: var(--color-secondary-default);
+		background-color: var(--color-primary-default);
 	}
 
 	.player__play-button img {
