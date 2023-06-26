@@ -31,7 +31,7 @@ export default function player() {
 	let animationPosition = null; // decides where in the animation (keyframe) on drag down
 	const animationDuration = 0.7; // this has to be the same duration as --duration in variables.css 
 	
-	const playerElement = document.querySelector('.player');
+	const playerElement = document.querySelector('.player:not(.player__section-2)');
 	const allElementsInPlayer = playerElement.querySelectorAll('*');
 	const mainWindowElement = document.querySelector('.main-window');
 	const titleElement = document.querySelector('.player__title');
@@ -77,7 +77,7 @@ export default function player() {
 	}
 
 	function handlePlayerElementTouchstart(event) {
-		if (isMaximized) {
+		if (isMaximized) { 
 			setTouchStart(event);
 		}
 	}
@@ -94,12 +94,12 @@ export default function player() {
 			setAnimationToRunning();
 			isMaximized = false;
 			
-			
 			if (!draggedOver25Percent) {
 				isMaximized = true;
 				setAnimationPositionForMaximized();
 			}
-
+			
+			draggedOver25Percent = false;
 			renderHTML();
 		}
 	}
@@ -408,7 +408,7 @@ export default function player() {
 				element.style.animationPlayState = 'paused';
 				element.style.animationDelay = `-${animationPosition}s`;
 			}
-			
+
 			draggedOver25Percent = dragPercentage >= 25 ? true : false;
 		}
 	}
