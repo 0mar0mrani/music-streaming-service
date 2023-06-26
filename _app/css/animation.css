@@ -350,7 +350,7 @@
 	70% {
 		opacity: 0;
 		margin-right: 1rem;
-		background-color: var(--color-secondary-default);
+		background-color: var(--color-primary-default);
 		width: var(--play-button-small);
 		height: var(--play-button-small);
 	}
@@ -358,7 +358,7 @@
 	100% {
 		opacity: 1;
 		margin-right: 1rem;
-		background-color: var(--color-secondary-default);
+		background-color: var(--color-primary-default);
 		width: var(--play-button-small);
 		height: var(--play-button-small);
 	}
