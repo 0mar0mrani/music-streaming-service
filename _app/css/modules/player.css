@@ -244,17 +244,20 @@
 	.player__play-button {
 		margin-right: 1rem;
 	}
-
+	
 	.player__play-button img {
 		width: 3.2rem;
 		height: 3.2rem;
 	}
 
 	.player__play-button,
-	.player__play-button:hover,
 	.player__play-button:active,
 	.player__play-button:focus {
-		background: none;
+		background-color: none;
+	}
+
+	.player__play-button:hover {
+		background-color: var(--color-primary-darkest);
 	}
 
 	.player__play-button img {
