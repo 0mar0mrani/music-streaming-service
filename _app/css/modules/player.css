@@ -335,13 +335,13 @@
 		animation: timeline-maximized var(--duration) ease-in-out forwards;
 	}
 
-	.player--maximized .player__play-button:hover {
+	/* .player--maximized .player__play-button:hover {
 		background-color: var(--color-primary-darkest) !important;
 	}
 
 	.player--maximized .player__play-button:focus {
 		background-color: var(--color-primary-default) !important;
-	}
+	} */
 
 	.player--maximized .player__play-button img {
 		animation: play-icon-maximized var(--duration) ease-in-out forwards;
