@@ -35,14 +35,6 @@
 	filter: var(--filter-primary-darkest);
 }
 
-.player__previous-button:focus,
-.player__next-button:focus,
-.player__shuffle-button:focus,
-.player__repeat-button:focus,
-.player__mute-button:focus {
-	filter: var(--filter-primary-default);
-}
-
 /* Sliders */
 .player__timeline-slider,
 .player__volume-slider {
@@ -228,6 +220,14 @@
 		left: 0;
 	}
 
+	.player__previous-button:hover,
+	.player__next-button:hover,
+	.player__shuffle-button:hover,
+	.player__repeat-button:hover,
+	.player__mute-button:hover {
+		filter: var(--filter-primary-default);
+	}
+
 	.player__shuffle-button, 
 	.player__next-button, 
 	.player__previous-button,
@@ -263,7 +263,7 @@
 
 	.player__play-button:hover img,
 	.player__play-button:active img {
-		filter: var(--filter-primary-darkest);
+		filter: var(--filter-primary-default);
 	}
 	
 	.player__timeline-slider {
@@ -330,14 +330,6 @@
 
 	.player--maximized .player__timeline-slider {
 		animation: timeline-maximized var(--duration) ease-in-out forwards;
-	}
-
-	.player--maximized .player__play-button:hover {
-		background-color: var(--color-primary-darkest) !important;
-	}
-
-	.player--maximized .player__play-button:focus {
-		background-color: var(--color-primary-default) !important;
 	}
 
 	.player--maximized .player__play-button img {

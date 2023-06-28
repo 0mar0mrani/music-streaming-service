@@ -82,8 +82,10 @@ export default function player() {
 		}
 	}
 
-	function handlePlayerElementTouchmove(event) {		
-		if (isMaximized) {
+	function handlePlayerElementTouchmove(event) {	
+		const touchedControllers = event.target.closest('.player__section-2');	
+
+		if (isMaximized && !touchedControllers) {
 			event.preventDefault();
 			animateDragDown(event);
 		}
@@ -99,6 +101,8 @@ export default function player() {
 				setAnimationPositionForMaximized();
 				renderHTML();
 			}
+
+			draggedOver25Percent = false;
 		}
 	}
 	
@@ -181,7 +185,7 @@ export default function player() {
 		setTimeline();
 		isPlaying = true;
 		renderAudio();
-		renderHTML();
+		// renderHTML();
 	}
 
 	function handleCloseButtonClick(event) {
